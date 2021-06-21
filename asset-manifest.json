@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/uitool/static/css/main.bec3be7b.chunk.css",
-    "main.js": "/uitool/static/js/main.c5209702.chunk.js",
-    "main.js.map": "/uitool/static/js/main.c5209702.chunk.js.map",
+    "main.js": "/uitool/static/js/main.bedd381c.chunk.js",
+    "main.js.map": "/uitool/static/js/main.bedd381c.chunk.js.map",
     "runtime-main.js": "/uitool/static/js/runtime-main.4de360e4.js",
     "runtime-main.js.map": "/uitool/static/js/runtime-main.4de360e4.js.map",
     "static/css/2.394bb9a5.chunk.css": "/uitool/static/css/2.394bb9a5.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.394bb9a5.chunk.css",
     "static/js/2.6c3bd07a.chunk.js",
     "static/css/main.bec3be7b.chunk.css",
-    "static/js/main.c5209702.chunk.js"
+    "static/js/main.bedd381c.chunk.js"
   ]
 }
