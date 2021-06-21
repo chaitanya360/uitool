@@ -1,0 +1,16 @@
+.alertBox {
+  position: fixed;
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #eee;
+  border: 1px solid #e70404;
+}
+
+.bottom {
+  bottom: 5%;
+}
+
+.top {
+  top: 5%;
+}
