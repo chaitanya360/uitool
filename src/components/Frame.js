@@ -44,6 +44,7 @@ const styles = {
     display: "block",
     position: "relative",
     objectFit: "contain",
+    overflow: "hidden",
   },
   svgStyle: { height: "100%", width: "100%", position: "absolute", top: 0 },
 };
@@ -54,6 +55,7 @@ function Frame({
   setSelectedItem,
   Frames,
   setFrames,
+  bgSrc,
 }) {
   const shouldDraw = currentTool === "draw";
   const shouldSelect = currentTool === "select";
@@ -227,7 +229,7 @@ function Frame({
       ref={canRef}
     >
       <Info show={info} info={getInfo()} />
-      <Image />
+      <Image src={bgSrc} />
       <svg
         style={styles.svgStyle}
         onMouseLeave={handleMouseLeave}

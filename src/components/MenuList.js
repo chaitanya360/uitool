@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Menu } from "antd";
 
-import { SettingOutlined } from "@ant-design/icons";
+import { SettingOutlined, FileImageOutlined } from "@ant-design/icons";
 import { EyeIcon, PenIcon, SelectIcon } from "../components/Icon";
 import OnMouseOver from "./OnMouseOver";
 const { SubMenu } = Menu;
@@ -11,13 +11,12 @@ function MenuList({
   handleOnMouseOverOptions,
   handleOnMouseOverValuesChange,
 }) {
-  function onChange(e) {
-    console.log(`checked = ${e.target.checked}`);
-  }
-
   return (
     <>
       <Menu.ItemGroup key="options">
+        <Menu.Item key="change_image" icon={<FileImageOutlined />}>
+          Change Image
+        </Menu.Item>
         <Menu.Item key="draw" icon={<PenIcon />}>
           Draw
         </Menu.Item>

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import cx from "classnames";
 import styles from "./alert.module.css";
 import { Button } from "antd";
+import "./components.css";
 
 class AlertBox extends Component {
   static propTypes = {
@@ -74,70 +75,82 @@ class AlertBox extends Component {
   };
 
   render() {
-    const { message, variant, placement } = this.props;
+    const { message, variant, placement, width = "300px" } = this.props;
     const { show } = this.state;
     return (
       show && (
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0,0,0,0.1)",
-            position: "absolute",
-            top: "0",
-            left: "0",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <>
+          <div className="black_bg_wrapper"></div>
           <div
-            id="alertbox"
-            className={cx(
-              styles.alertBox,
-              styles[variant],
-              styles[placement],
-              "animate__animated animate__fadeInDownBig animate__delay-0s animate__faster"
-            )}
             style={{
-              padding: "20px",
+              width: "100%",
+              height: "100%",
+              overflow: "hidden",
+              position: "absolute",
+              top: "0",
+              left: "0",
+              display: "flex",
+              justifyContent: "center",
             }}
           >
             <div
+              id="alertbox"
+              className={cx(
+                styles.alertBox,
+                styles[variant],
+                styles[placement],
+                "animate__animated animate__fadeInDownBig animate__delay-0s animate__faster"
+              )}
               style={{
-                width: "100%",
-                textAlign: "center",
-                paddingBottom: "20px",
-                fontSize: "18px",
-                color: "rgba(0,0,0,0.9)",
+                padding: "20px",
+                width,
+                zIndex: 3,
+                borderRadius: "4px",
               }}
             >
-              {message}
-            </div>
-
-            <div
-              style={{
-                padding: "0px 60px",
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <Button
-                type="primary"
-                ghost
-                onClick={this.props.handleYes}
-                danger
+              <div
+                style={{
+                  width: "100%",
+                  textAlign: "center",
+                  paddingBottom: "20px",
+                  fontSize: "18px",
+                  color: "rgba(0,0,0,0.9)",
+                  lineHeight: "35px",
+                }}
               >
-                Yes
-              </Button>
+                {message}
+              </div>
 
-              <Button type="primary" ghost onClick={this.props.handleNo}>
-                No
-              </Button>
+              <div
+                style={{
+                  padding: "0px 60px",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Button
+                  type="primary"
+                  ghost
+                  onClick={this.props.handleYes}
+                  danger
+                  style={{ borderRadius: "4px" }}
+                >
+                  Yes
+                </Button>
+
+                <Button
+                  type="primary"
+                  ghost
+                  onClick={this.props.handleNo}
+                  style={{ borderRadius: "4px" }}
+                >
+                  No
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )
     );
   }

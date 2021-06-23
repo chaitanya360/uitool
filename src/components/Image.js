@@ -1,6 +1,6 @@
 import React from "react";
 
-function Image(props) {
+function Image({ src }) {
   return (
     <div
       style={{
@@ -14,7 +14,7 @@ function Image(props) {
     >
       <img
         style={{ height: "100%", width: "auto" }}
-        src={`${process.env.PUBLIC_URL}/statics/Images/bg.jpg`}
+        src={src}
         alt="flat plan"
       />
     </div>

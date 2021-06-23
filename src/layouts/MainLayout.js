@@ -1,9 +1,9 @@
 import { Layout, Menu, Breadcrumb, Typography } from "antd";
 import { useState } from "react";
-import MenuItem from "antd/lib/menu/MenuItem";
 import Frame from "../components/Frame";
 import AlertBox from "../components/AlertBox";
 import MenuList from "../components/MenuList";
+import UploadImage from "../components/UploadImage";
 
 const { Content, Sider } = Layout;
 
@@ -29,9 +29,14 @@ function MainLayout({ content }) {
 
   const [Frames, setFrames] = useState([]);
   const [currentTool, setCurrentTool] = useState("draw");
-  const [showAlert, setShowAlert] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showImgChangeAlert, setshowImgChangeAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState(false);
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
+  const [displayImageUploader, setDisplayImageUploader] = useState(false);
+  const [bgImg, setBgImg] = useState(
+    `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`
+  );
 
   const handleMenuItemSelected = (e) => {
     setCurrentTool(e.key);
@@ -41,11 +46,15 @@ function MainLayout({ content }) {
         setSelectedItem(false);
         break;
       case "delete":
-        setShowAlert(true);
+        setShowDeleteAlert(true);
         break;
 
       case "free":
         setSelectedItem(false);
+        break;
+
+      case "change_image":
+        setshowImgChangeAlert(true);
         break;
     }
   };
@@ -134,22 +143,54 @@ function MainLayout({ content }) {
               setSelectedItem={setSelectedItem}
               Frames={Frames}
               setFrames={setFrames}
+              bgSrc={bgImg}
+            />
+
+            <UploadImage
+              setImg={setBgImg}
+              shouldDisplay={displayImageUploader}
+              setShouldDisplay={setDisplayImageUploader}
+              onImageChanged={() => {
+                setDisplayImageUploader(false);
+                setCurrentTool(false);
+              }}
             />
 
             <AlertBox
-              show={showAlert}
-              onClose={() => setShowAlert(false)}
+              show={showDeleteAlert}
+              onClose={() => setShowDeleteAlert(false)}
               message={"Are you sure to delete"}
               autoClose={false}
               variant={"Info"}
               handleYes={() => {
-                setShowAlert(false);
+                setShowDeleteAlert(false);
                 setCurrentTool(false);
 
                 deletePath();
               }}
               handleNo={() => {
-                setShowAlert(false);
+                setShowDeleteAlert(false);
+                setCurrentTool(false);
+              }}
+            />
+
+            <AlertBox
+              width="350px"
+              show={showImgChangeAlert}
+              onClose={() => setshowImgChangeAlert(false)}
+              message={
+                "Changing Image Would Remove Paths, Still want to change?"
+              }
+              autoClose={false}
+              variant={"Info"}
+              handleYes={() => {
+                setshowImgChangeAlert(false);
+                setCurrentTool(false);
+                setDisplayImageUploader(true);
+                setFrames([]);
+              }}
+              handleNo={() => {
+                setshowImgChangeAlert(false);
                 setCurrentTool(false);
               }}
             />
