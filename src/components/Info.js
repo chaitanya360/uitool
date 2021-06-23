@@ -10,6 +10,7 @@ function Info({ show, info = "this is some information" }) {
           left: "50%",
           transform: "translate(-50%, 0px)",
         }}
+        className="animate__animated animate__fadeIn animate__delay-0s animate__faster"
       >
         <div
           style={{
@@ -17,8 +18,9 @@ function Info({ show, info = "this is some information" }) {
             padding: "10px 10px",
             color: "white",
             fontSize: "larger",
-            borderRadius: "5px",
+            borderRadius: "3px",
             boxShadow: "2px 2px 2px grey",
+            maxWidth: "400px",
           }}
         >
           {info}

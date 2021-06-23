@@ -1,33 +1,32 @@
 import { useState } from "react";
 import { PathLine } from "react-svg-pathline";
 const Path = ({
-  pathRef,
   co,
   tempEnd,
-  id,
   shouldSelect,
   selectedItem = { id: "random" },
   handleItemSelect,
   hoverProps,
   isFreeView,
   setInfo,
+  frame,
 }) => {
+  const id = frame.id;
   const [bgColor, setBgColor] = useState("transparent");
 
   const hoverColor = "rgba(255,0,0,0.15)";
   const selectedColor = "rgba(255,0,0,0.25)";
 
+  const status = frame.status;
+
   return (
-    <g ref={pathRef} style={{ position: "absolute" }}>
+    <g>
       <g
         onMouseEnter={() => {
           if (hoverProps && isFreeView) {
             if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
-              console.log("on element");
-
-              if (hoverProps.hoverColor) {
+              if (hoverProps.isColorEnable) {
                 setBgColor(hoverProps.hoverColor);
-                console.log("hovercolor is present", hoverProps.hoverColor);
               }
 
               if (hoverProps.isInfoEnable) {
@@ -57,6 +56,17 @@ const Path = ({
           }
         }}
       >
+        {status === 0 && co[0].x !== 0 && (
+          <circle
+            r="2"
+            cx={co[0].x}
+            cy={co[0].y}
+            stroke={co.length === 1 ? "black" : "red"}
+            strokeWidth="1"
+            fill="transparent"
+          />
+        )}
+
         <PathLine
           points={co}
           stroke="red"

@@ -7,6 +7,23 @@ import MenuList from "../components/MenuList";
 
 const { Content, Sider } = Layout;
 
+const styles = {
+  menu: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    height: "100%",
+  },
+
+  content: {
+    padding: 24,
+    margin: 0,
+    height: "100%",
+    width: "100%",
+    overflow: "scroll",
+  },
+};
+
 function MainLayout({ content }) {
   // draw, select
 
@@ -15,8 +32,6 @@ function MainLayout({ content }) {
   const [showAlert, setShowAlert] = useState(false);
   const [selectedItem, setSelectedItem] = useState(false);
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
-
-  // console.log(selectedItem);
 
   const handleMenuItemSelected = (e) => {
     setCurrentTool(e.key);
@@ -41,7 +56,11 @@ function MainLayout({ content }) {
     tempFrames.forEach((frame) => {
       if (frame.id === selectedItem.id) {
         if (id === "color")
-          frame.hoverProps = { ...frame.hoverProps, isColorEnable: isChecked };
+          frame.hoverProps = {
+            ...frame.hoverProps,
+            isColorEnable: isChecked,
+            hoverColor: "rgba(0,255,0,0.4)",
+          };
         if (id === "info")
           frame.hoverProps = { ...frame.hoverProps, isInfoEnable: isChecked };
       }
@@ -92,12 +111,7 @@ function MainLayout({ content }) {
           <Menu
             selectedKeys={[currentTool]}
             mode="inline"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              height: "100%",
-            }}
+            style={styles.menu}
             onSelect={(e) => handleMenuItemSelected(e)}
             theme="dark"
           >
@@ -113,16 +127,7 @@ function MainLayout({ content }) {
           <Breadcrumb style={{ margin: "16px 0" }}>
             <Breadcrumb.Item>Home</Breadcrumb.Item>
           </Breadcrumb>
-          <Content
-            className="site-layout-background"
-            style={{
-              padding: 24,
-              margin: 0,
-              height: "100%",
-              width: "100%",
-              overflow: "scroll",
-            }}
-          >
+          <Content className="site-layout-background" style={styles.content}>
             <Frame
               currentTool={currentTool}
               selectedItem={selectedItem}

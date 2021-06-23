@@ -5,6 +5,49 @@ import Info from "./Info";
 
 const getId = () => new Date().getTime();
 
+const isCloserToFirstPoint = (e, co, canRef) => {
+  const diffDist = 8;
+  const currX = getCursorPos(e, canRef).x;
+  const currY = getCursorPos(e, canRef).y;
+
+  const diff = (point1, point2) =>
+    point1 > point2 ? point1 - point2 : point2 - point1;
+
+  return (
+    diff(co[0].x, currX) < diffDist &&
+    diff(co[0].y, currY) < diffDist &&
+    co.length > 2
+  );
+};
+
+function getCursorPos(e, canRef) {
+  var a,
+    x = 0,
+    y = 0;
+  e = e || window.event;
+  /*get the x and y positions of the image:*/
+  a = canRef.current.getBoundingClientRect();
+  /*calculate the cursor's x and y coordinates, relative to the image:*/
+  x = e.pageX - a.left;
+  y = e.pageY - a.top;
+  /*consider any page scrolling:*/
+  x = x - window.pageXOffset;
+  y = y - window.pageYOffset;
+  return { x: x, y: y };
+}
+
+const styles = {
+  canvasStyle: {
+    border: "1px solid black",
+    height: "80vh",
+    width: "1200px",
+    display: "block",
+    position: "relative",
+    objectFit: "contain",
+  },
+  svgStyle: { height: "100%", width: "100%", position: "absolute", top: 0 },
+};
+
 function Frame({
   currentTool,
   selectedItem,
@@ -19,29 +62,13 @@ function Frame({
   const [co, setCo] = useState([{ x: 0, y: 0 }]);
   const [tempEnd, setTempEnd] = useState({ x1: 0, y1: 0, x2: 0, y2: 0 });
   const [info, setInfo] = useState(false);
+  const [isCloserToClose, setIsCloserToClose] = useState(false);
 
   // 0: nothing is clicked
   // 1: first point is clicked
   // 2: last point is clicked, cursor leaves
   let status = useRef(0);
   const canRef = useRef(null);
-  const pathRef = useRef();
-
-  function getCursorPos(e) {
-    var a,
-      x = 0,
-      y = 0;
-    e = e || window.event;
-    /*get the x and y positions of the image:*/
-    a = canRef.current.getBoundingClientRect();
-    /*calculate the cursor's x and y coordinates, relative to the image:*/
-    x = e.pageX - a.left;
-    y = e.pageY - a.top;
-    /*consider any page scrolling:*/
-    x = x - window.pageXOffset;
-    y = y - window.pageYOffset;
-    return { x: x, y: y };
-  }
 
   const getCursor = () => {
     switch (currentTool) {
@@ -60,8 +87,6 @@ function Frame({
         if (frame.id === item.id) setSelectedItem(frame);
       });
     }
-
-    console.log(selectedItem);
   };
 
   const addNewFrame = () => {
@@ -74,6 +99,7 @@ function Frame({
           isInfoEnable: false,
           isColorEnable: false,
         },
+        status: 1,
       };
 
       setFrames((old) => [
@@ -87,6 +113,7 @@ function Frame({
             isInfoEnable: false,
             isColorEnable: false,
           },
+          status: 0,
         },
       ]);
 
@@ -115,18 +142,86 @@ function Frame({
     return Frames.indexOf(frame) === Frames.length - 1;
   };
 
-  console.log("info: ", info);
+  const handleMouseDown = (e) => {
+    if (!shouldDraw) return;
+
+    setTempEnd(() => ({
+      x1: getCursorPos(e, canRef).x,
+      y1: getCursorPos(e, canRef).y,
+      x2: getCursorPos(e, canRef).x,
+      y2: getCursorPos(e, canRef).y,
+    }));
+
+    // for first point
+    if (status.current == 0) {
+      setCo([
+        {
+          x: getCursorPos(e, canRef).x,
+          y: getCursorPos(e, canRef).y,
+        },
+      ]);
+      status.current = 1;
+      return;
+    }
+
+    if (isCloserToClose && status.current === 1) {
+      setCo((old) => [...old, { x: old[0].x, y: old[0].y }]);
+      status.current = 2;
+      setIsCloserToClose(false);
+      return;
+    }
+
+    if (status.current === 1) {
+      setCo((old) => [
+        ...old,
+        {
+          x: getCursorPos(e, canRef).x,
+          y: getCursorPos(e, canRef).y,
+        },
+      ]);
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (!shouldDraw) return;
+
+    if (status.current === 2) {
+      addNewFrame();
+      return;
+    }
+
+    if (status.current == 1)
+      setTempEnd((old) => ({
+        x1: old.x1,
+        y1: old.y1,
+        x2: getCursorPos(e, canRef).x,
+        y2: getCursorPos(e, canRef).y,
+      }));
+
+    if (isCloserToFirstPoint(e, co, canRef)) setIsCloserToClose(true);
+    else setIsCloserToClose(false);
+  };
+
+  const handleMouseLeave = () => () => {
+    if (shouldDraw && status.current !== 0) {
+      setTempEnd({
+        x1: co[co.length - 1].x,
+        y1: co[co.length - 1].y,
+        x2: co[co.length - 1].x,
+        y2: co[co.length - 1].y,
+      });
+      status.current = 2;
+      addNewFrame();
+    }
+  };
 
   return (
     <div
       style={{
-        cursor: getCursor(),
-        border: "1px solid black",
-        height: "80vh",
-        width: "1200px",
-        display: "block",
-        position: "relative",
-        objectFit: "contain",
+        cursor: isCloserToClose
+          ? `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`
+          : getCursor(),
+        ...styles.canvasStyle,
       }}
       id="canvas"
       ref={canRef}
@@ -134,76 +229,18 @@ function Frame({
       <Info show={info} info={getInfo()} />
       <Image />
       <svg
-        style={{ height: "100%", width: "100%", position: "absolute", top: 0 }}
-        onMouseLeave={() => {
-          if (shouldDraw && status.current !== 0) {
-            setTempEnd({ x1: 0, y1: 0, x2: 0, y2: 0 });
-            status.current = 2;
-            setTimeout(() => addNewFrame(), 500);
-          }
-        }}
-        onMouseMove={(e) => {
-          if (status.current == 1 && shouldDraw)
-            setTempEnd((old) => ({
-              x1: old.x1,
-              y1: old.y1,
-              x2: getCursorPos(e).x,
-              y2: getCursorPos(e).y,
-            }));
-        }}
-        onMouseDown={(e) => {
-          if (!shouldDraw) return;
-
-          if (status.current == 0) {
-            setCo([
-              {
-                x: getCursorPos(e).x,
-                y: getCursorPos(e).y,
-                x: getCursorPos(e).x,
-                y: getCursorPos(e).y,
-              },
-            ]);
-            status.current = 1;
-          }
-
-          // for first click
-          if (status.current === 0) {
-            setTempEnd((old) => ({
-              x1: getCursorPos(e).x,
-              y1: getCursorPos(e).y,
-              x2: getCursorPos(e).x,
-              y2: getCursorPos(e).y,
-            }));
-          }
-
-          if (status.current === 1) {
-            setTempEnd((old) => ({
-              x1: getCursorPos(e).x,
-              y1: getCursorPos(e).y,
-              x2: getCursorPos(e).x,
-              y2: getCursorPos(e).y,
-            }));
-          }
-
-          if (status.current !== 0) {
-            setCo((old) => [
-              ...old,
-              {
-                x: getCursorPos(e).x,
-                y: getCursorPos(e).y,
-              },
-            ]);
-          }
-        }}
+        style={styles.svgStyle}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={handleMouseMove}
+        onMouseDown={handleMouseDown}
       >
         {Frames.length > 0 ? (
           Frames.map((frame) => (
             <Path
               co={isLast(frame) ? co : frame.co}
-              pathRef={isLast(frame) ? pathRef : frame.pathRef}
               tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
-              id={frame.id}
               key={frame.id}
+              frame={frame}
               shouldSelect={shouldSelect}
               handleItemSelect={handleItemSelect}
               selectedItem={selectedItem}
@@ -213,7 +250,7 @@ function Frame({
             />
           ))
         ) : (
-          <Path co={co} pathRef={pathRef} tempEnd={tempEnd} id={0} />
+          <Path co={co} tempEnd={tempEnd} frame={{ id: 0, status: 0 }} />
         )}
       </svg>
     </div>

@@ -14,7 +14,7 @@ function Image(props) {
     >
       <img
         style={{ height: "100%", width: "auto" }}
-        src={`${process.env.PUBLIC_URL}/statics/images/bg.jpg`}
+        src={`${process.env.PUBLIC_URL}/statics/Images/bg.jpg`}
         alt="flat plan"
       />
     </div>
