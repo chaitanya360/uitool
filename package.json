@@ -1,7 +1,8 @@
 {
   "name": "buildingtool",
   "version": "0.1.0",
-  "homepage": "https://chaitanya360.github.io/uitool",
+  "homepage": "https://uitool.herokuapp.com/",
+  
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
