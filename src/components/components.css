@@ -7,3 +7,20 @@
   left: 0;
   z-index: 2;
 }
+
+.dropdown_title {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.dropdown_title:hover {
+  color: white;
+}
+
+#dropdown::-webkit-scrollbar {
+  display: none; /* Safari and Chrome browsers */
+}
+
+#dropdown {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* mozilla */
+}

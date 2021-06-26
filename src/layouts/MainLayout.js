@@ -1,42 +1,89 @@
-import { Layout, Menu, Breadcrumb, Typography } from "antd";
-import { useState } from "react";
+import { Layout, Menu } from "antd";
+import { useEffect, useState } from "react";
+
 import Frame from "../components/Frame";
-import AlertBox from "../components/AlertBox";
+import Popups from "../components/Popups";
 import MenuList from "../components/MenuList";
-import UploadImage from "../components/UploadImage";
+import RoutePipeline from "../components/RoutePipeline";
 
 const { Content, Sider } = Layout;
 
+const getId = () => new Date().getTime();
+
 const styles = {
   menu: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
     height: "100%",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
   },
 
   content: {
-    padding: 24,
     margin: 0,
-    height: "100%",
+    padding: 24,
     width: "100%",
+    height: "100%",
     overflow: "scroll",
   },
 };
 
-function MainLayout({ content }) {
+const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
+const initialFrameValues = {
+  paths: [],
+  bgImg: defaultBgImage,
+  frameName: "new",
+  id: getId(),
+};
+
+function MainLayout() {
   // draw, select
 
+  const pathsState = useState([]);
   const [Frames, setFrames] = useState([]);
+  const deleteAlertState = useState(false);
+  const selectedItemState = useState(false);
+  const imgeChangeAlertState = useState(false);
+  const displayImageUploaderState = useState(false);
+  const [bgImg, setBgImg] = useState(defaultBgImage);
+  const [frameName, setFrameName] = useState("Home");
   const [currentTool, setCurrentTool] = useState("draw");
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [showImgChangeAlert, setshowImgChangeAlert] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(false);
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
-  const [displayImageUploader, setDisplayImageUploader] = useState(false);
-  const [bgImg, setBgImg] = useState(
-    `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`
-  );
+  const [currentFrame, setCurrentFrame] = useState(initialFrameValues);
+  const displayNewFramePopupState = useState(false);
+
+  const [paths, setPaths] = pathsState;
+  const setShowDeleteAlert = deleteAlertState[1];
+  const setshowImgChangeAlert = imgeChangeAlertState[1];
+  const [selectedItem, setSelectedItem] = selectedItemState;
+  const setDisplayNewFramePopup = displayNewFramePopupState[1];
+
+  useEffect(() => {
+    setCurrentFrame((old) => ({
+      ...old,
+      paths,
+      bgImg,
+      frameName,
+    }));
+  }, [bgImg, paths, frameName]);
+
+  const addNewFrame = (frameName, description, bgImg, id = "not specified") => {
+    setFrames((old) => [...old, currentFrame]);
+
+    setFrameName(frameName);
+    setBgImg(bgImg);
+    setCurrentFrame((old) => ({
+      ...old,
+      id,
+      description,
+    }));
+
+    setPaths([]);
+    setDisplayNewFramePopup(false);
+    setCurrentTool(false);
+    setSelectedItem(false);
+  };
+
+  console.log(Frames);
 
   const handleMenuItemSelected = (e) => {
     setCurrentTool(e.key);
@@ -44,6 +91,8 @@ function MainLayout({ content }) {
     switch (e.key) {
       case "draw":
         setSelectedItem(false);
+        setIsSliderCollpased(false);
+
         break;
       case "delete":
         setShowDeleteAlert(true);
@@ -51,71 +100,27 @@ function MainLayout({ content }) {
 
       case "free":
         setSelectedItem(false);
+        setIsSliderCollpased(true);
         break;
 
       case "change_image":
         setshowImgChangeAlert(true);
+        setIsSliderCollpased(false);
+
         break;
     }
   };
-
-  const handleOnMouseOverOptions = (id, isChecked) => {
-    let tempFrames = Frames;
-
-    tempFrames.forEach((frame) => {
-      if (frame.id === selectedItem.id) {
-        if (id === "color")
-          frame.hoverProps = {
-            ...frame.hoverProps,
-            isColorEnable: isChecked,
-            hoverColor: "rgba(0,255,0,0.4)",
-          };
-        if (id === "info")
-          frame.hoverProps = { ...frame.hoverProps, isInfoEnable: isChecked };
-      }
-    });
-
-    setFrames([...tempFrames]);
-  };
-
-  const handleOnMouseOverValuesChange = (id, value) => {
-    let tempFrames = Frames;
-
-    tempFrames.forEach((frame) => {
-      if (frame.id === selectedItem.id) {
-        if (id === "color")
-          frame.hoverProps = { ...frame.hoverProps, hoverColor: value };
-        if (id === "info")
-          frame.hoverProps = { ...frame.hoverProps, hoverInfo: value };
-      }
-    });
-
-    setFrames([...tempFrames]);
-  };
-
-  function deletePath() {
-    setFrames((old) => [
-      ...old.filter((frame) => frame.id !== selectedItem.id),
-      {
-        co: [{ x: 0, y: 0 }],
-
-        tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
-        id: "temp",
-      },
-    ]);
-
-    setSelectedItem(false);
-  }
 
   return (
     <Layout>
       <Layout>
         <Sider
           width={200}
-          className="site-layout-background"
+          className="slider"
           theme="dark"
           collapsible
-          onCollapse={() => setIsSliderCollpased((prev) => !prev)}
+          collapsed={isSliderCollapsed}
+          onCollapse={(collapsed) => setIsSliderCollpased(collapsed)}
         >
           <Menu
             selectedKeys={[currentTool]}
@@ -125,74 +130,38 @@ function MainLayout({ content }) {
             theme="dark"
           >
             <MenuList
-              selectedItem={selectedItem}
+              addNewFrame={addNewFrame}
               isSliderCollapsed={isSliderCollapsed}
-              handleOnMouseOverOptions={handleOnMouseOverOptions}
-              handleOnMouseOverValuesChange={handleOnMouseOverValuesChange}
+              pathsState={pathsState}
+              selectedItemState={selectedItemState}
+              setCurrentTool={setCurrentTool}
+              setDisplayNewFramePopup={setDisplayNewFramePopup}
+              Frames={Frames}
             />
           </Menu>
         </Sider>
         <Layout style={{ padding: "0 24px 24px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-          </Breadcrumb>
+          <RoutePipeline Frames={Frames} currentFrame={currentFrame} />
           <Content className="site-layout-background" style={styles.content}>
             <Frame
               currentTool={currentTool}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
-              Frames={Frames}
-              setFrames={setFrames}
-              bgSrc={bgImg}
+              paths={currentFrame.paths}
+              setPaths={setPaths}
+              bgSrc={currentFrame.bgImg}
             />
 
-            <UploadImage
-              setImg={setBgImg}
-              shouldDisplay={displayImageUploader}
-              setShouldDisplay={setDisplayImageUploader}
-              onImageChanged={() => {
-                setDisplayImageUploader(false);
-                setCurrentTool(false);
-              }}
-            />
-
-            <AlertBox
-              show={showDeleteAlert}
-              onClose={() => setShowDeleteAlert(false)}
-              message={"Are you sure to delete"}
-              autoClose={false}
-              variant={"Info"}
-              handleYes={() => {
-                setShowDeleteAlert(false);
-                setCurrentTool(false);
-
-                deletePath();
-              }}
-              handleNo={() => {
-                setShowDeleteAlert(false);
-                setCurrentTool(false);
-              }}
-            />
-
-            <AlertBox
-              width="350px"
-              show={showImgChangeAlert}
-              onClose={() => setshowImgChangeAlert(false)}
-              message={
-                "Changing Image Would Remove Paths, Still want to change?"
-              }
-              autoClose={false}
-              variant={"Info"}
-              handleYes={() => {
-                setshowImgChangeAlert(false);
-                setCurrentTool(false);
-                setDisplayImageUploader(true);
-                setFrames([]);
-              }}
-              handleNo={() => {
-                setshowImgChangeAlert(false);
-                setCurrentTool(false);
-              }}
+            <Popups
+              deleteAlertState={deleteAlertState}
+              imgeChangeAlertState={imgeChangeAlertState}
+              setCurrentTool={setCurrentTool}
+              setBgImg={setBgImg}
+              selectedItemState={selectedItemState}
+              displayImageUploaderState={displayImageUploaderState}
+              displayNewFramePopupState={displayNewFramePopupState}
+              addNewFrame={addNewFrame}
+              pathsState={pathsState}
             />
           </Content>
         </Layout>

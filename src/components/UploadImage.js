@@ -23,10 +23,14 @@ function UploadImage({
   return (
     <div
       className="black_bg_wrapper"
-      style={{ display: shouldDisplay ? "block" : "none" }}
+      style={{ display: shouldDisplay ? "block" : "none", zIndex: "4" }}
     >
       <div
-        style={{ width: "100vw", display: "flex", justifyContent: "center" }}
+        style={{
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+        }}
       >
         <div
           className="animate__animated animate__bounceInDown animate__delay-0s animate__faster"

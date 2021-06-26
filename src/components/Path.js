@@ -6,7 +6,6 @@ const Path = ({
   shouldSelect,
   selectedItem = { id: "random" },
   handleItemSelect,
-  hoverProps,
   isFreeView,
   setInfo,
   frame,
@@ -16,6 +15,8 @@ const Path = ({
 
   const hoverColor = "rgba(255,0,0,0.15)";
   const selectedColor = "rgba(255,0,0,0.25)";
+  const hoverProps = frame.hoverProps;
+  const clickProps = frame.clickProps;
 
   const status = frame.status;
 
@@ -53,6 +54,10 @@ const Path = ({
             if (selectedItem.id === id) {
               handleItemSelect(false);
             } else handleItemSelect({ id: id });
+          }
+
+          if (clickProps) {
+            if (clickProps.isClickEnable) console.log(clickProps.targetFrameId);
           }
         }}
       >

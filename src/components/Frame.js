@@ -40,21 +40,27 @@ const styles = {
   canvasStyle: {
     border: "1px solid black",
     height: "80vh",
-    width: "1200px",
+    width: "1100px",
     display: "block",
     position: "relative",
     objectFit: "contain",
     overflow: "hidden",
+    margin: "auto",
   },
-  svgStyle: { height: "100%", width: "100%", position: "absolute", top: 0 },
+  svgStyle: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    top: 0,
+  },
 };
 
 function Frame({
   currentTool,
   selectedItem,
   setSelectedItem,
-  Frames,
-  setFrames,
+  paths,
+  setPaths,
   bgSrc,
 }) {
   const shouldDraw = currentTool === "draw";
@@ -85,7 +91,7 @@ function Frame({
 
   const handleItemSelect = (item) => {
     if (item) {
-      Frames.forEach((frame) => {
+      paths.forEach((frame) => {
         if (frame.id === item.id) setSelectedItem(frame);
       });
     }
@@ -100,13 +106,24 @@ function Frame({
         hoverProps: {
           isInfoEnable: false,
           isColorEnable: false,
+          hoverColor: "",
+          hoverInfo: "",
+        },
+        clickProps: {
+          isClickEnable: false,
+          targetFrameId: 0,
         },
         status: 1,
       };
 
-      setFrames((old) => [
+      setPaths((old) => [
+        // previous paths
         ...old.filter((frame) => frame.id !== "temp"),
+
+        // current frame
         curr,
+
+        // temp frame used for current drawing
         {
           co: [{ x: 0, y: 0 }],
           tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
@@ -114,6 +131,12 @@ function Frame({
           hoverProps: {
             isInfoEnable: false,
             isColorEnable: false,
+            hoverColor: "",
+            hoverInfo: "",
+          },
+          clickProps: {
+            isClickEnable: false,
+            targetFrameId: 0,
           },
           status: 0,
         },
@@ -126,7 +149,7 @@ function Frame({
   const getInfo = () => {
     let pathInfo = false;
     if (info) {
-      Frames.forEach((frame) => {
+      paths.forEach((frame) => {
         if (frame.id === info) pathInfo = frame.hoverProps.hoverInfo;
       });
     }
@@ -141,7 +164,7 @@ function Frame({
   };
 
   const isLast = (frame) => {
-    return Frames.indexOf(frame) === Frames.length - 1;
+    return paths.indexOf(frame) === paths.length - 1;
   };
 
   const handleMouseDown = (e) => {
@@ -218,44 +241,46 @@ function Frame({
   };
 
   return (
-    <div
-      style={{
-        cursor: isCloserToClose
-          ? `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`
-          : getCursor(),
-        ...styles.canvasStyle,
-      }}
-      id="canvas"
-      ref={canRef}
-    >
+    <>
       <Info show={info} info={getInfo()} />
-      <Image src={bgSrc} />
-      <svg
-        style={styles.svgStyle}
-        onMouseLeave={handleMouseLeave}
-        onMouseMove={handleMouseMove}
-        onMouseDown={handleMouseDown}
+
+      <div
+        style={{
+          cursor: isCloserToClose
+            ? `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`
+            : getCursor(),
+          ...styles.canvasStyle,
+        }}
+        id="canvas"
+        ref={canRef}
       >
-        {Frames.length > 0 ? (
-          Frames.map((frame) => (
-            <Path
-              co={isLast(frame) ? co : frame.co}
-              tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
-              key={frame.id}
-              frame={frame}
-              shouldSelect={shouldSelect}
-              handleItemSelect={handleItemSelect}
-              selectedItem={selectedItem}
-              hoverProps={frame.hoverProps}
-              isFreeView={isFreeView}
-              setInfo={setInfo}
-            />
-          ))
-        ) : (
-          <Path co={co} tempEnd={tempEnd} frame={{ id: 0, status: 0 }} />
-        )}
-      </svg>
-    </div>
+        <Image src={bgSrc} />
+        <svg
+          style={styles.svgStyle}
+          onMouseLeave={handleMouseLeave}
+          onMouseMove={handleMouseMove}
+          onMouseDown={handleMouseDown}
+        >
+          {paths.length > 0 ? (
+            paths.map((frame) => (
+              <Path
+                co={isLast(frame) ? co : frame.co}
+                tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
+                key={frame.id}
+                frame={frame}
+                shouldSelect={shouldSelect}
+                handleItemSelect={handleItemSelect}
+                selectedItem={selectedItem}
+                isFreeView={isFreeView}
+                setInfo={setInfo}
+              />
+            ))
+          ) : (
+            <Path co={co} tempEnd={tempEnd} frame={{ id: 0, status: 0 }} />
+          )}
+        </svg>
+      </div>
+    </>
   );
 }
 

@@ -4,13 +4,21 @@ import { Menu } from "antd";
 import { SettingOutlined, FileImageOutlined } from "@ant-design/icons";
 import { EyeIcon, PenIcon, SelectIcon } from "../components/Icon";
 import OnMouseOver from "./OnMouseOver";
+import OnMouseClick from "./OnMouseClick";
+import SelectedPathId from "./SelectedPathId";
+
 const { SubMenu } = Menu;
 function MenuList({
-  selectedItem,
   isSliderCollapsed,
-  handleOnMouseOverOptions,
-  handleOnMouseOverValuesChange,
+  selectedItemState,
+  pathsState,
+  addNewFrame,
+  setCurrentTool,
+  setDisplayNewFramePopup,
+  Frames,
 }) {
+  const selectedItem = selectedItemState[0];
+
   return (
     <>
       <Menu.ItemGroup key="options">
@@ -30,47 +38,29 @@ function MenuList({
 
       {selectedItem !== false && (
         <>
-          <div
-            style={{
-              border: "1px solid rgba(255,255,255,0.8)",
-              padding: "0px 10px",
-              margin: "20px 0px",
-            }}
-          >
-            {!isSliderCollapsed && (
-              <>
-                <div
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    padding: "20px",
-                  }}
-                >
-                  Selected Path Id
-                </div>
-                <div
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    padding: "20px",
-                  }}
-                >
-                  {selectedItem.id}
-                </div>
-              </>
-            )}
-          </div>
+          <SelectedPathId
+            isSliderCollapsed={isSliderCollapsed}
+            selectedItem={selectedItem}
+          />
+
           <SubMenu
             key="actions"
             icon={<SettingOutlined />}
             title="Actions"
             style={{ width: "100%" }}
           >
-            <Menu.Item key="delete">Delete</Menu.Item>
-            <OnMouseOver
-              handleOnMouseOverOptions={handleOnMouseOverOptions}
-              handleOnMouseOverValuesChange={handleOnMouseOverValuesChange}
-              selectedItem={selectedItem}
+            <Menu.Item key="delete" danger>
+              Delete
+            </Menu.Item>
+            <OnMouseOver pathsState={pathsState} selectedItem={selectedItem} />
+
+            <OnMouseClick
+              pathsState={pathsState}
+              addNewFrame={addNewFrame}
+              selectedItemState={selectedItemState}
+              setCurrentTool={setCurrentTool}
+              setDisplayNewFramePopup={setDisplayNewFramePopup}
+              Frames={Frames}
             />
           </SubMenu>
         </>

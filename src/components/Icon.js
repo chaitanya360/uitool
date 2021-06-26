@@ -88,9 +88,9 @@ const SelectSvg = () => (
     <path
       d="M6.13518 1.79732L5.86614 12.6171L2.9067 11.2096C1.7408 10.8578 0.395696 11.6494 1.29246 13.0569L6.85263 18.5987C10.0811 20.9738 15.5516 20.5339 16 15.6959V8.30675C15.8206 6.81134 14.3858 6.45948 13.6683 7.60303V10.242V7.33914C13.1302 6.10761 11.9644 5.75575 11.1573 7.07524V10.242V6.63541C10.6192 4.70017 9.00495 5.05203 8.55655 6.45948V10.242L8.37724 1.97324C7.8864 0.764778 6.763 0.653765 6.13518 1.79732Z"
       stroke="currentColor"
-      stroke-width="0.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -106,17 +106,17 @@ const EyeSvg = () => (
     <path
       d="M11.4488 1.00014C14.7192 1.01925 18.0409 2.95258 22 6.8466C18.02 10.7885 14.4644 12.3635 11.039 12.1867M11.4488 1.00014C8.11878 0.980691 4.84204 2.94586 1 6.8466C5.20492 10.6227 8.02528 12.0312 11.039 12.1867M11.4488 1.00014C19.439 1.00014 19.5415 12.1867 11.039 12.1867M11.4488 1.00014C3.97073 1.00014 2.22927 11.0784 11.039 12.1867"
       stroke="currentColor"
-      stroke-width="0.7"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M13.4625 5.86587C14.3518 9.62201 10.6835 9.96348 9.4607 8.82525C8.23794 7.68703 8.23794 5.06911 11.3504 4.5C10.5723 6.32116 12.5732 7.00409 13.4625 5.86587Z"
       fill="currentColor"
       stroke="currentColor"
-      stroke-width="0.7"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="0.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );

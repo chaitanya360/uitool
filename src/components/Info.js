@@ -5,7 +5,7 @@ function Info({ show, info = "this is some information" }) {
     show && (
       <div
         style={{
-          position: "fixed",
+          position: "absolute",
           top: "10px",
           left: "50%",
           transform: "translate(-50%, 0px)",

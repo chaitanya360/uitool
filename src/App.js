@@ -1,6 +1,6 @@
 import "antd/dist/antd.css";
 import "animate.css";
-import UploadImage from "./components/UploadImage";
+import NewFramePopup from "./components/NewFramePopup";
 
 import MainLayout from "./layouts/MainLayout";
 
