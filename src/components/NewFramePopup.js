@@ -11,7 +11,6 @@ function NewFramePopup({
   addNewFrame,
   show,
   setShow,
-  setCurrentTool,
   selectedItemState,
   paths,
 }) {
@@ -20,7 +19,7 @@ function NewFramePopup({
   const [bgImg, setBgImg] = useState(defaultBgImage);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedItem, setSelectedItem] = selectedItemState;
+  const selectedItem = selectedItemState[0];
 
   const { TextArea } = Input;
 
@@ -33,8 +32,6 @@ function NewFramePopup({
       if (frame.id === selectedItem.id) {
         // setting target frame id
         frame.clickProps = { ...frame.clickProps, targetFrameId: newFrameId };
-        setSelectedItem(false);
-        setCurrentTool(false);
       }
     });
 

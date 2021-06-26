@@ -9,6 +9,7 @@ const Path = ({
   isFreeView,
   setInfo,
   frame,
+  setCurrentFrameId,
 }) => {
   const id = frame.id;
   const [bgColor, setBgColor] = useState("transparent");
@@ -23,7 +24,7 @@ const Path = ({
   return (
     <g>
       <g
-        onMouseEnter={() => {
+        onMouseOver={() => {
           if (hoverProps && isFreeView) {
             if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
               if (hoverProps.isColorEnable) {
@@ -56,8 +57,13 @@ const Path = ({
             } else handleItemSelect({ id: id });
           }
 
-          if (clickProps) {
-            if (clickProps.isClickEnable) console.log(clickProps.targetFrameId);
+          if (isFreeView) {
+            if (clickProps) {
+              if (clickProps.isClickEnable) {
+                setCurrentFrameId(parseInt(clickProps.targetFrameId));
+                setInfo(false);
+              }
+            }
           }
         }}
       >

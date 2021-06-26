@@ -62,6 +62,7 @@ function Frame({
   paths,
   setPaths,
   bgSrc,
+  setCurrentFrameId,
 }) {
   const shouldDraw = currentTool === "draw";
   const shouldSelect = currentTool === "select";
@@ -273,6 +274,7 @@ function Frame({
                 selectedItem={selectedItem}
                 isFreeView={isFreeView}
                 setInfo={setInfo}
+                setCurrentFrameId={setCurrentFrameId}
               />
             ))
           ) : (

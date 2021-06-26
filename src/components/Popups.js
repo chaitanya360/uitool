@@ -35,7 +35,6 @@ function Popups({
         show={displayNewFramePopup}
         setShow={setDisplayNewFramePopup}
         addNewFrame={addNewFrame}
-        setCurrentTool={setCurrentTool}
         selectedItemState={selectedItemState}
         paths={paths}
       />

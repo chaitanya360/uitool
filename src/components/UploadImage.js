@@ -9,15 +9,18 @@ function UploadImage({
   setShouldDisplay,
 }) {
   const onImageChange = (event) => {
-    const file = event[0];
-    if (file) {
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        setImg(e.target.result);
-      };
-      reader.readAsDataURL(file);
+    if (event.length > 0) {
+      const file = event[0];
+      console.log(event);
+      if (file) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          setImg(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+      onImageChanged();
     }
-    onImageChanged();
   };
 
   return (
