@@ -24,15 +24,7 @@ function Popups({
   const [paths, setPaths] = pathsState;
 
   function deletePath() {
-    setPaths((old) => [
-      ...old.filter((frame) => frame.id !== selectedItem.id),
-      {
-        co: [{ x: 0, y: 0 }],
-
-        tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
-        id: "temp",
-      },
-    ]);
+    setPaths((old) => [...old.filter((frame) => frame.id !== selectedItem.id)]);
 
     setSelectedItem(false);
   }

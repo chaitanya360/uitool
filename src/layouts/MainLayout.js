@@ -39,7 +39,7 @@ function MainLayout() {
   // draw, select
 
   const pathsState = useState([]);
-  const [Frames, setFrames] = useState([]);
+  const [Frames, setFrames] = useState([initialFrameValues]);
   const deleteAlertState = useState(false);
   const selectedItemState = useState(false);
   const imgeChangeAlertState = useState(false);
@@ -48,7 +48,7 @@ function MainLayout() {
   const [frameName, setFrameName] = useState("Home");
   const [currentTool, setCurrentTool] = useState("draw");
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(initialFrameValues);
+  // const [currentFrame, setCurrentFrame] = useState(initialFrameValues);
   const displayNewFramePopupState = useState(false);
 
   const [paths, setPaths] = pathsState;
@@ -56,34 +56,56 @@ function MainLayout() {
   const setshowImgChangeAlert = imgeChangeAlertState[1];
   const [selectedItem, setSelectedItem] = selectedItemState;
   const setDisplayNewFramePopup = displayNewFramePopupState[1];
+  const [currentFrameId, setCurrentFrameId] = useState(initialFrameValues.id);
+
+  const setCurrentFrame = (values) => {
+    let tempFrames = Frames;
+
+    const frame = tempFrames.find((frame) => frame.id === currentFrameId);
+
+    tempFrames[tempFrames.indexOf(frame)] = {
+      ...frame,
+      ...values,
+    };
+
+    setFrames(tempFrames);
+  };
 
   useEffect(() => {
-    setCurrentFrame((old) => ({
-      ...old,
+    setCurrentFrameId(Frames[0].id);
+  }, []);
+
+  useEffect(() => {
+    setCurrentFrameId(Frames[Frames.length - 1].id);
+  }, [Frames]);
+
+  useEffect(() => {
+    setCurrentFrame({
       paths,
       bgImg,
       frameName,
-    }));
+    });
   }, [bgImg, paths, frameName]);
 
   const addNewFrame = (frameName, description, bgImg, id = "not specified") => {
-    setFrames((old) => [...old, currentFrame]);
+    setFrames((old) => [
+      ...old,
+      { paths: [], bgImg, frameName, id, description },
+    ]);
 
     setFrameName(frameName);
     setBgImg(bgImg);
-    setCurrentFrame((old) => ({
-      ...old,
-      id,
-      description,
-    }));
+    // setCurrentFrame((old) => ({
+    //   ...old,
+    //   id,
+    //   description,
+    // }));
 
     setPaths([]);
     setDisplayNewFramePopup(false);
     setCurrentTool(false);
     setSelectedItem(false);
   };
-
-  console.log(Frames);
 
   const handleMenuItemSelected = (e) => {
     setCurrentTool(e.key);
@@ -110,6 +132,8 @@ function MainLayout() {
         break;
     }
   };
+
+  console.log(Frames);
 
   return (
     <Layout>
@@ -141,15 +165,18 @@ function MainLayout() {
           </Menu>
         </Sider>
         <Layout style={{ padding: "0 24px 24px" }}>
-          <RoutePipeline Frames={Frames} currentFrame={currentFrame} />
+          <RoutePipeline
+            Frames={Frames}
+            currentFrame={Frames.find((frame) => frame.id === currentFrameId)}
+          />
           <Content className="site-layout-background" style={styles.content}>
             <Frame
               currentTool={currentTool}
               selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
-              paths={currentFrame.paths}
+              paths={paths}
               setPaths={setPaths}
-              bgSrc={currentFrame.bgImg}
+              bgSrc={bgImg}
             />
 
             <Popups
