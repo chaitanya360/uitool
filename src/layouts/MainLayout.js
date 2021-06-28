@@ -31,7 +31,7 @@ const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
 const initialFrameValues = {
   paths: [],
   bgImg: defaultBgImage,
-  frameName: "new",
+  frameName: "Home",
   id: getId(),
 };
 
@@ -49,6 +49,7 @@ function MainLayout() {
   const [Frames, setFrames] = useState([initialFrameValues]);
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
   const [currentFrameId, setCurrentFrameId] = useState(initialFrameValues.id);
+  const [location, setLocation] = useState([]);
 
   const [paths, setPaths] = pathsState;
   const setShowDeleteAlert = deleteAlertState[1];
@@ -69,8 +70,10 @@ function MainLayout() {
     setFrames(tempFrames);
   };
 
+  // function called when the compounenet is mounted for the first time
   useEffect(() => {
     setCurrentFrameId(Frames[0].id);
+    setLocation([Frames[0].id]);
   }, []);
 
   useEffect(() => {
@@ -89,6 +92,7 @@ function MainLayout() {
     const frame = tempFrames.find((frame) => frame.id === currentFrameId);
     setBgImg(frame.bgImg);
     setPaths(frame.paths);
+    updateLocation(currentFrameId);
   }, [currentFrameId]);
 
   const addNewFrame = (frameName, description, bgImg, id = "not specified") => {
@@ -97,9 +101,27 @@ function MainLayout() {
       { paths: [], bgImg, frameName, id, description },
     ]);
 
+    setLocation((old) => [...old, id]);
     setDisplayNewFramePopup(false);
     setCurrentTool(false);
     setSelectedItem(false);
+  };
+
+  const updateLocation = (currentId) => {
+    let index = location.indexOf(currentId);
+    let newLocation = [];
+
+    if (location.length > 0) {
+      // if currentId is not visited (moving forward)
+      if (index === -1) {
+        setLocation((old) => [...old, currentId]);
+      }
+      // if currentId is visited and clicked (going backward)
+      else {
+        for (let i = 0; i <= index; i++) newLocation.push(location[i]);
+        setLocation(newLocation);
+      }
+    }
   };
 
   const handleMenuItemSelected = (e) => {
@@ -157,7 +179,11 @@ function MainLayout() {
           </Menu>
         </Sider>
         <Layout style={{ padding: "0 24px 24px" }}>
-          <RoutePipeline Frames={Frames} />
+          <RoutePipeline
+            location={location}
+            setCurrentFrameId={setCurrentFrameId}
+            Frames={Frames}
+          />
           <Content className="site-layout-background" style={styles.content}>
             <Frame
               currentTool={currentTool}
