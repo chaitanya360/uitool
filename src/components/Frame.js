@@ -40,7 +40,7 @@ const styles = {
   canvasStyle: {
     border: "1px solid black",
     height: "80vh",
-    width: "1100px",
+    width: "1200px",
     display: "block",
     position: "relative",
     objectFit: "contain",
@@ -52,6 +52,10 @@ const styles = {
     width: "100%",
     position: "absolute",
     top: 0,
+    left: 0,
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
+    backgroundPosition: "center",
   },
 };
 
@@ -255,13 +259,21 @@ function Frame({
         id="canvas"
         ref={canRef}
       >
-        <Image src={bgSrc} />
         <svg
-          style={styles.svgStyle}
+          style={{
+            // backgroundImage: `url(${bgSrc})`,
+            ...styles.svgStyle,
+          }}
           onMouseLeave={handleMouseLeave}
           onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          // viewBox="0 0 1700 800"
         >
+          <image style={{ width: "100%", height: "100%" }} xlinkHref={bgSrc} />
+
           {paths.length > 0 ? (
             paths.map((frame) => (
               <Path

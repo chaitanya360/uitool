@@ -168,18 +168,19 @@ function MainLayout() {
             theme="dark"
           >
             <MenuList
-              addNewFrame={addNewFrame}
               isSliderCollapsed={isSliderCollapsed}
               pathsState={pathsState}
               selectedItemState={selectedItemState}
               setCurrentTool={setCurrentTool}
               setDisplayNewFramePopup={setDisplayNewFramePopup}
               Frames={Frames}
+              currentFrameId={currentFrameId}
             />
           </Menu>
         </Sider>
         <Layout style={{ padding: "0 24px 24px" }}>
           <RoutePipeline
+            isFreeView={currentTool === "free"}
             location={location}
             setCurrentFrameId={setCurrentFrameId}
             Frames={Frames}

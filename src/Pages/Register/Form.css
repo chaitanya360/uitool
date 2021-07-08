@@ -1,0 +1,60 @@
+input[type="submit"] {
+  background-color: rgb(16, 122, 228);
+  border: none;
+  text-decoration: none;
+  color: white;
+  padding: 5px 20px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.should_hover:hover {
+  background-color: rgb(97, 97, 224);
+}
+
+.alternateMethod:hover {
+  color: rgb(97, 97, 224);
+}
+
+.formWrapper {
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: -2;
+  position: absolute;
+  background: white;
+}
+
+.formBody {
+  height: 100vh;
+  width: 100vw;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.namesContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 450px;
+}
+
+@media screen and (max-width: 600px) {
+  .namesContainer {
+    flex-direction: column;
+    max-width: 95%;
+  }
+
+  .formBody {
+    overflow-x: hidden;
+  }
+
+  .formWrapper {
+    height: 110%;
+  }
+}

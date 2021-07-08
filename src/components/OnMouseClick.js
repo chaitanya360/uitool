@@ -7,11 +7,11 @@ const { SubMenu } = Menu;
 
 function OnMouseClick({
   setCurrentTool,
-  addNewFrame,
   selectedItemState,
   pathsState,
   setDisplayNewFramePopup,
   Frames,
+  currentFrameId,
 }) {
   const [selectedItem, setSelectedItem] = selectedItemState;
   const [paths, setPaths] = pathsState;
@@ -98,9 +98,11 @@ function OnMouseClick({
                       </Button>
                     </div>
                   </Menu.Item>
-                  {Frames.map((frame) => (
-                    <Menu.Item key={frame.id}>{frame.frameName}</Menu.Item>
-                  ))}
+                  {Frames.filter((frame) => frame.id !== currentFrameId).map(
+                    (frame) => (
+                      <Menu.Item key={frame.id}>{frame.frameName}</Menu.Item>
+                    )
+                  )}
                 </Menu>
               </DropDown>
             </div>

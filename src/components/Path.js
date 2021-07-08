@@ -24,6 +24,12 @@ const Path = ({
   return (
     <g>
       <g
+        style={{
+          cursor:
+            isFreeView && clickProps && clickProps.isClickEnable
+              ? "pointer"
+              : "inherit",
+        }}
         onMouseOver={() => {
           if (hoverProps && isFreeView) {
             if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
@@ -69,7 +75,7 @@ const Path = ({
       >
         {status === 0 && co[0].x !== 0 && (
           <circle
-            r="2"
+            r="3"
             cx={co[0].x}
             cy={co[0].y}
             stroke={co.length === 1 ? "black" : "red"}
@@ -83,7 +89,7 @@ const Path = ({
           stroke="red"
           strokeWidth="1"
           fill={selectedItem.id === id ? selectedColor : bgColor}
-          r={10}
+          r={2}
         />
       </g>
       <line

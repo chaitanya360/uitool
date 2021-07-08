@@ -12,10 +12,10 @@ function MenuList({
   isSliderCollapsed,
   selectedItemState,
   pathsState,
-  addNewFrame,
   setCurrentTool,
   setDisplayNewFramePopup,
   Frames,
+  currentFrameId,
 }) {
   const selectedItem = selectedItemState[0];
 
@@ -56,11 +56,11 @@ function MenuList({
 
             <OnMouseClick
               pathsState={pathsState}
-              addNewFrame={addNewFrame}
               selectedItemState={selectedItemState}
               setCurrentTool={setCurrentTool}
               setDisplayNewFramePopup={setDisplayNewFramePopup}
               Frames={Frames}
+              currentFrameId={currentFrameId}
             />
           </SubMenu>
         </>
