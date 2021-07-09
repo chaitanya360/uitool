@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Path from "./Path";
-import Image from "./Image";
 import Info from "./Info";
 
 const getId = () => new Date().getTime();
@@ -40,7 +39,7 @@ const styles = {
   canvasStyle: {
     border: "1px solid black",
     height: "80vh",
-    width: "1200px",
+    width: "1100px",
     display: "block",
     position: "relative",
     objectFit: "contain",
@@ -261,7 +260,7 @@ function Frame({
       >
         <svg
           style={{
-            // backgroundImage: `url(${bgSrc})`,
+            backgroundImage: `url(${bgSrc})`,
             ...styles.svgStyle,
           }}
           onMouseLeave={handleMouseLeave}
@@ -272,7 +271,7 @@ function Frame({
           xmlnsXlink="http://www.w3.org/1999/xlink"
           // viewBox="0 0 1700 800"
         >
-          <image style={{ width: "100%", height: "100%" }} xlinkHref={bgSrc} />
+          {/* <image style={{ width: "auto", height: "100%" }} xlinkHref={bgSrc} /> */}
 
           {paths.length > 0 ? (
             paths.map((frame) => (

@@ -16,3 +16,20 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.btn {
+  background-color: rgb(16, 122, 228);
+  border: none;
+  text-decoration: none;
+  color: white;
+  padding: 5px 20px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.ant-progress-bg {
+  height: 4px !important;
+}

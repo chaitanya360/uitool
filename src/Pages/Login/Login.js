@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import InputUnderline from "../../components/InputUnderline";
 import { Typography, Space } from "antd";
