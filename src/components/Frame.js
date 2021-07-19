@@ -260,7 +260,14 @@ function Frame({
   };
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        height: "100%",
+        width: "100%",
+        backgroundColor: "rgba(17,145,255,0.01)",
+      }}
+    >
       <Info show={info} info={getInfo()} />
 
       <div

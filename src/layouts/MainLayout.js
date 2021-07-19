@@ -206,9 +206,9 @@ function MainLayout() {
         width={150}
         className="slider"
         theme="dark"
-        collapsible
+        collapsible={false}
         collapsedWidth={60}
-        collapsed={isSliderCollapsed}
+        collapsed={false}
         onCollapse={(collapsed) => setIsSliderCollpased(collapsed)}
         onClickCapture={() => setContextMenuPosition(false)}
       >

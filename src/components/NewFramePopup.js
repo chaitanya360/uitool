@@ -11,7 +11,7 @@ const getId = () => new Date().getTime();
 const styles = {
   form: {
     width: "500px",
-    zIndex: 9,
+    zIndex: 3,
     backgroundColor: "white",
     boxShadow: "2px 2px 2px rgba(0,0,0,0.4)",
     height: "fit-content",
@@ -77,7 +77,6 @@ function NewFramePopup({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          zIndex: "999",
         }}
       >
         <UploadImage
@@ -96,7 +95,6 @@ function NewFramePopup({
               right: "0",
               top: "0",
               margin: "20px",
-              zIndex: "999 !important",
             }}
           >
             <CloseCircleOutlined

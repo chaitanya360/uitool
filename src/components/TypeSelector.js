@@ -26,10 +26,24 @@ function TypeSelector({ Frames, selectedType, setSelectedType }) {
 
   getTypes();
   return (
-    <div style={{ display: "flex", alignItems: "center", margin: "10px 0px" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        margin: "10px 0px",
+      }}
+    >
       <div style={{ marginRight: "20px" }}>Select Type</div>
       <Dropdown overlay={DropDownOptions}>
-        <Button style={{ color: "white", minWidth: "100px" }}>
+        <Button
+          style={{
+            color: "white",
+            minWidth: "100px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           {selectedType}
           <DownOutlined />
         </Button>
