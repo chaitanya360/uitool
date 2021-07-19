@@ -5,7 +5,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 4;
 }
 
 .dropdown_title {
@@ -23,4 +23,23 @@
 #dropdown {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* mozilla */
+}
+
+.svgContainer {
+  /* border: 1px solid black; */
+  height: 600px;
+  width: 1200px;
+  max-width: 100%;
+  object-fit: contain;
+  overflow: scroll;
+  margin: auto;
+  /* padding: 10px 0px; */
+}
+
+.ant-layout-sider-trigger {
+  transform: translateY(-10px);
+}
+
+.menu_item_text_hover:hover {
+  color: white;
 }

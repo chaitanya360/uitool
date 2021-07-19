@@ -7,6 +7,7 @@ function SelectedPathId({ isSliderCollapsed, selectedItem }) {
         border: "1px solid rgba(255,255,255,0.8)",
         padding: "0px 10px",
         margin: "20px 0px",
+        width: "90%",
       }}
     >
       {!isSliderCollapsed && (
@@ -16,7 +17,7 @@ function SelectedPathId({ isSliderCollapsed, selectedItem }) {
               style={{
                 width: "100%",
                 textAlign: "center",
-                padding: "15px 20px",
+                padding: "15px 5px",
               }}
             >
               Selected Path Id
@@ -25,7 +26,7 @@ function SelectedPathId({ isSliderCollapsed, selectedItem }) {
               style={{
                 width: "100%",
                 textAlign: "center",
-                padding: "10px 20px 15px 20px",
+                padding: "15px 0px",
               }}
             >
               {selectedItem.id}

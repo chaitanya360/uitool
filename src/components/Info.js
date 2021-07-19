@@ -9,6 +9,7 @@ function Info({ show, info = "this is some information" }) {
           top: "10px",
           left: "50%",
           transform: "translate(-50%, 0px)",
+          zIndex: "999",
         }}
         className="animate__animated animate__fadeIn animate__delay-0s animate__faster"
       >

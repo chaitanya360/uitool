@@ -3,12 +3,20 @@ import "./Form.css";
 import InputUnderline from "../../components/InputUnderline";
 import { Typography, Space } from "antd";
 import { Button } from "antd";
-import { Link } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
+import { register } from "../../api/users";
+import Loading from "../../components/Loading";
 
-const emailRegularExpression = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/);
+const emailRegularExpression = RegExp(
+  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+);
 
-const Register = () => {
+const Register = ({ setJustRegistered }) => {
   const { Title, Text } = Typography;
+  const [loading, setLoading] = useState(false);
+  let isValid = false;
+
+  const history = useHistory();
 
   const [state, setState] = useState({
     firstName: "",
@@ -96,20 +104,41 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    validateForm();
-    console.log(state);
+
+    if (validateForm()) {
+      setLoading(true);
+      register(
+        state.firstName,
+        state.lastName,
+        state.email,
+        state.password,
+        state.number
+      ).then((response) => {
+        setLoading(false);
+        if (response.ok) {
+          if (response.data.status) {
+            setJustRegistered(true);
+            history.push("/login");
+          } else alert(response.data.message);
+        } else alert(response.problem);
+      });
+    }
   };
 
   const validateForm = () => {
+    isValid = true;
+
     const checkForEmptyEntry = (Key) => {
       if (state[Key].length == 0) {
         setError(Key, "Enter Your " + Key);
+        isValid = false;
       }
     };
 
     const checkPassword = () => {
-      if (state.password.length < 6) {
-        setPasswordError("Password should be at least 6 character long");
+      if (state.password.length < 4) {
+        setPasswordError("Password should be at least 4 character long");
+        isValid = false;
       }
     };
 
@@ -119,80 +148,86 @@ const Register = () => {
 
     if (!emailRegularExpression.test(state.email)) {
       setEmailError("Email is not valid");
+      isValid = false;
     }
 
     checkPassword();
+    return isValid;
   };
 
   return (
     <>
+      {loading && <Loading top="20%" />}
       <div className="formWrapper" />
+      <div className="formContainer">
+        <form className="formBody" onSubmit={handleRegister}>
+          <Title level={1} style={{ color: "dodgerblue" }}>
+            Register
+          </Title>
+          <div
+            style={{ width: window.innerWidth < 900 ? "80%" : "fit-content" }}
+          >
+            <div className="namesContainer">
+              <div>
+                <InputUnderline
+                  error={state.error.firstName}
+                  setError={setFirstNameError}
+                  text="First Name"
+                  type="text"
+                  value={state.firstName}
+                  setValue={setFirstName}
+                  minWidth={"100px"}
+                />
+              </div>
+              <div>
+                <InputUnderline
+                  error={state.error.lastName}
+                  setError={setLastNameError}
+                  text="Last Name"
+                  type="text"
+                  value={state.lastName}
+                  setValue={setLastName}
+                  minWidth={"100px"}
+                />
+              </div>
+            </div>
+            <InputUnderline
+              error={state.error.number}
+              setError={setNumberError}
+              text="Mobile"
+              type="number"
+              value={state.number}
+              setValue={setNumber}
+            />
+            <InputUnderline
+              error={state.error.email}
+              setError={setEmailError}
+              text="E-mail"
+              type="text"
+              value={state.email}
+              setValue={setEmail}
+            />
 
-      <form className="formBody" onSubmit={handleRegister}>
-        <Title level={1} style={{ color: "dodgerblue" }}>
-          Register
-        </Title>
-        <div style={{ width: window.innerWidth < 900 ? "80%" : "fit-content" }}>
-          <div className="namesContainer">
-            <div>
-              <InputUnderline
-                error={state.error.firstName}
-                setError={setFirstNameError}
-                text="First Name"
-                type="text"
-                value={state.firstName}
-                setValue={setFirstName}
-                minWidth={"100px"}
-              />
-            </div>
-            <div>
-              <InputUnderline
-                error={state.error.lastName}
-                setError={setLastNameError}
-                text="Last Name"
-                type="text"
-                value={state.lastName}
-                setValue={setLastName}
-                minWidth={"100px"}
-              />
-            </div>
+            <InputUnderline
+              error={state.error.password}
+              setError={setPasswordError}
+              text="Password"
+              type="password"
+              value={state.password}
+              setValue={setPassword}
+            />
           </div>
-          <InputUnderline
-            error={state.error.number}
-            setError={setNumberError}
-            text="Mobile"
-            type="number"
-            value={state.number}
-            setValue={setNumber}
-          />
-          <InputUnderline
-            error={state.error.email}
-            setError={setEmailError}
-            text="E-mail"
-            type="text"
-            value={state.email}
-            setValue={setEmail}
-          />
-
-          <InputUnderline
-            error={state.error.password}
-            setError={setPasswordError}
-            text="Password"
-            type="password"
-            value={state.password}
-            setValue={setPassword}
-          />
-        </div>
-        <input type="submit" value="Register" className="should_hover" />
-        <Text>
-          Already Have An Account?
-          <Link to="/login">
-            <Button type="link" className="alternateMethod">
-              Login
-            </Button>
-          </Link>
-        </Text>
-      </form>
+          <input type="submit" value="Register" className="should_hover" />
+          <Text>
+            Already Have An Account?
+            <Link to="/login">
+              <Button type="link" className="alternateMethod">
+                Login
+              </Button>
+            </Link>
+          </Text>
+        </form>
+      </div>
     </>
   );
 };

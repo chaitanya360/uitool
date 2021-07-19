@@ -2,38 +2,38 @@ import React, { useState } from "react";
 import { Menu } from "antd";
 
 import { SettingOutlined, FileImageOutlined } from "@ant-design/icons";
-import { EyeIcon, PenIcon, SelectIcon } from "../components/Icon";
-import OnMouseOver from "./OnMouseOver";
-import OnMouseClick from "./OnMouseClick";
-import SelectedPathId from "./SelectedPathId";
+import { EyeIcon, PenIcon } from "../components/Icon";
 
-const { SubMenu } = Menu;
+import SelectedPathId from "./SelectedPathId";
+import { colors } from "../utility";
+
 function MenuList({
   isSliderCollapsed,
   selectedItemState,
-  pathsState,
-  setCurrentTool,
-  setDisplayNewFramePopup,
+  projectName,
   Frames,
   currentFrameId,
 }) {
   const selectedItem = selectedItemState[0];
-
   return (
     <>
-      <Menu.ItemGroup key="options">
-        <Menu.Item key="change_image" icon={<FileImageOutlined />}>
-          Change Image
-        </Menu.Item>
-        <Menu.Item key="draw" icon={<PenIcon />}>
-          Draw
-        </Menu.Item>
-        <Menu.Item key="select" icon={<SelectIcon />}>
-          Select
-        </Menu.Item>
-        <Menu.Item key="free" icon={<EyeIcon />}>
-          Free
-        </Menu.Item>
+      <Menu.ItemGroup title={projectName}>
+        {Frames.map((frame) => (
+          <Menu.Item
+            key={frame.id}
+            style={{
+              padding: "5px 20px",
+              width: "100%",
+              fontWeight: "600",
+              color: frame.id === currentFrameId ? "white" : "unset",
+
+              backgroundColor:
+                frame.id === currentFrameId ? colors.light_blue : colors.blue,
+            }}
+          >
+            <div className="menu_item_text_hover">{frame.frameName}</div>
+          </Menu.Item>
+        ))}
       </Menu.ItemGroup>
 
       {selectedItem !== false && (
@@ -42,27 +42,6 @@ function MenuList({
             isSliderCollapsed={isSliderCollapsed}
             selectedItem={selectedItem}
           />
-
-          <SubMenu
-            key="actions"
-            icon={<SettingOutlined />}
-            title="Actions"
-            style={{ width: "100%" }}
-          >
-            <Menu.Item key="delete" danger>
-              Delete
-            </Menu.Item>
-            <OnMouseOver pathsState={pathsState} selectedItem={selectedItem} />
-
-            <OnMouseClick
-              pathsState={pathsState}
-              selectedItemState={selectedItemState}
-              setCurrentTool={setCurrentTool}
-              setDisplayNewFramePopup={setDisplayNewFramePopup}
-              Frames={Frames}
-              currentFrameId={currentFrameId}
-            />
-          </SubMenu>
         </>
       )}
     </>

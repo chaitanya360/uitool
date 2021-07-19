@@ -44,7 +44,7 @@ function Popups({
         setShouldDisplay={setDisplayImageUploader}
         onImageChanged={() => {
           setDisplayImageUploader(false);
-          setCurrentTool(false);
+          setCurrentTool("draw");
         }}
       />
 
@@ -56,13 +56,13 @@ function Popups({
         variant={"danger"}
         handleYes={() => {
           setShowDeleteAlert(false);
-          setCurrentTool(false);
-
+          setCurrentTool("draw");
+          setSelectedItem(false);
           deletePath();
         }}
         handleNo={() => {
           setShowDeleteAlert(false);
-          setCurrentTool(false);
+          setCurrentTool("draw");
         }}
       />
 

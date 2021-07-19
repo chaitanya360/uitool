@@ -104,7 +104,7 @@ class AlertBox extends Component {
               style={{
                 padding: "20px",
                 width,
-                zIndex: 3,
+                zIndex: 5,
                 borderRadius: "4px",
               }}
             >

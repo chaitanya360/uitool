@@ -19,7 +19,7 @@ function NewFramePopup({
   const [bgImg, setBgImg] = useState(defaultBgImage);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const selectedItem = selectedItemState[0];
+  const [selectedItem, setSelectedItem] = selectedItemState;
 
   const { TextArea } = Input;
 
@@ -34,7 +34,7 @@ function NewFramePopup({
         frame.clickProps = { ...frame.clickProps, targetFrameId: newFrameId };
       }
     });
-
+    setSelectedItem(false);
     setBgImg(defaultBgImage);
     setName("");
     setDescription("");
@@ -48,6 +48,7 @@ function NewFramePopup({
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          zIndex: "99999",
         }}
       >
         <UploadImage
@@ -79,6 +80,7 @@ function NewFramePopup({
                 right: "0",
                 top: "0",
                 margin: "20px",
+                zIndex: "999",
               }}
             >
               <CloseCircleOutlined
@@ -96,6 +98,7 @@ function NewFramePopup({
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                color="red"
               />
             </div>
             <div style={{ width: "70%", margin: "10px 0px" }}>
@@ -105,6 +108,7 @@ function NewFramePopup({
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                color="red"
               />
             </div>
             <div style={{ width: "70%", margin: "20px 0px" }}>

@@ -3,12 +3,12 @@ import { PathLine } from "react-svg-pathline";
 const Path = ({
   co,
   tempEnd,
-  shouldSelect,
   selectedItem = { id: "random" },
   handleItemSelect,
   isFreeView,
   setInfo,
   frame,
+  setContextMenuPosition,
   setCurrentFrameId,
 }) => {
   const id = frame.id;
@@ -42,10 +42,6 @@ const Path = ({
               }
             }
           }
-
-          if (shouldSelect) {
-            setBgColor(hoverColor);
-          }
         }}
         onMouseLeave={() => {
           setBgColor("transparent");
@@ -57,20 +53,22 @@ const Path = ({
           }
         }}
         onClick={() => {
-          if (shouldSelect) {
-            if (selectedItem.id === id) {
-              handleItemSelect(false);
-            } else handleItemSelect({ id: id });
-          }
-
           if (isFreeView) {
             if (clickProps) {
               if (clickProps.isClickEnable) {
-                setCurrentFrameId(parseInt(clickProps.targetFrameId));
+                if (clickProps.targetFrameId)
+                  setCurrentFrameId(parseInt(clickProps.targetFrameId));
                 setInfo(false);
               }
             }
           }
+        }}
+        onAuxClick={(e) => {
+          e.stopPropagation();
+          if (selectedItem.id === id && tempEnd.x1) {
+            handleItemSelect(false);
+            setBgColor(hoverColor);
+          } else handleItemSelect({ id: id, e });
         }}
       >
         {status === 0 && co[0].x !== 0 && (

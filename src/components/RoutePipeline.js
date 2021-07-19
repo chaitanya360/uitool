@@ -1,7 +1,12 @@
 import React from "react";
 import { Breadcrumb } from "antd";
 
-function RoutePipeline({ location, setCurrentFrameId, Frames, isFreeView }) {
+function RoutePipeline({
+  location,
+  setCurrentFrameId,
+  Frames,
+  setCurrentTool,
+}) {
   const getFrameName = (id) => {
     for (let i = 0; i < Frames.length; i++) {
       if (Frames[i].id === id) {
@@ -10,19 +15,19 @@ function RoutePipeline({ location, setCurrentFrameId, Frames, isFreeView }) {
     }
   };
   return (
-    <Breadcrumb style={{ margin: "16px 0" }}>
+    <Breadcrumb>
       {location.map((singleLocation, index) => (
         <Breadcrumb.Item
-          onClick={() =>
-            isFreeView
-              ? setCurrentFrameId(singleLocation)
-              : alert("Select Free Tool To Navigate")
-          }
+          key={index.toString()}
+          onClick={() => {
+            setCurrentTool("free");
+            setCurrentFrameId(singleLocation);
+          }}
         >
           <span
             style={{
               cursor: "pointer",
-              color: index === location.length - 1 ? "dodgerblue" : "inherit",
+              color: index === location.length - 1 ? "white" : "inherit",
             }}
           >
             {getFrameName(singleLocation)}

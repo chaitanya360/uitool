@@ -2,28 +2,29 @@ import React, { useState } from "react";
 import "./components.css";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 
-function DropDown({ children, title = "Drop Down List" }) {
-  const [visible, setVisible] = useState(false);
+function DropDown({ children, title = "Drop Down List", open = true }) {
+  const [visible, setVisible] = useState(open);
 
   return (
     <div
       style={{
         display: "block",
-        width: "97%",
-        margin: "10px 4px 5px 1px",
+        padding: "0px 10px",
+        fontWeight: "bold",
+        margin: "5px 4px",
+        minWidth: "230px",
         border: visible ? "1px solid rgba(255,255,255,0.3)" : "none",
       }}
     >
       <div
         style={{
-          padding: "20px",
+          padding: "10px 20px",
           fontSize: "16px",
           fontWeight: "lighter",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           cursor: "pointer",
-          backgroundColor: "#001529",
         }}
         onClick={() => setVisible((old) => !old)}
         className="dropdown_title"

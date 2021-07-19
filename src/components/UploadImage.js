@@ -46,7 +46,7 @@ function UploadImage({
           <span
             style={{
               position: "absolute",
-              zIndex: 3,
+              zIndex: 5,
               margin: "20px",
               right: 0,
             }}

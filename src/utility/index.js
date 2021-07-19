@@ -1,7 +1,8 @@
 let colors = {
   light_red: "#FF6060",
   yellow: "#FBBC05",
-  blue: "#105ED2",
+  blue: "#0080B9",
+  light_blue: "#00c2ff",
   green: "#38A910",
   white: "#FFFFFF",
   light_green: "#52D8BB",

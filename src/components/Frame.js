@@ -1,6 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Path from "./Path";
 import Info from "./Info";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import { colors } from "../utility";
+import UploadImage from "./UploadImage";
 
 const getId = () => new Date().getTime();
 
@@ -20,38 +23,16 @@ const isCloserToFirstPoint = (e, co, canRef) => {
 };
 
 function getCursorPos(e, canRef) {
-  var a,
-    x = 0,
-    y = 0;
-  e = e || window.event;
-  /*get the x and y positions of the image:*/
-  a = canRef.current.getBoundingClientRect();
-  /*calculate the cursor's x and y coordinates, relative to the image:*/
-  x = e.pageX - a.left;
-  y = e.pageY - a.top;
-  /*consider any page scrolling:*/
-  x = x - window.pageXOffset;
-  y = y - window.pageYOffset;
+  let x, y;
+  x = e.pageX - canRef.current.offsetLeft + canRef.current.scrollLeft;
+  y = e.pageY - canRef.current.offsetTop + canRef.current.scrollTop;
   return { x: x, y: y };
 }
 
 const styles = {
-  canvasStyle: {
-    border: "1px solid black",
-    height: "80vh",
-    width: "1100px",
-    display: "block",
-    position: "relative",
-    objectFit: "contain",
-    overflow: "hidden",
-    margin: "auto",
-  },
   svgStyle: {
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-    top: 0,
-    left: 0,
+    height: "600px",
+    width: "1200px",
     backgroundRepeat: "no-repeat",
     backgroundSize: "contain",
     backgroundPosition: "center",
@@ -59,16 +40,22 @@ const styles = {
 };
 
 function Frame({
-  currentTool,
+  currentToolState,
   selectedItem,
   setSelectedItem,
   paths,
   setPaths,
   bgSrc,
   setCurrentFrameId,
+  setContextMenuPosition,
+  setBgImg,
+  displayImageUploaderState,
 }) {
+  const [displayImageUploader, setDisplayImageUploader] =
+    displayImageUploaderState;
+  const [currentTool, setCurrentTool] = currentToolState;
   const shouldDraw = currentTool === "draw";
-  const shouldSelect = currentTool === "select";
+  // const shouldSelect = currentTool === "select";
   const isFreeView = currentTool === "free";
 
   const [co, setCo] = useState([{ x: 0, y: 0 }]);
@@ -83,6 +70,7 @@ function Frame({
   const canRef = useRef(null);
 
   const getCursor = () => {
+    if (selectedItem || !bgSrc) return "default";
     switch (currentTool) {
       case "draw":
         return `url(${process.env.PUBLIC_URL}/statics/Icons/pen.svg) 0 20, auto`;
@@ -96,7 +84,10 @@ function Frame({
   const handleItemSelect = (item) => {
     if (item) {
       paths.forEach((frame) => {
-        if (frame.id === item.id) setSelectedItem(frame);
+        if (frame.id === item.id) {
+          setSelectedItem(frame);
+          setContextMenuPosition(getContextMenuPosition(item.e, canRef));
+        }
       });
     }
   };
@@ -172,7 +163,13 @@ function Frame({
   };
 
   const handleMouseDown = (e) => {
+    if (selectedItem) {
+      setContextMenuPosition(false);
+      setSelectedItem(false);
+      return;
+    }
     if (!shouldDraw) return;
+    if (currentTool === "select") return;
 
     setTempEnd(() => ({
       x1: getCursorPos(e, canRef).x,
@@ -244,8 +241,26 @@ function Frame({
     }
   };
 
+  const getContextMenuPosition = (e, canRef) => {
+    let x = e.pageX;
+    let y = e.pageY;
+
+    let contextWidth = 235;
+    let contextHeight = 315;
+    console.log(x, window.innerWidth);
+
+    if (x > window.innerWidth - contextWidth) x -= contextWidth;
+    if (y > window.innerHeight - contextHeight)
+      y = window.innerHeight - contextHeight;
+
+    return {
+      x,
+      y,
+    };
+  };
+
   return (
-    <>
+    <div>
       <Info show={info} info={getInfo()} />
 
       <div
@@ -253,47 +268,84 @@ function Frame({
           cursor: isCloserToClose
             ? `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`
             : getCursor(),
-          ...styles.canvasStyle,
         }}
         id="canvas"
+        className="svgContainer custom_scroll"
         ref={canRef}
       >
-        <svg
-          style={{
-            backgroundImage: `url(${bgSrc})`,
-            ...styles.svgStyle,
-          }}
-          onMouseLeave={handleMouseLeave}
-          onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-          // viewBox="0 0 1700 800"
-        >
-          {/* <image style={{ width: "auto", height: "100%" }} xlinkHref={bgSrc} /> */}
+        {bgSrc ? (
+          <svg
+            style={{
+              backgroundImage: `url(${bgSrc})`,
+              ...styles.svgStyle,
+            }}
+            onMouseLeave={handleMouseLeave}
+            onMouseMove={handleMouseMove}
+            onClickCapture={handleMouseDown}
+            onAuxClick={(e) => {
+              setContextMenuPosition(false);
+              setSelectedItem(false);
+            }}
+            fill="none"
+            id="svg"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlnsXlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 1200 600"
+          >
+            {/* <image style={{ width: "auto", height: "100%" }} xlinkHref={bgSrc} /> */}
 
-          {paths.length > 0 ? (
-            paths.map((frame) => (
-              <Path
-                co={isLast(frame) ? co : frame.co}
-                tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
-                key={frame.id}
-                frame={frame}
-                shouldSelect={shouldSelect}
-                handleItemSelect={handleItemSelect}
-                selectedItem={selectedItem}
-                isFreeView={isFreeView}
-                setInfo={setInfo}
-                setCurrentFrameId={setCurrentFrameId}
-              />
-            ))
-          ) : (
-            <Path co={co} tempEnd={tempEnd} frame={{ id: 0, status: 0 }} />
-          )}
-        </svg>
+            {paths.length > 0 ? (
+              paths.map((frame) => (
+                <Path
+                  setContextMenuPosition={setContextMenuPosition}
+                  co={isLast(frame) ? co : frame.co}
+                  tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
+                  key={frame.id}
+                  frame={frame}
+                  handleItemSelect={handleItemSelect}
+                  selectedItem={selectedItem}
+                  isFreeView={isFreeView}
+                  setInfo={setInfo}
+                  setCurrentFrameId={setCurrentFrameId}
+                />
+              ))
+            ) : (
+              <Path co={co} tempEnd={tempEnd} frame={{ id: 0, status: 0 }} />
+            )}
+          </svg>
+        ) : (
+          <>
+            <UploadImage
+              setImg={setBgImg}
+              shouldDisplay={displayImageUploader}
+              setShouldDisplay={setDisplayImageUploader}
+              onImageChanged={() => {
+                setDisplayImageUploader(false);
+                setCurrentTool("draw");
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                alignItems: "center",
+                height: "100%",
+                color: colors.light_blue,
+              }}
+            >
+              <div style={{ margin: "10px", cursor: "pointer" }}>
+                <PlusCircleOutlined
+                  style={{ fontSize: "1.4rem" }}
+                  onClick={() => setDisplayImageUploader(true)}
+                />
+              </div>
+              <div>Select Bg Image</div>
+            </div>
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 

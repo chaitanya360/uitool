@@ -6,7 +6,7 @@ function ColorPicker({ bgColor, handleOnMouseOverValuesChange }) {
     <>
       <div
         style={{
-          padding: "20px",
+          padding: "10px 40px",
           height: "50px",
           display: "flex",
           justifyContent: "left",

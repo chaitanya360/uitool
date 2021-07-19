@@ -3,6 +3,7 @@ import { Menu, Button } from "antd";
 import { Checkbox } from "antd";
 import DropDown from "./DropDown";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { colors } from "../utility";
 const { SubMenu } = Menu;
 
 function OnMouseClick({
@@ -33,6 +34,7 @@ function OnMouseClick({
   };
 
   const handleOnMouseClickValuesChange = (id, value) => {
+    console.log(value);
     if (value === "new") setDisplayNewFramePopup(true);
     else {
       let tempPaths = paths;
@@ -41,7 +43,10 @@ function OnMouseClick({
         if (frame.id === selectedItem.id) {
           if (id === "change_page") {
             // setting target frame id
-            frame.clickProps = { ...frame.clickProps, targetFrameId: value };
+            frame.clickProps = {
+              ...frame.clickProps,
+              targetFrameId: parseInt(value),
+            };
             setSelectedItem(false);
             setCurrentTool(false);
           }
@@ -51,7 +56,6 @@ function OnMouseClick({
   };
 
   const handleMenuItemSelect = (e) => {
-    console.log(e.key);
     switch (e.key) {
       case "new":
         handleOnMouseClickValuesChange("change_page", "new");
@@ -60,7 +64,7 @@ function OnMouseClick({
         handleOnMouseClickValuesChange("change_page", e.key);
     }
   };
-
+  console.log(selectedItem);
   return (
     <>
       <DropDown title="On Mouse Click">
@@ -85,7 +89,7 @@ function OnMouseClick({
           >
             <div style={{ height: "fit-content" }}>
               <DropDown title="Select Page" inverted>
-                <Menu theme="dark" onSelect={handleMenuItemSelect}>
+                <Menu theme="dark" onClick={handleMenuItemSelect}>
                   <Menu.Item key="new" style={{ width: "100%" }}>
                     <div>
                       <Button
@@ -100,7 +104,19 @@ function OnMouseClick({
                   </Menu.Item>
                   {Frames.filter((frame) => frame.id !== currentFrameId).map(
                     (frame) => (
-                      <Menu.Item key={frame.id}>{frame.frameName}</Menu.Item>
+                      <Menu.Item
+                        key={frame.id}
+                        style={{
+                          color:
+                            selectedItem.clickProps &&
+                            selectedItem.clickProps.isClickEnable &&
+                            selectedItem.clickProps.targetFrameId === frame.id
+                              ? colors.light_blue
+                              : "white",
+                        }}
+                      >
+                        {frame.frameName}
+                      </Menu.Item>
                     )
                   )}
                 </Menu>

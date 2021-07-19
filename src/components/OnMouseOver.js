@@ -8,7 +8,7 @@ const { TextArea } = Input;
 const { SubMenu } = Menu;
 
 function OnMouseOver({ pathsState, selectedItem }) {
-  const bgColor = selectedItem.hoverProps.hoverColor;
+  const bgColor = selectedItem ? selectedItem.hoverProps.hoverColor : "green";
   const [paths, setPaths] = pathsState;
   const handleOnMouseOverOptionsCheckedChange = (id, isChecked) => {
     // risk to direct change paths
@@ -51,74 +51,76 @@ function OnMouseOver({ pathsState, selectedItem }) {
 
   return (
     <>
-      <DropDown title="On Mouse Over">
-        <Menu theme="dark">
-          <SubMenu
-            popupOffset="10px"
-            key="color"
-            title={
-              <Checkbox
-                style={{ color: "inherit" }}
-                checked={selectedItem.hoverProps.isColorEnable}
-                onChange={(e) =>
-                  handleOnMouseOverOptionsCheckedChange(
-                    "color",
-                    e.target.checked
-                  )
-                }
-              >
-                Background Color
-              </Checkbox>
-            }
-            style={{ width: "100%" }}
-          >
-            <ColorPicker
-              bgColor={bgColor}
-              handleOnMouseOverValuesChange={handleOnMouseOverValuesChange}
-            />
-          </SubMenu>
-          <SubMenu
-            popupOffset="10px"
-            key="info"
-            title={
-              <Checkbox
-                checked={selectedItem.hoverProps.isInfoEnable}
-                style={{ color: "inherit" }}
-                onChange={(e) =>
-                  handleOnMouseOverOptionsCheckedChange(
-                    "info",
-                    e.target.checked
-                  )
-                }
-              >
-                Show Information
-              </Checkbox>
-            }
-            style={{ width: "100%" }}
-          >
-            <div
-              style={{
-                backgroundColor: "black",
-                display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
-                flexDirection: "column",
-                padding: "10px",
-                color: "white",
-              }}
+      {selectedItem && (
+        <DropDown title="On Mouse Over">
+          <Menu theme="dark">
+            <SubMenu
+              popupOffset="20px"
+              key="color"
+              title={
+                <Checkbox
+                  style={{ color: "inherit" }}
+                  checked={selectedItem.hoverProps.isColorEnable}
+                  onChange={(e) =>
+                    handleOnMouseOverOptionsCheckedChange(
+                      "color",
+                      e.target.checked
+                    )
+                  }
+                >
+                  Background Color
+                </Checkbox>
+              }
+              style={{ width: "100%" }}
             >
-              <TextArea
-                placeholder="Enter Info For the Selected Path"
-                autoSize={{ minRows: 2, maxRows: 6 }}
-                value={selectedItem.hoverProps.hoverInfo}
-                onChange={(e) =>
-                  handleOnMouseOverValuesChange("info", e.target.value)
-                }
+              <ColorPicker
+                bgColor={bgColor}
+                handleOnMouseOverValuesChange={handleOnMouseOverValuesChange}
               />
-            </div>
-          </SubMenu>
-        </Menu>
-      </DropDown>
+            </SubMenu>
+            <SubMenu
+              popupOffset="10px"
+              key="info"
+              title={
+                <Checkbox
+                  checked={selectedItem.hoverProps.isInfoEnable}
+                  style={{ color: "inherit" }}
+                  onChange={(e) =>
+                    handleOnMouseOverOptionsCheckedChange(
+                      "info",
+                      e.target.checked
+                    )
+                  }
+                >
+                  Show Information
+                </Checkbox>
+              }
+              style={{ width: "100%", borderRadius: "20px" }}
+            >
+              <div
+                style={{
+                  backgroundColor: "black",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  padding: "10px",
+                  color: "white",
+                }}
+              >
+                <TextArea
+                  placeholder="Enter Info For the Selected Path"
+                  autoSize={{ minRows: 2, maxRows: 6 }}
+                  value={selectedItem.hoverProps.hoverInfo}
+                  onChange={(e) =>
+                    handleOnMouseOverValuesChange("info", e.target.value)
+                  }
+                />
+              </div>
+            </SubMenu>
+          </Menu>
+        </DropDown>
+      )}
     </>
   );
 }

@@ -1,5 +1,5 @@
 input[type="submit"],
-btn {
+.btn {
   background-color: rgb(16, 122, 228);
   border: none;
   text-decoration: none;
@@ -30,19 +30,40 @@ btn {
   background: white;
 }
 
+.formContainer {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
 .formBody {
   height: 100vh;
-  width: 100vw;
+  width: 450px;
   padding: 10px;
+  padding-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .namesContainer {
   display: flex;
   justify-content: space-between;
   width: 450px;
+}
+
+.register_success_login_info {
+  opacity: 0.9;
+  margin: 0px 0px 20px 0px;
+  background-color: dodgerblue;
+  color: white;
+  padding: 5px;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 0;
 }
 
 @media screen and (max-width: 600px) {

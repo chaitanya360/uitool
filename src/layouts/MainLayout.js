@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Frame from "../components/Frame";
 import Popups from "../components/Popups";
 import MenuList from "../components/MenuList";
-import RoutePipeline from "../components/RoutePipeline";
+import ContextMenu from "../components/ContextMenu";
+import Header from "../components/Header";
 
 const { Content, Sider } = Layout;
 
@@ -20,42 +21,59 @@ const styles = {
 
   content: {
     margin: 0,
-    padding: 24,
     width: "100%",
-    height: "100%",
+    height: "100vh",
     overflow: "scroll",
   },
 };
 
 const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
-const initialFrameValues = {
-  paths: [],
-  bgImg: defaultBgImage,
-  frameName: "Home",
-  id: getId(),
+const initialFrameValues = [
+  { paths: [], bgImg: false, frameName: "Tower", id: getId(), type: "Tower" },
+  {
+    paths: [],
+    bgImg: false,
+    frameName: "Block",
+    id: getId() + 1,
+    type: "block",
+  },
+  {
+    paths: [],
+    bgImg: false,
+    frameName: "Floor",
+    id: getId() + 2,
+    type: "floor",
+  },
+  { paths: [], bgImg: false, frameName: "Flat", id: getId() + 3, type: "flat" },
+];
+
+const getTowerId = () => {
+  for (let i = 0; i < initialFrameValues.length; i++)
+    if (initialFrameValues[i].frameName === "Tower")
+      return initialFrameValues[i].id;
 };
 
 function MainLayout() {
-  // draw, select
-
   const pathsState = useState([]);
   const deleteAlertState = useState(false);
   const selectedItemState = useState(false);
   const imgeChangeAlertState = useState(false);
   const displayNewFramePopupState = useState(false);
   const displayImageUploaderState = useState(false);
-  const [bgImg, setBgImg] = useState(defaultBgImage);
-  const [currentTool, setCurrentTool] = useState("draw");
-  const [Frames, setFrames] = useState([initialFrameValues]);
+  const [bgImg, setBgImg] = useState(false);
+  const currentToolState = useState("draw");
+  const [project, setProject] = useState({ ProjectName: "New Project" });
+  const [Frames, setFrames] = useState(initialFrameValues);
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
-  const [currentFrameId, setCurrentFrameId] = useState(initialFrameValues.id);
-  const [location, setLocation] = useState([]);
+  const [currentFrameId, setCurrentFrameId] = useState(getTowerId());
+  const [ContextMenuPosition, setContextMenuPosition] = useState(false);
+  const [location, setLocation] = useState([getTowerId()]);
 
   const [paths, setPaths] = pathsState;
-  const setShowDeleteAlert = deleteAlertState[1];
   const setshowImgChangeAlert = imgeChangeAlertState[1];
   const [selectedItem, setSelectedItem] = selectedItemState;
   const setDisplayNewFramePopup = displayNewFramePopupState[1];
+  const [currentTool, setCurrentTool] = currentToolState;
 
   const setCurrentFrame = (values) => {
     let tempFrames = Frames;
@@ -70,15 +88,15 @@ function MainLayout() {
     setFrames(tempFrames);
   };
 
-  // function called when the compounenet is mounted for the first time
-  useEffect(() => {
-    setCurrentFrameId(Frames[0].id);
-    setLocation([Frames[0].id]);
-  }, []);
+  const getCurrentFrame = () =>
+    Frames.find((frame) => frame.id === currentFrameId);
 
   useEffect(() => {
     setCurrentFrameId(Frames[Frames.length - 1].id);
+    setProject((old) => ({ ...old, Frames }));
   }, [Frames]);
+
+  console.log(location);
 
   useEffect(() => {
     setCurrentFrame({
@@ -95,6 +113,10 @@ function MainLayout() {
     updateLocation(currentFrameId);
   }, [currentFrameId]);
 
+  useEffect(() => {
+    if (!selectedItem) setContextMenuPosition(false);
+  }, [selectedItem]);
+
   const addNewFrame = (frameName, description, bgImg, id = "not specified") => {
     setFrames((old) => [
       ...old,
@@ -110,7 +132,7 @@ function MainLayout() {
   const updateLocation = (currentId) => {
     let index = location.indexOf(currentId);
     let newLocation = [];
-
+    // if (location.length == 0) setLocation([currentFrameId]);
     if (location.length > 0) {
       // if currentId is not visited (moving forward)
       if (index === -1) {
@@ -125,90 +147,112 @@ function MainLayout() {
   };
 
   const handleMenuItemSelected = (e) => {
-    setCurrentTool(e.key);
-    setIsSliderCollpased(false);
-
-    switch (e.key) {
-      case "draw":
-        setSelectedItem(false);
-
-        break;
-      case "delete":
-        setShowDeleteAlert(true);
-        break;
-
-      case "free":
-        setSelectedItem(false);
-        setIsSliderCollpased(true);
-        break;
-
-      case "change_image":
-        setshowImgChangeAlert(true);
-
-        break;
-    }
+    setCurrentFrameId(parseInt(e.key));
   };
 
+  // don't know why but it just fixed
+  // the problem of routepipeline
+  useState(() => {
+    setTimeout(() => {
+      setCurrentFrameId(getTowerId());
+    }, 1);
+  }, []);
+
   return (
-    <Layout>
-      <Layout>
-        <Sider
-          width={200}
-          className="slider"
+    <Layout
+      onContextMenuCapture={(e) => e.preventDefault()}
+      style={{
+        position: "fixed",
+        height: "100vh",
+        width: "100vw",
+        top: "0px",
+        left: "0px",
+      }}
+    >
+      <Sider
+        style={{ overflow: "hidden" }}
+        width={150}
+        className="slider"
+        theme="dark"
+        collapsible
+        collapsedWidth={60}
+        collapsed={isSliderCollapsed}
+        onCollapse={(collapsed) => setIsSliderCollpased(collapsed)}
+        onClickCapture={() => setContextMenuPosition(false)}
+      >
+        <Menu
+          selectable={false}
           theme="dark"
-          collapsible
-          collapsed={isSliderCollapsed}
-          onCollapse={(collapsed) => setIsSliderCollpased(collapsed)}
+          mode="inline"
+          style={styles.menu}
+          onClick={(e) => handleMenuItemSelected(e)}
         >
-          <Menu
-            selectedKeys={[currentTool]}
-            mode="inline"
-            style={styles.menu}
-            onSelect={(e) => handleMenuItemSelected(e)}
-            theme="dark"
-          >
-            <MenuList
-              isSliderCollapsed={isSliderCollapsed}
-              pathsState={pathsState}
-              selectedItemState={selectedItemState}
-              setCurrentTool={setCurrentTool}
-              setDisplayNewFramePopup={setDisplayNewFramePopup}
-              Frames={Frames}
-              currentFrameId={currentFrameId}
-            />
-          </Menu>
-        </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
-          <RoutePipeline
-            isFreeView={currentTool === "free"}
-            location={location}
-            setCurrentFrameId={setCurrentFrameId}
+          <MenuList
+            currentFrameId={currentFrameId}
+            isSliderCollapsed={isSliderCollapsed}
+            selectedItemState={selectedItemState}
+            projectName={project.ProjectName}
             Frames={Frames}
           />
-          <Content className="site-layout-background" style={styles.content}>
-            <Frame
-              currentTool={currentTool}
-              selectedItem={selectedItem}
-              setSelectedItem={setSelectedItem}
-              paths={paths}
-              setPaths={setPaths}
-              bgSrc={bgImg}
-              setCurrentFrameId={setCurrentFrameId}
-            />
+        </Menu>
+      </Sider>
 
-            <Popups
-              deleteAlertState={deleteAlertState}
-              imgeChangeAlertState={imgeChangeAlertState}
-              setCurrentTool={setCurrentTool}
-              setBgImg={setBgImg}
-              selectedItemState={selectedItemState}
-              displayImageUploaderState={displayImageUploaderState}
-              displayNewFramePopupState={displayNewFramePopupState}
-              addNewFrame={addNewFrame}
-              pathsState={pathsState}
-            />
-          </Content>
-        </Layout>
+      <Layout
+        style={{
+          padding: "0",
+        }}
+      >
+        {ContextMenuPosition && (
+          <ContextMenu
+            Frames={Frames}
+            currentFrameId={currentFrameId}
+            pathsState={pathsState}
+            selectedItem={selectedItem}
+            selectedItemState={selectedItemState}
+            setCurrentTool={setCurrentTool}
+            setDisplayNewFramePopup={setDisplayNewFramePopup}
+            handleContextMenuSelect={handleMenuItemSelected}
+            ContextMenuPosition={ContextMenuPosition}
+          />
+        )}
+        <Header
+          currentTool={currentTool}
+          setCurrentTool={setCurrentTool}
+          setshowImgChangeAlert={setshowImgChangeAlert}
+          FrameName={getCurrentFrame().frameName}
+          Frames={Frames}
+          location={location}
+          setCurrentFrameId={setCurrentFrameId}
+        />
+        <Content
+          className="site-layout-background hidden_scroll"
+          style={styles.content}
+        >
+          <Frame
+            setContextMenuPosition={setContextMenuPosition}
+            currentToolState={currentToolState}
+            selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
+            paths={paths}
+            setPaths={setPaths}
+            bgSrc={bgImg}
+            setCurrentFrameId={setCurrentFrameId}
+            displayImageUploaderState={displayImageUploaderState}
+            setBgImg={setBgImg}
+          />
+
+          <Popups
+            deleteAlertState={deleteAlertState}
+            imgeChangeAlertState={imgeChangeAlertState}
+            setCurrentTool={setCurrentTool}
+            setBgImg={setBgImg}
+            selectedItemState={selectedItemState}
+            displayImageUploaderState={displayImageUploaderState}
+            displayNewFramePopupState={displayNewFramePopupState}
+            addNewFrame={addNewFrame}
+            pathsState={pathsState}
+          />
+        </Content>
       </Layout>
     </Layout>
   );
