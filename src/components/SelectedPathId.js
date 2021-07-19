@@ -6,7 +6,7 @@ function SelectedPathId({ isSliderCollapsed, selectedItem }) {
       style={{
         border: "1px solid rgba(255,255,255,0.8)",
         padding: "0px 10px",
-        margin: "20px 0px",
+        margin: "20px auto",
         width: "90%",
       }}
     >

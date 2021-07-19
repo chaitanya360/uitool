@@ -14,9 +14,6 @@ const getId = () => new Date().getTime();
 const styles = {
   menu: {
     height: "100%",
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "column",
   },
 
   content: {
@@ -29,22 +26,45 @@ const styles = {
 
 const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
 const initialFrameValues = [
-  { paths: [], bgImg: false, frameName: "Tower", id: getId(), type: "Tower" },
   {
     paths: [],
     bgImg: false,
-    frameName: "Block",
+    frameName: "TowerTitle",
+    isPlaceHolder: true,
+    id: getId() - 2,
+    type: "Tower",
+  },
+  {
+    paths: [],
+    bgImg: false,
+    frameName: "Tower",
+    id: getId() - 1,
+    type: "Tower",
+  },
+  {
+    paths: [],
+    bgImg: false,
+    frameName: "BlockTitle",
+    isPlaceHolder: true,
     id: getId() + 1,
-    type: "block",
+    type: "Block",
   },
   {
     paths: [],
     bgImg: false,
-    frameName: "Floor",
+    frameName: "FloorTitle",
+    isPlaceHolder: true,
     id: getId() + 2,
-    type: "floor",
+    type: "Floor",
   },
-  { paths: [], bgImg: false, frameName: "Flat", id: getId() + 3, type: "flat" },
+  {
+    paths: [],
+    bgImg: false,
+    frameName: "FlatTitle",
+    isPlaceHolder: true,
+    id: getId() + 3,
+    type: "Flat",
+  },
 ];
 
 const getTowerId = () => {
@@ -68,7 +88,7 @@ function MainLayout() {
   const [currentFrameId, setCurrentFrameId] = useState(getTowerId());
   const [ContextMenuPosition, setContextMenuPosition] = useState(false);
   const [location, setLocation] = useState([getTowerId()]);
-
+  const [newPageFormDetails, setNewPageFormDetails] = useState(false);
   const [paths, setPaths] = pathsState;
   const setshowImgChangeAlert = imgeChangeAlertState[1];
   const [selectedItem, setSelectedItem] = selectedItemState;
@@ -96,8 +116,6 @@ function MainLayout() {
     setProject((old) => ({ ...old, Frames }));
   }, [Frames]);
 
-  console.log(location);
-
   useEffect(() => {
     setCurrentFrame({
       paths,
@@ -117,10 +135,16 @@ function MainLayout() {
     if (!selectedItem) setContextMenuPosition(false);
   }, [selectedItem]);
 
-  const addNewFrame = (frameName, description, bgImg, id = "not specified") => {
+  const addNewFrame = (
+    frameName,
+    description,
+    bgImg,
+    id = "not specified",
+    type = "Tower"
+  ) => {
     setFrames((old) => [
       ...old,
-      { paths: [], bgImg, frameName, id, description },
+      { paths: [], bgImg, frameName, id, description, type },
     ]);
 
     setLocation((old) => [...old, id]);
@@ -146,8 +170,11 @@ function MainLayout() {
     }
   };
 
-  const handleMenuItemSelected = (e) => {
-    setCurrentFrameId(parseInt(e.key));
+  const handleContextMenuItemSelected = (e) => {
+    switch (e.key) {
+      case "delete":
+        deleteAlertState[1](true);
+    }
   };
 
   // don't know why but it just fixed
@@ -170,7 +197,12 @@ function MainLayout() {
       }}
     >
       <Sider
-        style={{ overflow: "hidden" }}
+        style={{
+          padding: "0",
+          margin: "0",
+          width: "100%",
+          maxHeight: "100%",
+        }}
         width={150}
         className="slider"
         theme="dark"
@@ -185,7 +217,7 @@ function MainLayout() {
           theme="dark"
           mode="inline"
           style={styles.menu}
-          onClick={(e) => handleMenuItemSelected(e)}
+          // onClick={(e) => console.log(e)}
         >
           <MenuList
             currentFrameId={currentFrameId}
@@ -193,6 +225,10 @@ function MainLayout() {
             selectedItemState={selectedItemState}
             projectName={project.ProjectName}
             Frames={Frames}
+            setCurrentFrameId={setCurrentFrameId}
+            displayNewFramePopupState={displayNewFramePopupState}
+            currentFrameType={getCurrentFrame().type}
+            setNewPageFormDetails={setNewPageFormDetails}
           />
         </Menu>
       </Sider>
@@ -211,7 +247,7 @@ function MainLayout() {
             selectedItemState={selectedItemState}
             setCurrentTool={setCurrentTool}
             setDisplayNewFramePopup={setDisplayNewFramePopup}
-            handleContextMenuSelect={handleMenuItemSelected}
+            handleContextMenuSelect={handleContextMenuItemSelected}
             ContextMenuPosition={ContextMenuPosition}
           />
         )}
@@ -251,6 +287,8 @@ function MainLayout() {
             displayNewFramePopupState={displayNewFramePopupState}
             addNewFrame={addNewFrame}
             pathsState={pathsState}
+            setContextMenuPosition={setContextMenuPosition}
+            newPageFormDetails={newPageFormDetails}
           />
         </Content>
       </Layout>

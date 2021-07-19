@@ -13,6 +13,8 @@ function Popups({
   displayNewFramePopupState,
   addNewFrame,
   pathsState,
+  setContextMenuPosition,
+  newPageFormDetails,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -31,13 +33,16 @@ function Popups({
 
   return (
     <>
-      <NewFramePopup
-        show={displayNewFramePopup}
-        setShow={setDisplayNewFramePopup}
-        addNewFrame={addNewFrame}
-        selectedItemState={selectedItemState}
-        paths={paths}
-      />
+      {displayNewFramePopup && (
+        <NewFramePopup
+          show={displayNewFramePopup}
+          setShow={setDisplayNewFramePopup}
+          addNewFrame={addNewFrame}
+          selectedItemState={selectedItemState}
+          paths={paths}
+          newPageFormDetails={newPageFormDetails}
+        />
+      )}
       <UploadImage
         setImg={setBgImg}
         shouldDisplay={displayImageUploader}
@@ -55,6 +60,7 @@ function Popups({
         autoClose={false}
         variant={"danger"}
         handleYes={() => {
+          setContextMenuPosition(false);
           setShowDeleteAlert(false);
           setCurrentTool("draw");
           setSelectedItem(false);

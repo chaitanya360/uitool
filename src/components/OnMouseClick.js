@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Menu, Button } from "antd";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Checkbox } from "antd";
 import DropDown from "./DropDown";
-import { PlusCircleOutlined } from "@ant-design/icons";
 import { colors } from "../utility";
+import DropDownGroupItem from "./DropDownGroupItem";
 const { SubMenu } = Menu;
 
 function OnMouseClick({
@@ -15,6 +16,8 @@ function OnMouseClick({
   currentFrameId,
 }) {
   const [selectedItem, setSelectedItem] = selectedItemState;
+  const [selectedFrameType, setSelectedFrameType] = useState("Tower");
+
   const [paths, setPaths] = pathsState;
 
   const handleOnMouseClickOptionsCheckedChange = (id, isChecked) => {
@@ -34,7 +37,6 @@ function OnMouseClick({
   };
 
   const handleOnMouseClickValuesChange = (id, value) => {
-    console.log(value);
     if (value === "new") setDisplayNewFramePopup(true);
     else {
       let tempPaths = paths;
@@ -64,7 +66,39 @@ function OnMouseClick({
         handleOnMouseClickValuesChange("change_page", e.key);
     }
   };
-  console.log(selectedItem);
+
+  const getListedData = () => {
+    let Resultlist = [];
+
+    for (let i = 0; i < Frames.length; i++) {
+      let currentFrame = Frames[i];
+      let hasOfSameType = false;
+      for (let j = 0; j < Resultlist.length; j++) {
+        if (currentFrame.type === Resultlist[j].type) {
+          Resultlist[j].list.push(currentFrame);
+          hasOfSameType = true;
+          break;
+        }
+      }
+      if (!hasOfSameType) {
+        if (currentFrame.isPlaceHolder) {
+          Resultlist.push({
+            type: currentFrame.type,
+            list: [],
+          });
+        } else {
+          Resultlist.push({
+            type: currentFrame.type,
+            list: [currentFrame],
+          });
+        }
+      }
+    }
+
+    console.log(Resultlist);
+    return Resultlist;
+  };
+
   return (
     <>
       <DropDown title="On Mouse Click">
@@ -102,23 +136,47 @@ function OnMouseClick({
                       </Button>
                     </div>
                   </Menu.Item>
-                  {Frames.filter((frame) => frame.id !== currentFrameId).map(
-                    (frame) => (
-                      <Menu.Item
-                        key={frame.id}
-                        style={{
-                          color:
-                            selectedItem.clickProps &&
-                            selectedItem.clickProps.isClickEnable &&
-                            selectedItem.clickProps.targetFrameId === frame.id
-                              ? colors.light_blue
-                              : "white",
-                        }}
+
+                  {getListedData().map((singleType) => (
+                    <div
+                      style={{
+                        padding: "5px 0px",
+                        width: "90%",
+                        fontWeight: "600",
+                        margin: "10px auto",
+                      }}
+                    >
+                      <DropDownGroupItem
+                        titleBgChangeOnSelect
+                        title={singleType.type + "s"}
+                        visible={selectedFrameType == singleType.type}
+                        onDropDownArrowClick={() =>
+                          selectedFrameType === singleType.type
+                            ? setSelectedFrameType(false)
+                            : setSelectedFrameType(singleType.type)
+                        }
                       >
-                        {frame.frameName}
-                      </Menu.Item>
-                    )
-                  )}
+                        {singleType.list
+                          .filter((frame) => frame.id !== currentFrameId)
+                          .map((frame) => (
+                            <Menu.Item
+                              key={frame.id}
+                              style={{
+                                color:
+                                  selectedItem.clickProps &&
+                                  selectedItem.clickProps.isClickEnable &&
+                                  selectedItem.clickProps.targetFrameId ===
+                                    frame.id
+                                    ? colors.light_blue
+                                    : "white",
+                              }}
+                            >
+                              {frame.frameName}
+                            </Menu.Item>
+                          ))}
+                      </DropDownGroupItem>
+                    </div>
+                  ))}
                 </Menu>
               </DropDown>
             </div>

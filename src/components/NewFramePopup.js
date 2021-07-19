@@ -13,6 +13,7 @@ function NewFramePopup({
   setShow,
   selectedItemState,
   paths,
+  newPageFormDetails,
 }) {
   const [shouldDisplayUploadPopup, setShouldDisplayUploadPopup] =
     useState(false);
@@ -22,10 +23,10 @@ function NewFramePopup({
   const [selectedItem, setSelectedItem] = selectedItemState;
 
   const { TextArea } = Input;
-
   const handleAddNewFrame = () => {
     const newFrameId = getId();
-    addNewFrame(name, description, bgImg, newFrameId);
+    console.log(newPageFormDetails.type);
+    addNewFrame(name, description, bgImg, newFrameId, newPageFormDetails.type);
     let tempPaths = paths;
 
     tempPaths.forEach((frame) => {
@@ -89,12 +90,17 @@ function NewFramePopup({
               />
             </div>
 
-            <h3 style={{}}>New Frame</h3>
+            <h3 style={{}}>
+              New {newPageFormDetails ? newPageFormDetails.type : "Page"}
+            </h3>
             {/* <UploadImage shouldDisplay /> */}
             <div style={{ width: "70%", margin: "10px 0px" }}>
-              <div style={{ margin: "10px 0" }}>Frame Name</div>
+              <div style={{ margin: "10px 0" }}>
+                {" "}
+                {newPageFormDetails ? newPageFormDetails.type : "Page"} Name
+              </div>
               <Input
-                placeholder="New Frame"
+                placeholder="Name"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -102,9 +108,12 @@ function NewFramePopup({
               />
             </div>
             <div style={{ width: "70%", margin: "10px 0px" }}>
-              <div style={{ margin: "10px 0" }}>Frame Description</div>
+              <div style={{ margin: "10px 0" }}>
+                {newPageFormDetails ? newPageFormDetails.type : "Page"}{" "}
+                Description
+              </div>
               <TextArea
-                placeholder="This is New Frame"
+                placeholder="Description"
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -151,7 +160,7 @@ function NewFramePopup({
                 style={{ marginTop: "30px" }}
                 onClick={handleAddNewFrame}
               >
-                Add Frame
+                Add {newPageFormDetails ? newPageFormDetails.type : "Page"}
               </Button>
             </div>
           </div>

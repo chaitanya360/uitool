@@ -1,37 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./components.css";
-import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { UpOutlined } from "@ant-design/icons";
 import { colors } from "../utility";
 
-function DropDown({
+function DropDownGroupItem({
   titleBgChangeOnSelect = false,
   children,
   title = "Drop Down List",
-  open = true,
-  containerStyle = {
-    margin: "5px 4px",
-    padding: "0px 10px",
-    minWidth: "230px",
-  },
-  titleStyle = { padding: "10px 20px" },
-  listContainerStyle,
+  visible,
+  onDropDownArrowClick,
 }) {
-  const [visible, setVisible] = useState(open);
-
   return (
     <div
       style={{
         fontWeight: "bold",
         display: "block",
-        border: visible
-          ? "1px solid rgba(255,255,255,0.3)"
-          : "1px solid transparent",
-        ...containerStyle,
+        minWidth: "100%",
+        padding: "0px",
+        border: "none",
       }}
     >
       <div
         style={{
-          ...titleStyle,
+          padding: "10px 10px",
           fontSize: "16px",
           fontWeight: "lighter",
           display: "flex",
@@ -43,7 +34,7 @@ function DropDown({
               ? colors.light_blue
               : "transparent",
         }}
-        onClick={() => setVisible((old) => !old)}
+        onClick={onDropDownArrowClick}
         className="dropdown_title"
       >
         <span>{title}</span>
@@ -62,11 +53,12 @@ function DropDown({
           boxSizing: "revert",
           display: visible ? "block" : "none",
           height: visible ? "fit-content" : "0px",
-          overflow: "hidden",
+          overflow: "auto",
           maxHeight: "500px",
-          overflowY: "scroll",
           marginLeft: "0.5px",
-          ...listContainerStyle,
+          border: "1px solid rgba(255,255,255,0.3)",
+          borderTop: "none",
+          maxHeight: "220px",
         }}
         id="dropdown"
       >
@@ -76,4 +68,4 @@ function DropDown({
   );
 }
 
-export default DropDown;
+export default DropDownGroupItem;
