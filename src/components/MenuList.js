@@ -52,7 +52,6 @@ function MenuList({
     }
 
     // Resultlist.push({ type, list });
-    console.log(Resultlist);
     return Resultlist;
   };
 

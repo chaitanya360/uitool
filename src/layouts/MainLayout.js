@@ -249,6 +249,8 @@ function MainLayout() {
             setDisplayNewFramePopup={setDisplayNewFramePopup}
             handleContextMenuSelect={handleContextMenuItemSelected}
             ContextMenuPosition={ContextMenuPosition}
+            setNewPageFormDetails={setNewPageFormDetails}
+            setContextMenuPosition={setContextMenuPosition}
           />
         )}
         <Header
@@ -289,6 +291,7 @@ function MainLayout() {
             pathsState={pathsState}
             setContextMenuPosition={setContextMenuPosition}
             newPageFormDetails={newPageFormDetails}
+            Frames={Frames}
           />
         </Content>
       </Layout>

@@ -62,9 +62,8 @@ function DropDown({
           boxSizing: "revert",
           display: visible ? "block" : "none",
           height: visible ? "fit-content" : "0px",
-          overflow: "hidden",
           maxHeight: "500px",
-          overflowY: "scroll",
+          overflowY: "auto",
           marginLeft: "0.5px",
           ...listContainerStyle,
         }}

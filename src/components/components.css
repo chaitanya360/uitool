@@ -54,3 +54,7 @@
 .menu_item_text_hover:hover {
   color: white;
 }
+
+.ant-menu-submenu-popup {
+  z-index: 3 !important;
+}

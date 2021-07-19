@@ -85,16 +85,19 @@ function Header({
           }}
         >
           <IconMenuItem
+            tooltip="Free View"
             Icon={<EyeIcon />}
             selected={selectedMenuItem === "free"}
             onClick={() => handleHeaderMenuSelect("free")}
           />
           <IconMenuItem
+            tooltip="Change Background Image"
             Icon={<FileOutlined />}
             selected={selectedMenuItem === "change_bg"}
             onClick={() => handleHeaderMenuSelect("change_bg")}
           />
           <IconMenuItem
+            tooltip="Draw Path"
             Icon={<PenIcon />}
             selected={selectedMenuItem === "draw"}
             onClick={() => handleHeaderMenuSelect("draw")}
@@ -112,6 +115,7 @@ function Header({
               Icon={<EditOutlined style={{ fontSize: "1.2rem" }} />}
               text="Edit"
               id="edit"
+              key="edit"
             />
             <IconTextItem
               Icon={<LogoutOutlined style={{ fontSize: "1.1rem" }} />}

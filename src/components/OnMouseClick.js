@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Menu, Button } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { ConsoleSqlOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Checkbox } from "antd";
 import DropDown from "./DropDown";
 import { colors } from "../utility";
@@ -14,9 +14,11 @@ function OnMouseClick({
   setDisplayNewFramePopup,
   Frames,
   currentFrameId,
+  setNewPageFormDetails,
+  setContextMenuPosition,
 }) {
   const [selectedItem, setSelectedItem] = selectedItemState;
-  const [selectedFrameType, setSelectedFrameType] = useState("Tower");
+  const [selectedFrameType, setSelectedFrameType] = useState(false);
 
   const [paths, setPaths] = pathsState;
 
@@ -37,8 +39,11 @@ function OnMouseClick({
   };
 
   const handleOnMouseClickValuesChange = (id, value) => {
-    if (value === "new") setDisplayNewFramePopup(true);
-    else {
+    if (value === "new") {
+      setContextMenuPosition(false);
+      setNewPageFormDetails(false);
+      setDisplayNewFramePopup(true);
+    } else {
       let tempPaths = paths;
 
       tempPaths.forEach((frame) => {
@@ -95,7 +100,6 @@ function OnMouseClick({
       }
     }
 
-    console.log(Resultlist);
     return Resultlist;
   };
 
@@ -123,8 +127,12 @@ function OnMouseClick({
           >
             <div style={{ height: "fit-content" }}>
               <DropDown title="Select Page" inverted>
-                <Menu theme="dark" onClick={handleMenuItemSelect}>
-                  <Menu.Item key="new" style={{ width: "100%" }}>
+                <Menu theme="dark">
+                  <Menu.Item
+                    key="new"
+                    style={{ width: "100%" }}
+                    onClick={() => handleMenuItemSelect({ key: "new" })}
+                  >
                     <div>
                       <Button
                         type="link"
@@ -161,6 +169,12 @@ function OnMouseClick({
                           .map((frame) => (
                             <Menu.Item
                               key={frame.id}
+                              onClick={() =>
+                                handleOnMouseClickValuesChange(
+                                  "change_page",
+                                  frame.id
+                                )
+                              }
                               style={{
                                 color:
                                   selectedItem.clickProps &&

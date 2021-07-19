@@ -15,6 +15,7 @@ function Popups({
   pathsState,
   setContextMenuPosition,
   newPageFormDetails,
+  Frames,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -41,6 +42,7 @@ function Popups({
           selectedItemState={selectedItemState}
           paths={paths}
           newPageFormDetails={newPageFormDetails}
+          Frames={Frames}
         />
       )}
       <UploadImage

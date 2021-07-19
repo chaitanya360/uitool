@@ -15,6 +15,8 @@ function ContextMenu({
   selectedItemState,
   handleContextMenuSelect,
   ContextMenuPosition = { x: 0, y: 0 },
+  setNewPageFormDetails,
+  setContextMenuPosition,
 }) {
   return (
     <Menu
@@ -65,6 +67,8 @@ function ContextMenu({
             setDisplayNewFramePopup={setDisplayNewFramePopup}
             Frames={Frames}
             currentFrameId={currentFrameId}
+            setNewPageFormDetails={setNewPageFormDetails}
+            setContextMenuPosition={setContextMenuPosition}
           />
         </>
       )}
