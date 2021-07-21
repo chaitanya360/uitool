@@ -7,7 +7,6 @@ import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import storage from "../../api/storage";
 import { login } from "../../api/users";
-import jwtDecode from "jwt-decode";
 import Loading from "../../components/Loading";
 
 const emailRegularExpression = RegExp(
@@ -54,14 +53,14 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
             };
 
             // storing token and user object
-            storage.storeToken(user.token);
+            storage.storeToken(userData.token);
             storage.storeUser(user);
 
             // setting user globlly
             authContext.setUser(user);
 
             // redirecting to "workspace"
-            history.push("/workspace");
+            history.push("/dashboard");
           } else alert(response.data.message);
         } else alert(response.problem);
       });

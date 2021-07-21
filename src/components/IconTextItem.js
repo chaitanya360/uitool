@@ -2,7 +2,12 @@ import React from "react";
 import { Menu } from "antd";
 import { EyeIcon } from "./Icon";
 
-function IconTextItem({ Icon = { EyeIcon }, text = "Icon", id }) {
+function IconTextItem({
+  Icon = { EyeIcon },
+  text = "Icon",
+  id,
+  onClick = () => console.log("clicked"),
+}) {
   return (
     <Menu.Item
       key={id}
@@ -14,6 +19,7 @@ function IconTextItem({ Icon = { EyeIcon }, text = "Icon", id }) {
         width: "100%",
         fontSize: "1rem",
       }}
+      onClick={onClick}
     >
       <div
         style={{

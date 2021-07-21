@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Layout } from "antd";
+import React, { useContext, useEffect, useState } from "react";
+import { Layout, Button } from "antd";
 import {
   UserOutlined,
   EditOutlined,
@@ -11,6 +11,10 @@ import RoutePipeline from "./RoutePipeline";
 import IconTextItem from "./IconTextItem";
 import { EyeIcon, PenIcon } from "./Icon";
 import IconMenuItem from "./IconMenuItem";
+import AlertBox from "./AlertBox";
+import storage from "../api/storage";
+import AuthContext from "../context/AuthContext";
+import { useHistory } from "react-router-dom";
 
 const { Header: AntHeader } = Layout;
 
@@ -18,13 +22,15 @@ function Header({
   setCurrentTool,
   setshowImgChangeAlert,
   currentTool,
-  FrameName = "New",
   location,
   setCurrentFrameId,
   Frames,
+  onSaveClick,
 }) {
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(currentTool);
-
+  const authContext = useContext(AuthContext);
+  const history = useHistory();
   const handleHeaderMenuSelect = (key) => {
     setSelectedMenuItem(key);
     switch (key) {
@@ -54,12 +60,31 @@ function Header({
     }
   };
 
+  const handleLogout = () => {
+    setShowLogoutAlert(false);
+    authContext.setUser(false);
+    history.push("/dashboard");
+    storage.removeToken();
+    storage.removeUser();
+  };
+
   useEffect(() => {
     setSelectedMenuItem(currentTool);
   }, [currentTool]);
 
   return (
     <AntHeader style={{ height: "40px" }}>
+      <AlertBox
+        show={showLogoutAlert}
+        onClose={() => setShowLogoutAlert(false)}
+        message={"Are you sure to logout"}
+        autoClose={false}
+        variant={"danger"}
+        handleYes={handleLogout}
+        handleNo={() => {
+          setShowLogoutAlert(false);
+        }}
+      />
       <div
         style={{
           display: "flex",
@@ -75,7 +100,6 @@ function Header({
           setCurrentFrameId={setCurrentFrameId}
           Frames={Frames}
         />
-        {/* <div>{FrameName}</div> */}
         <div
           style={{
             display: "flex",
@@ -84,6 +108,13 @@ function Header({
             height: "40px",
           }}
         >
+          <Button
+            type="primary"
+            style={{ fontWeight: "500" }}
+            onClick={onSaveClick}
+          >
+            Save
+          </Button>
           <IconMenuItem
             tooltip="Free View"
             Icon={<EyeIcon />}
@@ -118,6 +149,7 @@ function Header({
               key="edit"
             />
             <IconTextItem
+              onClick={() => setShowLogoutAlert(true)}
               Icon={<LogoutOutlined style={{ fontSize: "1.1rem" }} />}
               text="Log Out"
               id="logout"

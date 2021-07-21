@@ -1,15 +1,14 @@
 import { Layout, Menu } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Frame from "../components/Frame";
 import Popups from "../components/Popups";
 import MenuList from "../components/MenuList";
 import ContextMenu from "../components/ContextMenu";
 import Header from "../components/Header";
+import ProjectsContext from "../context/ProjectsContext";
 
 const { Content, Sider } = Layout;
-
-const getId = () => new Date().getTime();
 
 const styles = {
   menu: {
@@ -25,55 +24,27 @@ const styles = {
 };
 
 const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
-const initialFrameValues = [
-  {
-    paths: [],
-    bgImg: false,
-    frameName: "TowerTitle",
-    isPlaceHolder: true,
-    id: getId() - 2,
-    type: "Tower",
-  },
-  {
-    paths: [],
-    bgImg: false,
-    frameName: "Tower",
-    id: getId() - 1,
-    type: "Tower",
-  },
-  {
-    paths: [],
-    bgImg: false,
-    frameName: "BlockTitle",
-    isPlaceHolder: true,
-    id: getId() + 1,
-    type: "Block",
-  },
-  {
-    paths: [],
-    bgImg: false,
-    frameName: "FloorTitle",
-    isPlaceHolder: true,
-    id: getId() + 2,
-    type: "Floor",
-  },
-  {
-    paths: [],
-    bgImg: false,
-    frameName: "FlatTitle",
-    isPlaceHolder: true,
-    id: getId() + 3,
-    type: "Flat",
-  },
-];
 
-const getTowerId = () => {
-  for (let i = 0; i < initialFrameValues.length; i++)
-    if (initialFrameValues[i].frameName === "Tower")
-      return initialFrameValues[i].id;
+const getProject = (projects, id) => {
+  return projects.filter((project) => project.id == id)[0];
 };
 
-function MainLayout() {
+function MainLayout(props) {
+  const PROJECT_ID = props.match.params.id;
+  const { projects } = useContext(ProjectsContext);
+
+  console.log();
+
+  const [Frames, setFrames] = useState(getProject(projects, PROJECT_ID).Frames);
+  const [projectName, setProjectName] = useState(
+    getProject(projects, PROJECT_ID).projectName
+  );
+
+  const getTowerId = () => {
+    for (let i = 0; i < Frames.length; i++)
+      if (Frames[i].frameName === "Tower") return Frames[i].id;
+  };
+
   const pathsState = useState([]);
   const deleteAlertState = useState(false);
   const selectedItemState = useState(false);
@@ -82,8 +53,6 @@ function MainLayout() {
   const displayImageUploaderState = useState(false);
   const [bgImg, setBgImg] = useState(false);
   const currentToolState = useState("draw");
-  const [project, setProject] = useState({ ProjectName: "New Project" });
-  const [Frames, setFrames] = useState(initialFrameValues);
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
   const [currentFrameId, setCurrentFrameId] = useState(getTowerId());
   const [ContextMenuPosition, setContextMenuPosition] = useState(false);
@@ -113,7 +82,6 @@ function MainLayout() {
 
   useEffect(() => {
     setCurrentFrameId(Frames[Frames.length - 1].id);
-    setProject((old) => ({ ...old, Frames }));
   }, [Frames]);
 
   useEffect(() => {
@@ -185,6 +153,10 @@ function MainLayout() {
     }, 1);
   }, []);
 
+  const handleSave = () => {
+    console.table(Frames);
+  };
+
   return (
     <Layout
       onContextMenuCapture={(e) => e.preventDefault()}
@@ -223,7 +195,7 @@ function MainLayout() {
             currentFrameId={currentFrameId}
             isSliderCollapsed={isSliderCollapsed}
             selectedItemState={selectedItemState}
-            projectName={project.ProjectName}
+            projectName={projectName}
             Frames={Frames}
             setCurrentFrameId={setCurrentFrameId}
             displayNewFramePopupState={displayNewFramePopupState}
@@ -254,6 +226,7 @@ function MainLayout() {
           />
         )}
         <Header
+          onSaveClick={handleSave}
           currentTool={currentTool}
           setCurrentTool={setCurrentTool}
           setshowImgChangeAlert={setshowImgChangeAlert}

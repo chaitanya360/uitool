@@ -10,18 +10,14 @@ import Register from "./Pages/Register/Register";
 import NotFound from "./Pages/NotFound/NotFound";
 import Landing from "./Pages/Landing/Landing";
 import Dashboard from "./Pages/Dashboard/Dashboard";
-import AuthContext from "./context/AuthContext";
 import MainLayout from "./layouts/MainLayout";
 
 const Routes = (props) => {
   const [justRegistered, setJustRegistered] = useState(false);
-  const { user } = useContext(AuthContext);
   return (
     <Router {...props}>
       <Switch>
-        <Route exact path="/workspace">
-          {user ? <MainLayout /> : <Login />}
-        </Route>
+        <Route exact path="/workspace/:id" component={MainLayout} />
         <Route path="/login">
           <Login
             justRegistered={justRegistered}
@@ -38,7 +34,7 @@ const Routes = (props) => {
           <Dashboard />
         </Route>
         <Route exact path="/">
-          <Redirect to="/workspace" />
+          <Redirect to="/dashboard" />
         </Route>
         <Route path="*">
           <NotFound />

@@ -61,6 +61,7 @@ function MenuList({
       <Menu.ItemGroup title={projectName}>
         {getListedData().map((singleType) => (
           <div
+            key={singleType.type}
             style={{
               padding: "5px 0px",
               width: "90%",
