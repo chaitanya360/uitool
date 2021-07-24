@@ -38,8 +38,7 @@
 
 .svgContainer {
   /* border: 1px solid black; */
-  height: 600px;
-  width: 1200px;
+
   max-width: 100%;
   object-fit: contain;
   overflow: auto;

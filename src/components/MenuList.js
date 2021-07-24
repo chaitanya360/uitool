@@ -132,6 +132,21 @@ function MenuList({
           />
         </>
       )}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          height: "100%",
+          // alignItems: "flex-end",
+        }}
+      >
+        <Button
+          type="primary"
+          style={{ position: "absolute", bottom: "10px", fontWeight: "500" }}
+        >
+          Publish
+        </Button>
+      </div>
     </>
   );
 }

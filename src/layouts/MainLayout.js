@@ -6,7 +6,11 @@ import Popups from "../components/Popups";
 import MenuList from "../components/MenuList";
 import ContextMenu from "../components/ContextMenu";
 import Header from "../components/Header";
-import ProjectsContext from "../context/ProjectsContext";
+import AuthContext from "../context/AuthContext";
+import { Redirect } from "react-router-dom";
+import storage from "../api/storage";
+import RoutePipeline from "../components/RoutePipeline";
+import { colors } from "../utility";
 
 const { Content, Sider } = Layout;
 
@@ -25,20 +29,11 @@ const styles = {
 
 const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
 
-const getProject = (projects, id) => {
-  return projects.filter((project) => project.id == id)[0];
-};
+function MainLayout({ project, isTour = false }) {
+  const { user } = useContext(AuthContext);
+  const [Frames, setFrames] = useState(project.frames);
 
-function MainLayout(props) {
-  const PROJECT_ID = props.match.params.id;
-  const { projects } = useContext(ProjectsContext);
-
-  console.log();
-
-  const [Frames, setFrames] = useState(getProject(projects, PROJECT_ID).Frames);
-  const [projectName, setProjectName] = useState(
-    getProject(projects, PROJECT_ID).projectName
-  );
+  const [projectName, setProjectName] = useState(project.name);
 
   const getTowerId = () => {
     for (let i = 0; i < Frames.length; i++)
@@ -151,13 +146,19 @@ function MainLayout(props) {
     setTimeout(() => {
       setCurrentFrameId(getTowerId());
     }, 1);
+
+    const currFrame = getCurrentFrame();
+
+    setBgImg(currFrame.bgImg);
+    setPaths(currFrame.paths);
+    if (isTour) setCurrentTool("free");
   }, []);
 
   const handleSave = () => {
-    console.table(Frames);
+    storage.store("project", { ...project, frames: Frames });
   };
 
-  return (
+  return user || isTour ? (
     <Layout
       onContextMenuCapture={(e) => e.preventDefault()}
       style={{
@@ -168,42 +169,44 @@ function MainLayout(props) {
         left: "0px",
       }}
     >
-      <Sider
-        style={{
-          padding: "0",
-          margin: "0",
-          width: "100%",
-          maxHeight: "100%",
-        }}
-        width={150}
-        className="slider"
-        theme="dark"
-        collapsible={false}
-        collapsedWidth={60}
-        collapsed={false}
-        onCollapse={(collapsed) => setIsSliderCollpased(collapsed)}
-        onClickCapture={() => setContextMenuPosition(false)}
-      >
-        <Menu
-          selectable={false}
+      {!isTour && (
+        <Sider
+          style={{
+            padding: "0",
+            margin: "0",
+            width: "100%",
+            maxHeight: "fit-content",
+          }}
+          width={150}
+          className="slider"
           theme="dark"
-          mode="inline"
-          style={styles.menu}
-          // onClick={(e) => console.log(e)}
+          collapsible={false}
+          collapsedWidth={60}
+          collapsed={false}
+          onCollapse={(collapsed) => setIsSliderCollpased(collapsed)}
+          onClickCapture={() => setContextMenuPosition(false)}
         >
-          <MenuList
-            currentFrameId={currentFrameId}
-            isSliderCollapsed={isSliderCollapsed}
-            selectedItemState={selectedItemState}
-            projectName={projectName}
-            Frames={Frames}
-            setCurrentFrameId={setCurrentFrameId}
-            displayNewFramePopupState={displayNewFramePopupState}
-            currentFrameType={getCurrentFrame().type}
-            setNewPageFormDetails={setNewPageFormDetails}
-          />
-        </Menu>
-      </Sider>
+          <Menu
+            selectable={false}
+            theme="dark"
+            mode="inline"
+            style={styles.menu}
+            // onClick={(e) => console.log(e)}
+          >
+            <MenuList
+              currentFrameId={currentFrameId}
+              isSliderCollapsed={isSliderCollapsed}
+              selectedItemState={selectedItemState}
+              projectName={projectName}
+              Frames={Frames}
+              setCurrentFrameId={setCurrentFrameId}
+              displayNewFramePopupState={displayNewFramePopupState}
+              currentFrameType={getCurrentFrame().type}
+              setNewPageFormDetails={setNewPageFormDetails}
+            />
+          </Menu>
+        </Sider>
+      )}
 
       <Layout
         style={{
@@ -225,20 +228,39 @@ function MainLayout(props) {
             setContextMenuPosition={setContextMenuPosition}
           />
         )}
-        <Header
-          onSaveClick={handleSave}
-          currentTool={currentTool}
-          setCurrentTool={setCurrentTool}
-          setshowImgChangeAlert={setshowImgChangeAlert}
-          FrameName={getCurrentFrame().frameName}
-          Frames={Frames}
-          location={location}
-          setCurrentFrameId={setCurrentFrameId}
-        />
+        {!isTour && (
+          <Header
+            onSaveClick={handleSave}
+            currentTool={currentTool}
+            setCurrentTool={setCurrentTool}
+            setshowImgChangeAlert={setshowImgChangeAlert}
+            FrameName={getCurrentFrame().frameName}
+            Frames={Frames}
+            location={location}
+            setCurrentFrameId={setCurrentFrameId}
+          />
+        )}
         <Content
           className="site-layout-background hidden_scroll"
           style={styles.content}
         >
+          {isTour && (
+            <div
+              style={{
+                width: "100%",
+                height: "fit-content",
+                backgroundColor: colors.blue,
+                padding: "10px",
+              }}
+            >
+              <RoutePipeline
+                setCurrentTool={setCurrentTool}
+                location={location}
+                setCurrentFrameId={setCurrentFrameId}
+                Frames={Frames}
+              />
+            </div>
+          )}
           <Frame
             setContextMenuPosition={setContextMenuPosition}
             currentToolState={currentToolState}
@@ -250,6 +272,7 @@ function MainLayout(props) {
             setCurrentFrameId={setCurrentFrameId}
             displayImageUploaderState={displayImageUploaderState}
             setBgImg={setBgImg}
+            isTour={isTour}
           />
 
           <Popups
@@ -269,6 +292,8 @@ function MainLayout(props) {
         </Content>
       </Layout>
     </Layout>
+  ) : (
+    <Redirect to="/login" />
   );
 }
 

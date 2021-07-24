@@ -1,25 +1,37 @@
 import React, { useState } from "react";
 import ImageUploader from "react-images-upload";
 import { CloseCircleOutlined } from "@ant-design/icons";
-
+import imgClient from "../api/imgClient";
+import Loading from "./Loading";
 function UploadImage({
   setImg,
   onImageChanged,
   shouldDisplay,
   setShouldDisplay,
 }) {
+  const [loading, setLoading] = useState(false);
   const onImageChange = (event) => {
+    const formData = new FormData();
+
     if (event.length > 0) {
       const file = event[0];
-      console.log(event);
+
       if (file) {
-        let reader = new FileReader();
-        reader.onload = (e) => {
-          setImg(e.target.result);
-        };
-        reader.readAsDataURL(file);
+        setLoading(true);
+        formData.append("file", file);
+        formData.append("upload_preset", "hn6xkfkd");
+
+        imgClient.post("", formData).then((response) => {
+          setLoading(false);
+          if (response.ok) {
+            console.log(response);
+            setImg(response.data.url);
+            onImageChanged();
+          } else {
+            alert(response.problem);
+          }
+        });
       }
-      onImageChanged();
     }
   };
 
@@ -41,31 +53,37 @@ function UploadImage({
             position: "absolute",
             top: "20px",
             width: "600px",
+            height: "fit-content",
             zIndex: 5,
           }}
         >
-          <span
-            style={{
-              position: "absolute",
-              margin: "20px",
-              right: 0,
-            }}
-          >
-            <CloseCircleOutlined
-              style={{ fontSize: "25px" }}
-              onClick={() => setShouldDisplay(false)}
+          {!loading && (
+            <span
+              style={{
+                position: "absolute",
+                margin: "20px",
+                right: 0,
+              }}
+            >
+              <CloseCircleOutlined
+                style={{ fontSize: "25px" }}
+                onClick={() => setShouldDisplay(false)}
+              />
+            </span>
+          )}
+          {!loading && (
+            <ImageUploader
+              withIcon={true}
+              buttonText="Choose image"
+              onChange={onImageChange}
+              imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+              maxFileSize={5242880}
+              singleImage
             />
-          </span>
-          <ImageUploader
-            withIcon={true}
-            buttonText="Choose images"
-            onChange={onImageChange}
-            imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-            maxFileSize={5242880}
-            singleImage
-          />
+          )}
         </div>
       </div>
+      <div style={{ marginLeft: "50px" }}>{loading && <Loading />}</div>
     </div>
   );
 }

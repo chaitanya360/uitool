@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PathLine } from "react-svg-pathline";
+import Info from "./Info";
 const Path = ({
   co,
   tempEnd,
@@ -8,8 +9,9 @@ const Path = ({
   isFreeView,
   setInfo,
   frame,
-  setContextMenuPosition,
   setCurrentFrameId,
+  handleShowInfo,
+  info,
 }) => {
   const id = frame.id;
   const [bgColor, setBgColor] = useState("transparent");
@@ -20,7 +22,6 @@ const Path = ({
   const clickProps = frame.clickProps;
 
   const status = frame.status;
-
   return (
     <g>
       <g
@@ -30,7 +31,7 @@ const Path = ({
               ? "pointer"
               : "inherit",
         }}
-        onMouseOver={() => {
+        onMouseOver={(e) => {
           if (hoverProps && isFreeView) {
             if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
               if (hoverProps.isColorEnable) {
@@ -81,7 +82,6 @@ const Path = ({
             fill="transparent"
           />
         )}
-
         <PathLine
           points={co}
           stroke="red"

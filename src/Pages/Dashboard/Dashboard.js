@@ -1,16 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Layout } from "antd";
 import "./Dashboard.css";
 import Header from "./Header";
 import ProjectCard from "./ProjectCard";
 import ProjectsContext from "../../context/ProjectsContext";
 import AuthContext from "../../context/AuthContext";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 const { Content } = Layout;
 
 function Dashboard(props) {
-  const { projects } = useContext(ProjectsContext);
   const { user } = useContext(AuthContext);
+  const { projects } = useContext(ProjectsContext);
 
   return user ? (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
@@ -24,11 +24,11 @@ function Dashboard(props) {
             justifyContent: "space-around",
           }}
         >
-          {projects.length > 0 ? (
+          {projects && projects.length > 0 ? (
             projects.map((project) => {
               return (
                 <ProjectCard
-                  name={project.projectName}
+                  name={project.name}
                   id={project.id}
                   src={`${process.env.PUBLIC_URL}/statics/Images/bg3.jpg`}
                 />
@@ -42,6 +42,12 @@ function Dashboard(props) {
     </Layout>
   ) : (
     <Redirect to="/login" />
+    // <div style={{ fontSize: "1.2rem", margin: "20px" }}>
+    //   <Link to="/login" style={{ textDecoration: "none" }}>
+    //     Login
+    //   </Link>{" "}
+    //   Required
+    // </div>
   );
 }
 

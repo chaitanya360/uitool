@@ -7,15 +7,15 @@ const getToken = () => get(Tokenkey);
 
 const removeToken = () => remove(Tokenkey);
 
-const storeUser = (user) => store(UserKey, JSON.stringify(user));
+const storeUser = (user) => store(UserKey, user);
 
-const getUser = () => JSON.parse(get(UserKey));
+const getUser = () => get(UserKey);
 
 const removeUser = () => remove(UserKey);
 
 const store = (key, value) => {
   try {
-    localStorage.setItem(key, value);
+    localStorage.setItem(key, JSON.stringify(value));
   } catch (error) {
     console.log("Error Storing " + key + " Locally", error);
   }
@@ -23,7 +23,7 @@ const store = (key, value) => {
 
 const get = (key) => {
   try {
-    return localStorage.getItem(key);
+    return JSON.parse(localStorage.getItem(key));
   } catch (error) {
     console.log(`Error Retrieving ${key} From Locally`, error);
   }
@@ -44,4 +44,6 @@ export default {
   storeUser,
   getUser,
   removeUser,
+  store,
+  get,
 };

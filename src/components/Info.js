@@ -1,26 +1,25 @@
 import React from "react";
+import { colors } from "../utility";
 
-function Info({ show, info = "this is some information" }) {
+function Info({ show, info = "this is some information", pos: { x, y } }) {
   return (
     show && (
       <div
         style={{
           position: "absolute",
-          top: "10px",
-          left: "50%",
-          transform: "translate(-50%, 0px)",
+          top: y,
+          left: x,
           zIndex: "999",
         }}
         className="animate__animated animate__fadeIn animate__delay-0s animate__faster"
       >
         <div
           style={{
-            backgroundColor: "dodgerblue",
+            backgroundColor: colors.blue,
             padding: "10px 10px",
             color: "white",
             fontSize: "larger",
             borderRadius: "3px",
-            boxShadow: "2px 2px 2px grey",
             maxWidth: "400px",
           }}
         >

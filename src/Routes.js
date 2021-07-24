@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Route,
   BrowserRouter as Router,
@@ -10,6 +10,7 @@ import Register from "./Pages/Register/Register";
 import NotFound from "./Pages/NotFound/NotFound";
 import Landing from "./Pages/Landing/Landing";
 import Dashboard from "./Pages/Dashboard/Dashboard";
+import Project from "./Pages/Project/Project";
 import MainLayout from "./layouts/MainLayout";
 
 const Routes = (props) => {
@@ -17,7 +18,7 @@ const Routes = (props) => {
   return (
     <Router {...props}>
       <Switch>
-        <Route exact path="/workspace/:id" component={MainLayout} />
+        <Route exact path="/workspace/:id" component={Project} />
         <Route path="/login">
           <Login
             justRegistered={justRegistered}
@@ -30,12 +31,10 @@ const Routes = (props) => {
         <Route path="/landing">
           <Landing />
         </Route>
-        <Route path="/dashboard">
-          <Dashboard />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/dashboard" />
-        </Route>
+
+        <Route path="/dashboard" component={Dashboard} />
+        <Route exact path="/" component={Dashboard} />
+        <Route path="/project/:id/:tour" component={Project} />
         <Route path="*">
           <NotFound />
         </Route>

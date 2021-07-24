@@ -11,22 +11,28 @@ import ProjectCard from "./Pages/Dashboard/ProjectCard";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import ProjectsContext from "./context/ProjectsContext";
 import { initialFrameValues } from "./utility/data";
+import { getProjects } from "./api/backend";
 const getId = () => new Date().getTime();
 
 function App() {
-  const [user, setUser] = useState(false);
-  const [projects, setProjects] = useState([
-    { projectName: "Project IGI", id: 1, Frames: initialFrameValues },
-    { projectName: "Project Impossible", id: 2, Frames: initialFrameValues },
-    { projectName: "Project Furious", id: 3, Frames: initialFrameValues },
-    { projectName: "Project Lost", id: 4, Frames: initialFrameValues },
-  ]);
-
-  useEffect(() => {
+  const [user, setUser] = useState(true);
+  const [projects, setProjects] = useState(false);
+  const checkUser = () => {
     // checking for user locally
     const savedUser = storage.getUser();
     if (savedUser) setUser(savedUser);
+    else setUser(false);
+  };
+
+  useEffect(() => {
+    checkUser();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setProjects(getProjects(user.email));
+    }
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

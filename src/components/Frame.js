@@ -3,9 +3,31 @@ import Path from "./Path";
 import Info from "./Info";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { colors } from "../utility";
-import UploadImage from "./UploadImage";
+import Loading from "./Loading";
 
 const getId = () => new Date().getTime();
+
+const getVerticallyCenteredY = (cos) => {
+  let max = 0;
+  let min = 99999;
+  let i = 0;
+  for (i = 0; i < cos.length; i++) {
+    if (cos[i].y > max) max = cos[i].y;
+    if (cos[i].y < min) min = cos[i].y;
+  }
+
+  return (max + min) / 2;
+};
+
+const getExtreateRightX = (cos) => {
+  let max = 0;
+  let i = 0;
+  for (i = 0; i < cos.length; i++) {
+    if (cos[i].x > max) max = cos[i].x;
+  }
+
+  return max;
+};
 
 const isCloserToFirstPoint = (e, co, canRef) => {
   const diffDist = 8;
@@ -36,6 +58,8 @@ const styles = {
     backgroundRepeat: "no-repeat",
     backgroundSize: "contain",
     backgroundPosition: "center",
+    // width: "100%",
+    // height: "auto",
   },
 };
 
@@ -50,6 +74,7 @@ function Frame({
   setContextMenuPosition,
   setBgImg,
   displayImageUploaderState,
+  isTour,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -62,6 +87,7 @@ function Frame({
   const [tempEnd, setTempEnd] = useState({ x1: 0, y1: 0, x2: 0, y2: 0 });
   const [info, setInfo] = useState(false);
   const [isCloserToClose, setIsCloserToClose] = useState(false);
+  const [loadingBg, setLoadingBg] = useState(false);
 
   // 0: nothing is clicked
   // 1: first point is clicked
@@ -83,10 +109,14 @@ function Frame({
 
   const handleItemSelect = (item) => {
     if (item) {
+      console.log(item);
       paths.forEach((frame) => {
         if (frame.id === item.id) {
           setSelectedItem(frame);
-          setContextMenuPosition(getContextMenuPosition(item.e, canRef));
+
+          setContextMenuPosition(
+            getContextMenuPosition({ x: item.e.pageX, y: item.e.pageY }, canRef)
+          );
         }
       });
     }
@@ -160,6 +190,23 @@ function Frame({
 
   const isLast = (frame) => {
     return paths.indexOf(frame) === paths.length - 1;
+  };
+
+  const getInfoPos = () => {
+    const infoWidth = 400;
+    const infoHight = 300;
+    let currPath;
+    for (let i = 0; i < paths.length; i++) {
+      // info variable contains id which is set when
+      // on mouse over event calls in Paths component
+      if (paths[i].id === info) currPath = paths[i];
+    }
+    const extreameX = getExtreateRightX(currPath.co);
+    const verticallyCenterredY = getVerticallyCenteredY(currPath.co);
+
+    const x = extreameX + canRef.current.offsetLeft;
+    const y = verticallyCenterredY + canRef.current.offsetTop;
+    return { x, y };
   };
 
   const handleMouseDown = (e) => {
@@ -241,14 +288,12 @@ function Frame({
     }
   };
 
-  const getContextMenuPosition = (e, canRef) => {
-    let x = e.pageX;
-    let y = e.pageY;
-
+  const getContextMenuPosition = (e) => {
+    let x = e.x;
+    let y = e.y;
+    // x += canRef.current.offsetLeft;
     let contextWidth = 235;
     let contextHeight = 315;
-    console.log(x, window.innerWidth);
-
     if (x > window.innerWidth - contextWidth) x -= contextWidth;
     if (y > window.innerHeight - contextHeight)
       y = window.innerHeight - contextHeight;
@@ -268,22 +313,25 @@ function Frame({
         backgroundColor: "rgba(17,145,255,0.01)",
       }}
     >
-      <Info show={info} info={getInfo()} />
-
+      {info && <Info show info={getInfo()} pos={getInfoPos()} />}
       <div
         style={{
           cursor: isCloserToClose
             ? `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`
             : getCursor(),
+          height: "600px",
+          width: "1200px",
         }}
         id="canvas"
         className="svgContainer custom_scroll"
         ref={canRef}
       >
+        {loadingBg && <Loading />}
+
         {bgSrc ? (
           <svg
             style={{
-              backgroundImage: `url(${bgSrc})`,
+              // backgroundImage: `url(${bgSrc})`,
               ...styles.svgStyle,
             }}
             onMouseLeave={handleMouseLeave}
@@ -299,12 +347,15 @@ function Frame({
             xmlnsXlink="http://www.w3.org/1999/xlink"
             viewBox="0 0 1200 600"
           >
-            {/* <image style={{ width: "auto", height: "100%" }} xlinkHref={bgSrc} /> */}
-
+            <image
+              onLoad={() => setLoadingBg(false)}
+              visibility={loadingBg ? "hidden" : "visible"}
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              xlinkHref={bgSrc}
+            />
             {paths.length > 0 ? (
               paths.map((frame) => (
                 <Path
-                  setContextMenuPosition={setContextMenuPosition}
                   co={isLast(frame) ? co : frame.co}
                   tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
                   key={frame.id}
@@ -313,6 +364,8 @@ function Frame({
                   selectedItem={selectedItem}
                   isFreeView={isFreeView}
                   setInfo={setInfo}
+                  info={getInfo()}
+                  handleShowInfo
                   setCurrentFrameId={setCurrentFrameId}
                 />
               ))
@@ -321,16 +374,7 @@ function Frame({
             )}
           </svg>
         ) : (
-          <>
-            <UploadImage
-              setImg={setBgImg}
-              shouldDisplay={displayImageUploader}
-              setShouldDisplay={setDisplayImageUploader}
-              onImageChanged={() => {
-                setDisplayImageUploader(false);
-                setCurrentTool("draw");
-              }}
-            />
+          !loadingBg && (
             <div
               style={{
                 display: "flex",
@@ -349,7 +393,7 @@ function Frame({
               </div>
               <div>Select Bg Image</div>
             </div>
-          </>
+          )
         )}
       </div>
     </div>
