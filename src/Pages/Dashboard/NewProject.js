@@ -8,8 +8,11 @@ import storage from "../../api/storage";
 import ErrorMessage from "../../components/ErrorMessage";
 import ErrorContext from "../../context/ErrorContext";
 import Loading from "../../components/Loading";
+import AuthContext from "../../context/AuthContext";
 
 function NewProject(props) {
+  const { setUser } = useContext(AuthContext);
+
   const [projectName, setProjectName] = useState("");
   const [btnClicked, setBtnClicked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,7 +26,8 @@ function NewProject(props) {
     addProject(projectName, frames, token).then((response) => {
       if (response.ok) {
         if (response.data.status) {
-          window.location.reload();
+          setUser(storage.getUser());
+          // window.location.reload();
           setBtnClicked(false);
         } else setErrorMsg("Failed To add New project, Try login again");
       }

@@ -13,10 +13,10 @@ const addProject = (name, frames, token) =>
     { headers: { Authorization: token } }
   );
 
-const setProject = (id, name, frames, token) =>
+const setProject = (id, name, frames, token, frames_obj) =>
   apiClient.post(
     setProjectEndpoint,
-    { project_id: id, project_name: name, frames },
+    { project_id: id, project_name: name, frames, frames_obj },
     { headers: { Authorization: token } }
   );
 

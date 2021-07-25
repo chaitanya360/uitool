@@ -159,9 +159,13 @@ function MainLayout({ project, isTour = false }) {
   }, []);
 
   const handleSave = () => {
-    setProject(project._id, projectName, Frames, storage.getToken()).then(
-      (response) => console.log(response)
-    );
+    setProject(
+      project._id,
+      projectName,
+      JSON.stringify(Frames),
+      storage.getToken(),
+      Frames
+    ).then((response) => console.log(response));
   };
 
   const handlePublish = () => {
