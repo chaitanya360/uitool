@@ -17,6 +17,7 @@ function MenuList({
   displayNewFramePopupState,
   currentFrameType,
   setNewPageFormDetails,
+  handlePublishPressed,
 }) {
   useEffect(() => {
     setSelectedFrameType(currentFrameType);
@@ -143,6 +144,7 @@ function MenuList({
         <Button
           type="primary"
           style={{ position: "absolute", bottom: "10px", fontWeight: "500" }}
+          onClick={handlePublishPressed}
         >
           Publish
         </Button>

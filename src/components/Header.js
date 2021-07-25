@@ -26,6 +26,7 @@ function Header({
   setCurrentFrameId,
   Frames,
   onSaveClick,
+  setSelectedItem,
 }) {
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(currentTool);
@@ -33,6 +34,7 @@ function Header({
   const history = useHistory();
   const handleHeaderMenuSelect = (key) => {
     setSelectedMenuItem(key);
+    setSelectedItem(false);
     switch (key) {
       case "draw":
         setCurrentTool("draw");

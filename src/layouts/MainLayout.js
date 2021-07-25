@@ -8,9 +8,12 @@ import ContextMenu from "../components/ContextMenu";
 import Header from "../components/Header";
 import AuthContext from "../context/AuthContext";
 import { Redirect } from "react-router-dom";
-import storage from "../api/storage";
+import { setProject } from "../api/projects";
 import RoutePipeline from "../components/RoutePipeline";
 import { colors } from "../utility";
+import PublishedTagline from "../components/PublishedTagline";
+import storage from "../api/storage";
+import ErrorContext from "../context/ErrorContext";
 
 const { Content, Sider } = Layout;
 
@@ -22,7 +25,6 @@ const styles = {
   content: {
     margin: 0,
     width: "100%",
-    height: "100vh",
     overflow: "scroll",
   },
 };
@@ -31,9 +33,9 @@ const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
 
 function MainLayout({ project, isTour = false }) {
   const { user } = useContext(AuthContext);
-  const [Frames, setFrames] = useState(project.frames);
+  const [Frames, setFrames] = useState(JSON.parse(project.frames));
 
-  const [projectName, setProjectName] = useState(project.name);
+  const [projectName, setProjectName] = useState(project.project_name);
 
   const getTowerId = () => {
     for (let i = 0; i < Frames.length; i++)
@@ -58,6 +60,8 @@ function MainLayout({ project, isTour = false }) {
   const [selectedItem, setSelectedItem] = selectedItemState;
   const setDisplayNewFramePopup = displayNewFramePopupState[1];
   const [currentTool, setCurrentTool] = currentToolState;
+  const [showPublishTagline, setShowPublishTagline] = useState(false);
+  const { setErrorMsg } = useContext(ErrorContext);
 
   const setCurrentFrame = (values) => {
     let tempFrames = Frames;
@@ -155,7 +159,13 @@ function MainLayout({ project, isTour = false }) {
   }, []);
 
   const handleSave = () => {
-    storage.store("project", { ...project, frames: Frames });
+    setProject(project._id, projectName, Frames, storage.getToken()).then(
+      (response) => console.log(response)
+    );
+  };
+
+  const handlePublish = () => {
+    setShowPublishTagline(true);
   };
 
   return user || isTour ? (
@@ -194,6 +204,7 @@ function MainLayout({ project, isTour = false }) {
             // onClick={(e) => console.log(e)}
           >
             <MenuList
+              handlePublishPressed={handlePublish}
               currentFrameId={currentFrameId}
               isSliderCollapsed={isSliderCollapsed}
               selectedItemState={selectedItemState}
@@ -211,6 +222,8 @@ function MainLayout({ project, isTour = false }) {
       <Layout
         style={{
           padding: "0",
+          height: "100%",
+          width: "100%",
         }}
       >
         {ContextMenuPosition && (
@@ -230,6 +243,7 @@ function MainLayout({ project, isTour = false }) {
         )}
         {!isTour && (
           <Header
+            setSelectedItem={setSelectedItem}
             onSaveClick={handleSave}
             currentTool={currentTool}
             setCurrentTool={setCurrentTool}
@@ -240,6 +254,11 @@ function MainLayout({ project, isTour = false }) {
             setCurrentFrameId={setCurrentFrameId}
           />
         )}
+        <PublishedTagline
+          projectId={project._id}
+          visible={showPublishTagline}
+          setVisible={setShowPublishTagline}
+        />
         <Content
           className="site-layout-background hidden_scroll"
           style={styles.content}

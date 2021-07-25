@@ -1,17 +1,11 @@
 import React, { useState } from "react";
-import {
-  Route,
-  BrowserRouter as Router,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import Login from "./Pages/Login/Login";
 import Register from "./Pages/Register/Register";
 import NotFound from "./Pages/NotFound/NotFound";
 import Landing from "./Pages/Landing/Landing";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Project from "./Pages/Project/Project";
-import MainLayout from "./layouts/MainLayout";
 
 const Routes = (props) => {
   const [justRegistered, setJustRegistered] = useState(false);

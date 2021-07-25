@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Layout } from "antd";
 import "./Dashboard.css";
 import Header from "./Header";
@@ -6,38 +6,64 @@ import ProjectCard from "./ProjectCard";
 import ProjectsContext from "../../context/ProjectsContext";
 import AuthContext from "../../context/AuthContext";
 import { Link, Redirect, useHistory } from "react-router-dom";
+import Loading from "../../components/Loading";
 const { Content } = Layout;
 
 function Dashboard(props) {
   const { user } = useContext(AuthContext);
   const { projects } = useContext(ProjectsContext);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (projects) setLoading(false);
+  }, [projects]);
+
+  const getProjectSrc = (Project) => {
+    // getting bgimg of frame with name "tower" of project
+    let bgImg = false;
+    if (Project) {
+      let frames = JSON.parse(Project.frames);
+      for (let i = 0; i < frames.length; i++) {
+        if (frames[i].frameName === "Tower") bgImg = frames[i].bgImg;
+      }
+    }
+    if (bgImg) return bgImg;
+    return `${process.env.PUBLIC_URL}/statics/Images/project_placeholder.jpg`;
+  };
 
   return user ? (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
       <Header userName={user.firstName} />
-      <Content style={{ padding: "50px 50px" }}>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            width: "100%",
-            justifyContent: "space-around",
-          }}
-        >
-          {projects && projects.length > 0 ? (
-            projects.map((project) => {
-              return (
-                <ProjectCard
-                  name={project.name}
-                  id={project.id}
-                  src={`${process.env.PUBLIC_URL}/statics/Images/bg3.jpg`}
-                />
-              );
-            })
-          ) : (
-            <div>No Projects Available</div>
-          )}
-        </div>
+      <Content style={{ padding: "50px", height: "100%" }}>
+        {loading ? (
+          <div style={{ position: "absolute", top: 0, left: 0 }}>
+            <Loading />
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              width: "100%",
+              justifyContent: "flex-start",
+            }}
+          >
+            {projects.length > 0 ? (
+              projects.map((project) => {
+                return (
+                  <ProjectCard
+                    name={project.project_name}
+                    id={project._id}
+                    nothing={getProjectSrc(project)}
+                    src={getProjectSrc()}
+                  />
+                );
+              })
+            ) : (
+              <div>No Projects Available</div>
+            )}
+          </div>
+        )}
       </Content>
     </Layout>
   ) : (

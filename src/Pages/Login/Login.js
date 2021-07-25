@@ -50,6 +50,8 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
               lastName: userData.last_name,
               mobile: userData.mobile_number,
               email: userData.email,
+              // temporary later will store securely
+              password: state.password,
             };
 
             // storing token and user object

@@ -4,6 +4,7 @@ import cx from "classnames";
 import styles from "./alert.module.css";
 import { Button } from "antd";
 import "./components.css";
+import { colors } from "../utility";
 
 class AlertBox extends Component {
   static propTypes = {
@@ -106,6 +107,8 @@ class AlertBox extends Component {
                 width,
                 zIndex: 5,
                 borderRadius: "4px",
+                backgroundColor: "#0080b9",
+                border: "1px solid rgba(255,255,255,0.5)",
               }}
             >
               <div
@@ -114,8 +117,8 @@ class AlertBox extends Component {
                   textAlign: "center",
                   paddingBottom: "20px",
                   fontSize: "18px",
-                  color: "rgba(0,0,0,0.9)",
-                  lineHeight: "35px",
+                  color: "rgba(255,255,255,0.9)",
+                  lineHeight: "25px",
                 }}
               >
                 {message}
@@ -130,20 +133,25 @@ class AlertBox extends Component {
                 }}
               >
                 <Button
-                  type="primary"
-                  ghost
                   onClick={this.props.handleYes}
-                  danger
-                  style={{ borderRadius: "4px" }}
+                  style={{
+                    borderRadius: "4px",
+                    fontWeight: 500,
+                    backgroundColor: "white",
+                    color: colors.orange,
+                  }}
                 >
                   Yes
                 </Button>
 
                 <Button
-                  type="primary"
-                  ghost
                   onClick={this.props.handleNo}
-                  style={{ borderRadius: "4px" }}
+                  style={{
+                    borderRadius: "4px",
+                    backgroundColor: "white",
+                    fontWeight: 500,
+                    color: colors.blue,
+                  }}
                 >
                   No
                 </Button>

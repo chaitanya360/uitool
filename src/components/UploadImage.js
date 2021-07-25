@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ImageUploader from "react-images-upload";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import imgClient from "../api/imgClient";
 import Loading from "./Loading";
+import { colors } from "../utility";
+import ErrorContext from "../context/ErrorContext";
 function UploadImage({
   setImg,
   onImageChanged,
@@ -10,6 +12,7 @@ function UploadImage({
   setShouldDisplay,
 }) {
   const [loading, setLoading] = useState(false);
+  const { setErrorMsg } = useContext(ErrorContext);
   const onImageChange = (event) => {
     const formData = new FormData();
 
@@ -28,7 +31,7 @@ function UploadImage({
             setImg(response.data.url);
             onImageChanged();
           } else {
-            alert(response.problem);
+            setErrorMsg(response.problem);
           }
         });
       }
@@ -63,10 +66,11 @@ function UploadImage({
                 position: "absolute",
                 margin: "20px",
                 right: 0,
+                zIndex: "999",
               }}
             >
               <CloseCircleOutlined
-                style={{ fontSize: "25px" }}
+                style={{ fontSize: "25px", color: "rgba(255,255,255,0.9)" }}
                 onClick={() => setShouldDisplay(false)}
               />
             </span>
