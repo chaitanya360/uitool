@@ -10,6 +10,9 @@ let colors = {
   font_dark: "#000000",
   font_medium: "#636363",
   font_light: "#C4C4C4",
+  available: "rgba(0,255,40,0.3)",
+  booked: "rgba(250,5,40,0.2)",
+  not_open: "#ffe20752",
 };
 
 let sizes = {

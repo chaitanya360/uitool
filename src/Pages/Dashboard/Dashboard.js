@@ -19,15 +19,12 @@ function Dashboard(props) {
   }, [projects]);
 
   const getProjectSrc = (Project) => {
-    // getting bgimg of frame with name "tower" of project
-    let bgImg = false;
     if (Project) {
       let frames = JSON.parse(Project.frames);
       for (let i = 0; i < frames.length; i++) {
-        if (frames[i].frameName === "Tower") bgImg = frames[i].bgImg;
+        if (frames[i].frameName === "Tower") return frames[i].bgImg;
       }
     }
-    if (bgImg) return bgImg;
     return `${process.env.PUBLIC_URL}/statics/Images/project_placeholder.jpg`;
   };
 
@@ -44,7 +41,7 @@ function Dashboard(props) {
             style={{
               display: "flex",
               flexWrap: "wrap",
-              width: "100%",
+              margin: "auto",
               justifyContent: "flex-start",
             }}
           >

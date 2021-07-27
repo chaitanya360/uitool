@@ -143,7 +143,12 @@ function MenuList({
       >
         <Button
           type="primary"
-          style={{ position: "absolute", bottom: "10px", fontWeight: "500" }}
+          style={{
+            position: "absolute",
+            bottom: "10px",
+            fontWeight: "500",
+            width: "100%",
+          }}
           onClick={handlePublishPressed}
         >
           Publish

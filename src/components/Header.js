@@ -142,13 +142,14 @@ function Header({
             onTitleClicked={() => handleHeaderMenuSelect("user")}
             handleMenuItemSelect={handleUserMenuItemSelect}
             Icon={<UserOutlined />}
-            listWidth="130px"
+            listWidth="150px"
           >
             <IconTextItem
               Icon={<EditOutlined style={{ fontSize: "1.2rem" }} />}
-              text="Edit"
+              text="Dashboard"
               id="edit"
               key="edit"
+              onClick={() => history.push("/dashboard")}
             />
             <IconTextItem
               onClick={() => setShowLogoutAlert(true)}

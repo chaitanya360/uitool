@@ -8,6 +8,7 @@ const initialFrameValues = [
     isPlaceHolder: true,
     id: getId() - 2,
     type: "Tower",
+    status: false,
   },
   {
     paths: [],
@@ -15,6 +16,7 @@ const initialFrameValues = [
     frameName: "Tower",
     id: getId() - 1,
     type: "Tower",
+    status: false,
   },
   {
     paths: [],
@@ -23,6 +25,7 @@ const initialFrameValues = [
     isPlaceHolder: true,
     id: getId() + 1,
     type: "Block",
+    status: false,
   },
   {
     paths: [],
@@ -31,6 +34,7 @@ const initialFrameValues = [
     isPlaceHolder: true,
     id: getId() + 2,
     type: "Floor",
+    status: false,
   },
   {
     paths: [],
@@ -39,6 +43,7 @@ const initialFrameValues = [
     isPlaceHolder: true,
     id: getId() + 3,
     type: "Flat",
+    status: false,
   },
 ];
 

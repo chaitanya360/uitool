@@ -4,6 +4,7 @@ import React from "react";
 import OnMouseOver from "./OnMouseOver";
 import OnMouseClick from "./OnMouseClick";
 import { colors } from "../utility";
+import StatusSelector from "./StatusSelector";
 
 function ContextMenu({
   pathsState,
@@ -59,6 +60,7 @@ function ContextMenu({
 
       {selectedItem && (
         <>
+          <StatusSelector pathsState={pathsState} selectedItem={selectedItem} />
           <OnMouseOver pathsState={pathsState} selectedItem={selectedItem} />
           <OnMouseClick
             pathsState={pathsState}
