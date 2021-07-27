@@ -144,7 +144,7 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
               Register Sucess Login to Continue
             </div>
           )}
-          <Title level={1} style={{ color: "dodgerblue" }}>
+          <Title level={1} style={{ color: "#ff4769" }}>
             Login
           </Title>
           <div
@@ -172,9 +172,7 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
           <Text>
             Don't Have Account?
             <Link to="/register">
-              <Button type="link" className="alternateMethod">
-                Register
-              </Button>
+              <div className="alternateMethod">Register</div>
             </Link>
           </Text>
         </form>

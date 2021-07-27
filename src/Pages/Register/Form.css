@@ -1,6 +1,6 @@
 input[type="submit"],
 .btn {
-  background-color: rgb(16, 122, 228);
+  background-color: #ff4769;
   border: none;
   text-decoration: none;
   color: white;
@@ -10,14 +10,22 @@ input[type="submit"],
   border-radius: 2px;
   cursor: pointer;
   width: fit-content;
+  box-shadow: 2px 2px 2px rgba(68, 67, 67, 0.507);
 }
 
 .should_hover:hover {
-  background-color: rgb(97, 97, 224);
+  background-color: tomato;
+}
+
+.alternateMethod {
+  display: inline-block;
+  cursor: pointer;
+  margin: 0px 20px;
+  padding: 0px 5px;
 }
 
 .alternateMethod:hover {
-  color: rgb(97, 97, 224);
+  border-bottom: 1px solid tomato;
 }
 
 .formWrapper {
@@ -74,9 +82,15 @@ input[type="submit"],
 
   .formBody {
     overflow-x: hidden;
+    padding-top: 10px;
   }
 
   .formWrapper {
-    height: 110%;
+    height: 100%;
+  }
+
+  input[type="submit"],
+  .btn {
+    margin-top: 60px;
   }
 }

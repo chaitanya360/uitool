@@ -24,7 +24,7 @@ function DropDown({
         fontWeight: "bold",
         display: "block",
         border: visible
-          ? "1px solid rgba(255,255,255,0.3)"
+          ? `1px solid rgba(255, 71, 105,0.3)`
           : "1px solid transparent",
         ...containerStyle,
       }}
@@ -39,9 +39,7 @@ function DropDown({
           alignItems: "center",
           cursor: "pointer",
           backgroundColor:
-            visible && titleBgChangeOnSelect
-              ? colors.light_blue
-              : "transparent",
+            visible && titleBgChangeOnSelect ? colors.secondary : "transparent",
         }}
         onClick={() => setVisible((old) => !old)}
         className="dropdown_title"

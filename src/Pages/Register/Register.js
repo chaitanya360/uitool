@@ -161,7 +161,7 @@ const Register = ({ setJustRegistered }) => {
       <div className="formWrapper" />
       <div className="formContainer">
         <form className="formBody" onSubmit={handleRegister}>
-          <Title level={1} style={{ color: "dodgerblue" }}>
+          <Title level={1} style={{ color: "#ff4769" }}>
             Register
           </Title>
           <div
@@ -221,9 +221,7 @@ const Register = ({ setJustRegistered }) => {
           <Text>
             Already Have An Account?
             <Link to="/login">
-              <Button type="link" className="alternateMethod">
-                Login
-              </Button>
+              <div className="alternateMethod">Login</div>
             </Link>
           </Text>
         </form>

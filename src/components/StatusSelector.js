@@ -56,7 +56,7 @@ function StatusSelector({ pathsState, selectedItem }) {
   );
 
   return (
-    <Menu theme="dark">
+    <Menu theme="light" id="status_selector">
       <SubMenu key="color" popupOffset={-5} title={<StatusTitle />}>
         <Radio.Group
           onChange={handleStatusValueChange}
@@ -68,7 +68,8 @@ function StatusSelector({ pathsState, selectedItem }) {
             border: "1px solid white",
             display: "flex",
             flexDirection: "column",
-            borderColor: "rgba(255,255,255,0.6)",
+            borderColor: "rgba(255, 71, 105,0.6)",
+            backgroundColor: colors.menu_bg,
           }}
         >
           <Radio className="radio_element" value={"available"}>

@@ -1,9 +1,9 @@
 let colors = {
   light_red: "#FF6060",
   yellow: "#FBBC05",
-  blue: "#0080B9",
-  light_blue: "#00c2ff",
-  green: "#38A910",
+  primary: "#ff655b",
+  secondary: "#ff4769",
+  green: "#ff685A",
   white: "#FFFFFF",
   light_green: "#52D8BB",
   orange: "#ff6b14",
@@ -13,6 +13,7 @@ let colors = {
   available: "rgba(0,255,40,0.3)",
   booked: "rgba(250,5,40,0.2)",
   not_open: "#ffe20752",
+  menu_bg: "#FFEEEC",
 };
 
 let sizes = {

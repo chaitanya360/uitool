@@ -75,7 +75,7 @@ function Header({
   }, [currentTool]);
 
   return (
-    <AntHeader style={{ height: "40px" }}>
+    <AntHeader id="tools_header">
       <AlertBox
         show={showLogoutAlert}
         onClose={() => setShowLogoutAlert(false)}
@@ -107,7 +107,7 @@ function Header({
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            height: "40px",
+            height: "35px",
           }}
         >
           <Button

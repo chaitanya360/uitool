@@ -43,8 +43,8 @@ function NewFramePopup({
 
   const { TextArea } = Input;
   const handleAddNewFrame = () => {
+    if (name.length === 0) return alert("Enter Name");
     const newFrameId = getId();
-    console.log(newPageFormDetails.type);
     if (newPageFormDetails.type)
       addNewFrame(
         name,

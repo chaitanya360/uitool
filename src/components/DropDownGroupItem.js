@@ -17,7 +17,7 @@ function DropDownGroupItem({
         display: "block",
         minWidth: "100%",
         padding: "0px",
-        border: "none",
+        border: visible ? "1px solid rgba(255, 71, 105, 0.3)" : "none",
       }}
     >
       <div
@@ -29,10 +29,9 @@ function DropDownGroupItem({
           justifyContent: "space-between",
           alignItems: "center",
           cursor: "pointer",
+
           backgroundColor:
-            visible && titleBgChangeOnSelect
-              ? colors.light_blue
-              : "transparent",
+            visible && titleBgChangeOnSelect ? colors.secondary : "transparent",
         }}
         onClick={onDropDownArrowClick}
         className="dropdown_title"
@@ -56,7 +55,6 @@ function DropDownGroupItem({
           overflow: "auto",
           maxHeight: "500px",
           marginLeft: "0.5px",
-          border: "1px solid rgba(255,255,255,0.3)",
           borderTop: "none",
           maxHeight: "220px",
         }}

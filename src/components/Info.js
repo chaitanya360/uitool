@@ -15,7 +15,7 @@ function Info({ show, info = "this is some information", pos: { x, y } }) {
       >
         <div
           style={{
-            backgroundColor: colors.blue,
+            backgroundColor: colors.primary,
             padding: "10px 10px",
             color: "white",
             fontSize: "larger",

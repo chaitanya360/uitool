@@ -9,13 +9,13 @@ const { SubMenu } = Menu;
 
 const styles = {
   textBox: {
-    backgroundColor: colors.blue,
+    backgroundColor: "transparent",
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "column",
     padding: "3px",
-    color: "white",
+    color: "black",
     border: "none !important",
   },
 };
@@ -55,9 +55,12 @@ function OnMouseOver({ pathsState, selectedItem }) {
 
   return (
     <>
-      {selectedItem && (
-        <DropDown title="On Mouse Over">
-          <Menu theme="dark">
+      <DropDown
+        title="On Mouse Over"
+        titleStyle={{ color: "black", padding: "10px 20px" }}
+      >
+        <Menu theme="light">
+          {selectedItem && (
             <SubMenu
               popupOffset="10px"
               key="info"
@@ -81,9 +84,9 @@ function OnMouseOver({ pathsState, selectedItem }) {
                 />
               </div>
             </SubMenu>
-          </Menu>
-        </DropDown>
-      )}
+          )}
+        </Menu>
+      </DropDown>
     </>
   );
 }

@@ -382,7 +382,7 @@ function Frame({
                 flexDirection: "column",
                 alignItems: "center",
                 height: "100%",
-                color: colors.light_blue,
+                color: colors.secondary,
               }}
             >
               <div style={{ margin: "10px", cursor: "pointer" }}>

@@ -58,8 +58,3 @@ input[type="number"] {
 .hidden_scroll::-webkit-scrollbar {
   display: none;
 }
-
-.fileContainer {
-  background-color: #0080b9 !important;
-  color: white;
-}

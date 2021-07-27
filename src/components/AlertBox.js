@@ -107,7 +107,7 @@ class AlertBox extends Component {
                 width,
                 zIndex: 5,
                 borderRadius: "4px",
-                backgroundColor: "#0080b9",
+                backgroundColor: colors.secondary,
                 border: "1px solid rgba(255,255,255,0.5)",
               }}
             >
@@ -150,7 +150,7 @@ class AlertBox extends Component {
                     borderRadius: "4px",
                     backgroundColor: "white",
                     fontWeight: 500,
-                    color: colors.blue,
+                    color: colors.primary,
                   }}
                 >
                   No

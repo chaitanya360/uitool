@@ -6,6 +6,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 
 import SelectedPathId from "./SelectedPathId";
 import DropDownGroupItem from "./DropDownGroupItem";
+import { colors } from "../utility";
 
 function MenuList({
   isSliderCollapsed,
@@ -57,9 +58,27 @@ function MenuList({
   };
 
   const selectedItem = selectedItemState[0];
+
+  const ProjectTitle = () => (
+    <Menu.Item
+      style={{
+        backgroundColor: "#F33256",
+        padding: "2px 15px",
+        fontSize: "1rem",
+        cursor: "default",
+        textTransform: "capitalize",
+        color: "rgba(255,255,255,0.8)",
+        margin: "5px auto",
+        marginTop: "0px",
+      }}
+    >
+      {projectName}
+    </Menu.Item>
+  );
+
   return (
-    <>
-      <Menu.ItemGroup title={projectName}>
+    <div id="slider">
+      <Menu.ItemGroup title={<ProjectTitle />}>
         {getListedData().map((singleType) => (
           <div
             key={singleType.type}
@@ -86,7 +105,6 @@ function MenuList({
                   style={{
                     margin: "0px",
                     color: frame.id === currentFrameId ? "white" : "unset",
-                    borderTop: "1px solid rgba(255,255,255,0.3)",
                     padding: "0px 10px",
                   }}
                   onClick={() => setCurrentFrameId(frame.id)}
@@ -109,12 +127,14 @@ function MenuList({
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
+                      color: "black",
                       borderTop: "1px solid rgba(255,255,255,0.3)",
                     }}
                     onClick={() => {
                       setNewPageFormDetails({ type: singleType.type });
                       displayNewFramePopupState[1](true);
                     }}
+                    className=".hover_for_black"
                   >
                     Add {singleType.type}
                   </Button>
@@ -138,7 +158,6 @@ function MenuList({
           display: "flex",
           justifyContent: "center",
           height: "100%",
-          // alignItems: "flex-end",
         }}
       >
         <Button
@@ -148,13 +167,15 @@ function MenuList({
             bottom: "10px",
             fontWeight: "500",
             width: "100%",
+            backgroundColor: "rgba(255,255,255,0.8)",
+            color: "black",
           }}
           onClick={handlePublishPressed}
         >
           Publish
         </Button>
       </div>
-    </>
+    </div>
   );
 }
 

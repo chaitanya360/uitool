@@ -13,7 +13,7 @@ function IconMenuItem({
     <Tooltip title={tooltip} placement="bottom">
       <div
         style={{
-          backgroundColor: selected ? colors.light_blue : colors.blue,
+          backgroundColor: selected ? colors.secondary : colors.primary,
           display: "flex",
           height: "100%",
           padding: "3px 15px",

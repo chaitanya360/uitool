@@ -47,7 +47,7 @@ function IconDropDown({
       >
         <div
           style={{
-            backgroundColor: selected ? colors.light_blue : colors.blue,
+            backgroundColor: selected ? colors.secondary : colors.primary,
             cursor: "pointer",
             padding: "5px 10px",
             fontSize: "1.2rem",
@@ -72,7 +72,12 @@ function IconDropDown({
           }}
         >
           <Menu
-            style={{ width: listWidth, padding: "0px" }}
+            style={{
+              width: listWidth,
+              padding: "0px",
+              backgroundColor: "white",
+              boxShadow: "1px 1px 4px grey",
+            }}
             selectable={false}
             onClick={handleMenuItemSelect}
           >

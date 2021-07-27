@@ -272,7 +272,7 @@ function MainLayout({ project, isTour = false }) {
               style={{
                 width: "100%",
                 height: "fit-content",
-                backgroundColor: colors.blue,
+                backgroundColor: colors.primary,
                 padding: "10px",
               }}
             >

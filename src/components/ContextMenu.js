@@ -21,6 +21,7 @@ function ContextMenu({
 }) {
   return (
     <Menu
+      theme="light"
       style={{
         width: "fit-content",
         fontSize: "16px",
@@ -30,50 +31,50 @@ function ContextMenu({
         zIndex: "2",
         borderRadius: "4px",
         padding: "0",
+        backgroundColor: colors.menu_bg,
+        boxShadow: "1px 1px 3px grey",
       }}
       onClick={handleContextMenuSelect}
     >
       <Menu.Item
         key="edit"
         style={{
-          color: "white",
-          backgroundColor: colors.light_blue,
-          padding: "0px 20px",
+          color: "rgba(0,0,0,0.8)",
+          fontWeight: 500,
+          backgroundColor: colors.menu_bg,
+          padding: "0px 35px",
           margin: "0px",
           borderRadius: "3px 3px 0px 0px",
+          borderBottom: `1px solid ${colors.primary}`,
         }}
       >
         Edit
       </Menu.Item>
       <Menu.Item
+        id="delete_option"
         key="delete"
         style={{
           fontSize: "16px",
-          color: "tomato",
           fontWeight: "600",
-          backgroundColor: "white",
-          padding: "0px 30px",
+          backgroundColor: "transparent",
+          padding: "0px 35px",
         }}
       >
         Delete
       </Menu.Item>
 
-      {selectedItem && (
-        <>
-          <StatusSelector pathsState={pathsState} selectedItem={selectedItem} />
-          <OnMouseOver pathsState={pathsState} selectedItem={selectedItem} />
-          <OnMouseClick
-            pathsState={pathsState}
-            selectedItemState={selectedItemState}
-            setCurrentTool={setCurrentTool}
-            setDisplayNewFramePopup={setDisplayNewFramePopup}
-            Frames={Frames}
-            currentFrameId={currentFrameId}
-            setNewPageFormDetails={setNewPageFormDetails}
-            setContextMenuPosition={setContextMenuPosition}
-          />
-        </>
-      )}
+      <StatusSelector pathsState={pathsState} selectedItem={selectedItem} />
+      <OnMouseClick
+        pathsState={pathsState}
+        selectedItemState={selectedItemState}
+        setCurrentTool={setCurrentTool}
+        setDisplayNewFramePopup={setDisplayNewFramePopup}
+        Frames={Frames}
+        currentFrameId={currentFrameId}
+        setNewPageFormDetails={setNewPageFormDetails}
+        setContextMenuPosition={setContextMenuPosition}
+      />
+      <OnMouseOver pathsState={pathsState} selectedItem={selectedItem} />
     </Menu>
   );
 }

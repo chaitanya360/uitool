@@ -37,7 +37,7 @@ function TypeSelector({ Frames, selectedType, setSelectedType }) {
       <Dropdown overlay={DropDownOptions}>
         <Button
           style={{
-            color: "white",
+            color: "black",
             minWidth: "100px",
             display: "flex",
             justifyContent: "space-between",
