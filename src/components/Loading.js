@@ -16,7 +16,7 @@ function Loading({ left = "50%", top = "50%" }) {
     <div
       style={{
         position: "absolute",
-        zIndex: 2,
+        zIndex: 999,
         height: "100vh",
         width: "100vw",
       }}

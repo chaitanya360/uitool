@@ -156,7 +156,7 @@ const Register = ({ setJustRegistered }) => {
 
   return (
     <>
-      {loading && <Loading top="20%" />}
+      {loading && <Loading top="30%" />}
       <div className="formWrapper" />
       <div className="formContainer">
         <form className="formBody" onSubmit={handleRegister}>

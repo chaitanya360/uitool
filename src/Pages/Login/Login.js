@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import "./Login.css";
 import InputUnderline from "../../components/InputUnderline";
 import { Typography, Space } from "antd";
-import { Button } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
 import storage from "../../api/storage";
@@ -135,7 +134,7 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
 
   return (
     <>
-      {loading && <Loading top="20%" />}
+      {loading && <Loading top="30%" />}
       <div className="formWrapper" />
       <div className="formContainer">
         <form className="formBody" onSubmit={handleLogin}>

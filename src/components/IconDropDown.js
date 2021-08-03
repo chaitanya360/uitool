@@ -21,7 +21,7 @@ function IconDropDown({
         <div
           onClick={() => {
             setSelected(false);
-            setCurrentTool(false);
+            setCurrentTool && setCurrentTool(false);
           }}
           style={{
             position: "absolute",
@@ -29,8 +29,9 @@ function IconDropDown({
             zIndex: "2",
             left: "0px",
             height: "100vh",
-            width: "100vw",
+            width: "100%",
             backgroundColor: "rbga(0,0,0,0.2)",
+            overflow: "hidden",
           }}
         />
       )}
@@ -52,7 +53,7 @@ function IconDropDown({
             padding: "5px 10px",
             fontSize: "1.2rem",
             color: "white",
-            width: "50px",
+            width: "fit-content",
             height: "100%",
             display: "flex",
             justifyContent: "center",

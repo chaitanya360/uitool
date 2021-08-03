@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button } from "antd";
 import InputUnderline from "../../components/InputUnderline";
 import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
@@ -10,6 +10,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 import ErrorContext from "../../context/ErrorContext";
 import AuthContext from "../../context/AuthContext";
 import { colors } from "../../utility";
+import Loading from "../../components/Loading";
 
 function NewProjectPopup({ setBtnClicked }) {
   const { setUser } = useContext(AuthContext);
@@ -20,6 +21,10 @@ function NewProjectPopup({ setBtnClicked }) {
   const [nameError, setNameError] = useState(false);
 
   const handleCreateNewProject = async () => {
+    if (projectName.length === 0) {
+      setErrorMsg("Please Enter Valid Project Name");
+      return;
+    }
     // let token = await getNewToken();
     setLoading(true);
     const frames = JSON.stringify(initialFrameValues);
@@ -38,6 +43,7 @@ function NewProjectPopup({ setBtnClicked }) {
 
   return (
     <div className="new_project_wrapper">
+      {loading && <Loading />}
       <div className="new_project_container">
         <div className="new_project_header">
           <div>New Project</div>
@@ -87,7 +93,11 @@ function NewProjectPopup({ setBtnClicked }) {
               <Button className="publish_btn" onClick={handleCreateNewProject}>
                 Publish
               </Button>
-              <Button className="cancel_btn" type="text">
+              <Button
+                className="cancel_btn"
+                type="text"
+                onClick={() => setBtnClicked(false)}
+              >
                 Cancel
               </Button>
             </form>

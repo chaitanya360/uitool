@@ -16,6 +16,7 @@ import ErrorMessage from "./components/ErrorMessage";
 import ErrorContext from "./context/ErrorContext";
 import { message } from "antd";
 import { getAllProjects } from "./api/projects";
+import AlertBox from "./components/AlertBox";
 
 function App() {
   const [user, setUser] = useState(true);
@@ -33,7 +34,7 @@ function App() {
     getAllProjects(token).then((response) => {
       if (response.ok) {
         if (response.data.status) setProjects(response.data.data);
-      }
+      } else setErrorMsg("something went wrong");
     });
   };
 

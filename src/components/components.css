@@ -138,9 +138,9 @@
 }
 
 #published_link {
-  width: 400px;
+  width: 450px;
   padding: 4px 10px;
-  background-color: var(--primary);
+  background-color: rgba(0, 0, 0, 0.1);
   border: none;
   color: rgb(242, 242, 247);
   border-radius: 3px;
@@ -168,7 +168,6 @@
 .error_close {
   position: absolute;
   right: 0;
-  top: 0;
   padding: 0px 10px;
 }
 

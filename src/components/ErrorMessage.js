@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CloseCircleOutlined } from "@ant-design/icons";
 
 function ErrorMessage({ errorMsg, setErrorMsg }) {
+  useEffect(() => {
+    setTimeout(() => setErrorMsg(false), 4000);
+  }, [errorMsg]);
   return (
     <div
       className="error_container"
