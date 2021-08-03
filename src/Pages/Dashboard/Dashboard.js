@@ -7,12 +7,14 @@ import ProjectsContext from "../../context/ProjectsContext";
 import AuthContext from "../../context/AuthContext";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import Loading from "../../components/Loading";
+import NewProjectPopup from "./NewProjectPopup";
 const { Content } = Layout;
 
 function Dashboard(props) {
   const { user } = useContext(AuthContext);
   const { projects } = useContext(ProjectsContext);
   const [loading, setLoading] = useState(true);
+  const [btnClicked, setBtnClicked] = useState(false);
 
   useEffect(() => {
     if (projects) setLoading(false);
@@ -30,8 +32,10 @@ function Dashboard(props) {
 
   return user ? (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
-      <Header userName={user.firstName} />
+      <Header userName={user.firstName} setBtnClicked={setBtnClicked} />
       <Content style={{ padding: "50px", height: "100%" }}>
+        {btnClicked && <NewProjectPopup setBtnClicked={setBtnClicked} />}
+
         {loading ? (
           <div style={{ position: "absolute", top: 0, left: 0 }}>
             <Loading />

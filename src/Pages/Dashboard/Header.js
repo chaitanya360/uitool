@@ -2,17 +2,24 @@ import React from "react";
 import { Layout, Button } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { UserOutlined, SettingOutlined } from "@ant-design/icons";
-import NewProject from "./NewProject";
 
 const { Header: HEADER, Content } = Layout;
 
-function Header({ userName }) {
+function Header({ userName, setBtnClicked }) {
   return (
     <HEADER
       className="dashboard_header"
       style={{ height: "50px", zIndex: "3" }}
     >
-      <NewProject />
+      <Button
+        type="link"
+        icon={<PlusCircleOutlined />}
+        key="new"
+        className="new_project_btn"
+        onClick={() => setBtnClicked(true)}
+      >
+        <span style={{ marginTop: "2px" }}>New Project</span>
+      </Button>
       <div style={{ display: "flex", height: "fit-content" }}>
         <div
           style={{ display: "flex", alignItems: "center", margin: "0px 5px" }}

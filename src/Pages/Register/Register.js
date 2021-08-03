@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Form.css";
 import InputUnderline from "../../components/InputUnderline";
-import { Typography, Space } from "antd";
-import { Button } from "antd";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Typography } from "antd";
+import { Link, useHistory } from "react-router-dom";
 import { register } from "../../api/users";
 import Loading from "../../components/Loading";
 

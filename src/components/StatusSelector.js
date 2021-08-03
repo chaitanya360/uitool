@@ -33,7 +33,11 @@ function StatusSelector({ pathsState, selectedItem }) {
 
     tempPaths.forEach((frame) => {
       if (frame.id === selectedItem.id) {
-        frame.hoverProps = { ...frame.hoverProps, hoverColor: color };
+        frame.hoverProps = {
+          ...frame.hoverProps,
+          hoverColor: color,
+          isColorEnable: true,
+        };
         frame.bookingStatus = value;
       }
     });

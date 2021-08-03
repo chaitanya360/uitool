@@ -172,26 +172,6 @@
   padding: 0px 10px;
 }
 
-.new_project_input {
-  color: black;
-  padding-left: 5px;
-  border-radius: 3px;
-  margin-right: 10px;
-}
-
-.new_project_container {
-  display: flex;
-  align-items: center;
-}
-
-.new_project_option_btn {
-  padding: 3px 10px;
-  margin: 0px 5px;
-  color: black;
-  height: fit-content;
-  border: 1px solid rgb(66, 66, 66);
-}
-
 .fileContainer {
   background-color: var(--primary) !important;
   color: white;
