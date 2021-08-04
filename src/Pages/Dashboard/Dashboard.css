@@ -42,11 +42,12 @@
   cursor: pointer;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.493);
   border: 2px solid transparent;
+  background-color: white;
 }
 
 .project_card_body:hover {
   border-color: var(--primary);
-  box-shadow: 1px 1px 2px var(--primary);
+  box-shadow: 1px 1px 1px var(--primary);
   color: var(--primary);
 }
 

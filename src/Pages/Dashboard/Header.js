@@ -8,6 +8,7 @@ import AlertBox from "../../components/AlertBox";
 import { useHistory } from "react-router-dom";
 import storage from "../../api/storage";
 import AuthContext from "../../context/AuthContext";
+import ProjectsContext from "../../context/ProjectsContext";
 
 const { Header: HEADER, Content } = Layout;
 
@@ -16,10 +17,12 @@ function Header({ userName, setBtnClicked }) {
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
 
   const [userMenuExpand, setUserMenuExpand] = useState(false);
+  const { setProjects } = useContext(ProjectsContext);
   const authContext = useContext(AuthContext);
 
   const handleLogout = () => {
     setShowLogoutAlert(false);
+    setProjects(false);
     authContext.setUser(false);
     history.push("/dashboard");
     storage.removeToken();

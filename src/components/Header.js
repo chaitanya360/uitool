@@ -15,6 +15,7 @@ import AlertBox from "./AlertBox";
 import storage from "../api/storage";
 import AuthContext from "../context/AuthContext";
 import { useHistory } from "react-router-dom";
+import ProjectsContext from "../context/ProjectsContext";
 
 const { Header: AntHeader } = Layout;
 
@@ -31,6 +32,8 @@ function Header({
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(currentTool);
   const authContext = useContext(AuthContext);
+  const { setProjects } = useContext(ProjectsContext);
+
   const history = useHistory();
   const handleHeaderMenuSelect = (key) => {
     setSelectedMenuItem(key);
@@ -64,6 +67,7 @@ function Header({
 
   const handleLogout = () => {
     setShowLogoutAlert(false);
+    setProjects(false);
     authContext.setUser(false);
     history.push("/dashboard");
     storage.removeToken();

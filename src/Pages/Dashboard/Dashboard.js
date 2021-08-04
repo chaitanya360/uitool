@@ -8,17 +8,31 @@ import AuthContext from "../../context/AuthContext";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import Loading from "../../components/Loading";
 import NewProjectPopup from "./NewProjectPopup";
+import storage from "../../api/storage";
+import { getAllProjects } from "../../api/projects";
+import ErrorContext from "../../context/ErrorContext";
 const { Content } = Layout;
 
 function Dashboard(props) {
   const { user } = useContext(AuthContext);
-  const { projects } = useContext(ProjectsContext);
+  const { projects, setProjects } = useContext(ProjectsContext);
   const [loading, setLoading] = useState(true);
   const [btnClicked, setBtnClicked] = useState(false);
+  const { setErrorMsg } = useContext(ErrorContext);
 
   useEffect(() => {
     if (projects) setLoading(false);
+    else getProjects();
   }, [projects]);
+
+  const getProjects = () => {
+    const token = storage.getToken();
+    getAllProjects(token).then((response) => {
+      if (response.ok) {
+        if (response.data.status) setProjects(response.data.data);
+      } else setErrorMsg("something went wrong");
+    });
+  };
 
   const getProjectSrc = (Project) => {
     if (Project) {
@@ -33,7 +47,11 @@ function Dashboard(props) {
   return user ? (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
       <Header userName={user.firstName} setBtnClicked={setBtnClicked} />
-      <Content style={{ padding: "50px", height: "100%" }}>
+      <Content
+        style={{
+          height: "100%",
+        }}
+      >
         {btnClicked && <NewProjectPopup setBtnClicked={setBtnClicked} />}
 
         {loading ? (
@@ -43,10 +61,10 @@ function Dashboard(props) {
         ) : (
           <div
             style={{
-              display: "flex",
-              flexWrap: "wrap",
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,320px)",
               margin: "auto",
-              justifyContent: "flex-start",
+              padding: "0.5rem 1rem",
             }}
           >
             {projects.length > 0 ? (
