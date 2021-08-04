@@ -20,19 +20,26 @@ function Dashboard(props) {
   const [btnClicked, setBtnClicked] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
 
-  useEffect(() => {
-    if (projects) setLoading(false);
-    else getProjects();
-  }, [projects]);
+  const history = useHistory();
+
+  useEffect(() => {}, [projects]);
 
   const getProjects = () => {
     const token = storage.getToken();
     getAllProjects(token).then((response) => {
+      console.log(response);
+      setLoading(false);
       if (response.ok) {
         if (response.data.status) setProjects(response.data.data);
       } else setErrorMsg("something went wrong");
     });
   };
+
+  useEffect(() => {
+    if (!user) return history.push("/login");
+    if (projects) setLoading(false);
+    else getProjects();
+  }, []);
 
   const getProjectSrc = (Project) => {
     if (Project) {
@@ -71,6 +78,7 @@ function Dashboard(props) {
               projects.map((project) => {
                 return (
                   <ProjectCard
+                    key={project._id}
                     name={project.project_name}
                     id={project._id}
                     nothing={getProjectSrc(project)}
