@@ -66,7 +66,7 @@ function IconDropDown({
         </div>
         <div
           style={{
-            opacity: selected ? "1" : "0",
+            display: selected ? "block" : "none",
             transition: "opacity 0.2s linear",
             position: "absolute",
             top: listOffset,

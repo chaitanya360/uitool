@@ -74,7 +74,7 @@ function InputUnderline({
             ? "2px solid tomato"
             : "2px solid rgba(0,0,0,0.1)",
           backgroundColor: "transparent",
-          color: colors.primary,
+          color: "black",
         }}
         onFocusCapture={handleOnFocus}
         onBlur={handleOnBlur}

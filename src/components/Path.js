@@ -4,15 +4,19 @@ import Info from "./Info";
 const Path = ({
   co,
   tempEnd,
-  selectedItem = { id: "random" },
+  isSelected,
   handleItemSelect,
   isFreeView,
   setInfo,
   frame,
   setCurrentFrameId,
-  handleShowInfo,
-  info,
+  isAdjustView,
   isTour,
+  setCo,
+  ContextMenuPosition,
+  canRef,
+  setPaths,
+  paths,
 }) => {
   const id = frame.id;
   const [bgColor, setBgColor] = useState("transparent");
@@ -24,6 +28,10 @@ const Path = ({
 
   const status = frame.status;
 
+  // 0 for nothing
+  // 1 for clicked
+  let AdjustStatus = 0;
+
   const Styles = {
     body: {
       cursor:
@@ -33,15 +41,65 @@ const Path = ({
     },
   };
 
+  const getCursorPos = (e) => ({
+    x: e.pageX - canRef.current.offsetLeft + canRef.current.scrollLeft,
+    y: e.pageY - canRef.current.offsetTop + canRef.current.scrollTop,
+  });
+
   const VertexPoints = () => {
-    co.map((singlePoint) => (
+    if (!isAdjustView) return <></>;
+
+    const handleMouseMove = (clickedPoint, e) => {
+      if (AdjustStatus !== 1) return;
+
+      let newCo = [];
+
+      if (co[0] === clickedPoint || co[co.length - 1] === clickedPoint) {
+        // this is for first point, as last point is should also be changed
+        newCo.push(getCursorPos(e));
+        for (let i = 1; i < co.length - 1; i++) newCo.push(co[i]);
+        newCo.push(getCursorPos(e));
+      } else {
+        co.forEach((singlePoint) =>
+          singlePoint === clickedPoint
+            ? newCo.push(getCursorPos(e))
+            : newCo.push(singlePoint)
+        );
+      }
+
+      let newPath = [];
+      let changed = false;
+      for (let i = 0; i < paths.length; i++) {
+        let path = paths[i];
+        if (path === frame) {
+          path.co = newCo;
+          changed = true;
+        }
+        newPath.push(path);
+      }
+      if (changed) setPaths(newPath);
+    };
+
+    const handleMouseClick = (clickedPoint) => {
+      AdjustStatus = 1;
+      canRef.current.onmousemove = (event) =>
+        handleMouseMove(clickedPoint, event);
+    };
+
+    return co.map((singlePoint, index) => (
       <circle
-        r="3"
+        key={index}
+        r="4"
         cx={singlePoint.x}
         cy={singlePoint.y}
         stroke={"red"}
         strokeWidth="1"
         fill="transparent"
+        onMouseDownCapture={() => handleMouseClick(singlePoint)}
+        onMouseUpCapture={() => {
+          AdjustStatus = 0;
+          canRef.current.onmousemove = null;
+        }}
       />
     ));
   };
@@ -61,7 +119,7 @@ const Path = ({
       points={co}
       stroke="red"
       strokeWidth="1"
-      fill={selectedItem.id === id ? selectedColor : bgColor}
+      fill={isSelected ? selectedColor : bgColor}
       r={2}
     />
   );
@@ -83,7 +141,7 @@ const Path = ({
   };
 
   const handleOnMouseOver = (e) => {
-    if (hoverProps && isFreeView) {
+    if (hoverProps && isFreeView && !ContextMenuPosition) {
       if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
         if (hoverProps.isColorEnable) {
           setBgColor(hoverProps.hoverColor);
@@ -119,10 +177,11 @@ const Path = ({
   };
 
   const handleAuxClick = (e) => {
-    if (isFreeView) return;
-    if (status === 0) return;
+    if (isTour) return;
+    // if (status === 0) return;
+    setInfo(false);
     e.stopPropagation();
-    if (selectedItem.id === id && tempEnd.x1) {
+    if (isSelected && tempEnd.x1) {
       handleItemSelect(false);
       setBgColor(hoverColor);
     } else handleItemSelect({ id: id, e });
@@ -140,6 +199,7 @@ const Path = ({
         <Polygon />
         <EndCircle />
         <TempLine />
+        <VertexPoints />
       </g>
     </g>
   );

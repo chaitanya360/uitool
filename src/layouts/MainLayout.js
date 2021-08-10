@@ -174,7 +174,12 @@ function MainLayout({ project, isTour = false }) {
       JSON.stringify(Frames),
       storage.getToken(),
       Frames
-    ).then((response) => console.log(response));
+    ).then((response) => {
+      if (response.ok) {
+        if (response.data.status) console.log("saved");
+        else setErrorMsg("Your Session is Expired Try Login Again");
+      }
+    });
   };
 
   const handlePublish = () => {
@@ -305,6 +310,7 @@ function MainLayout({ project, isTour = false }) {
             displayImageUploaderState={displayImageUploaderState}
             setBgImg={setBgImg}
             isTour={isTour}
+            ContextMenuPosition={ContextMenuPosition}
           />
 
           <Popups

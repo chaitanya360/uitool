@@ -75,6 +75,7 @@ function Frame({
   setBgImg,
   displayImageUploaderState,
   isTour,
+  ContextMenuPosition,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -92,7 +93,7 @@ function Frame({
   // 0: nothing is clicked
   // 1: first point is clicked
   // 2: last point is clicked, cursor leaves
-  let status = useRef(2);
+  let status = useRef(0);
   const canRef = useRef(null);
 
   const getCursor = () => {
@@ -107,9 +108,12 @@ function Frame({
     }
   };
 
+  useEffect(() => {
+    setInfo(false);
+  }, []);
+
   const handleItemSelect = (item) => {
     if (item) {
-      console.log(item);
       paths.forEach((frame) => {
         if (frame.id === item.id) {
           setSelectedItem(frame);
@@ -123,6 +127,7 @@ function Frame({
   };
 
   const addNewFrame = () => {
+    console.log("adding new");
     if (co.length > 1) {
       let curr = {
         co,
@@ -195,12 +200,14 @@ function Frame({
   const getInfoPos = () => {
     const infoWidth = 400;
     const infoHight = 300;
-    let currPath;
-    for (let i = 0; i < paths.length; i++) {
-      // info variable contains id which is set when
-      // on mouse over event calls in Paths component
+    let currPath = false;
+    // info variable contains id which is set when
+    // on mouse over event calls in Paths component
+
+    for (let i = 0; i < paths.length; i++)
       if (paths[i].id === info) currPath = paths[i];
-    }
+
+    if (!currPath) return { x: -100, y: 0 };
     const extreameX = getExtreateRightX(currPath.co);
     const verticallyCenterredY = getVerticallyCenteredY(currPath.co);
 
@@ -212,6 +219,7 @@ function Frame({
   const handleMouseDown = (e) => {
     if (selectedItem) {
       setContextMenuPosition(false);
+      if (currentTool === "adjust") setCurrentTool("free");
       setSelectedItem(false);
       return;
     }
@@ -383,13 +391,19 @@ function Frame({
                   key={frame.id}
                   frame={frame}
                   handleItemSelect={handleItemSelect}
-                  selectedItem={selectedItem}
+                  isSelected={frame.id === selectedItem.id}
                   isFreeView={isFreeView}
                   setInfo={setInfo}
-                  info={getInfo()}
-                  handleShowInfo
                   setCurrentFrameId={setCurrentFrameId}
+                  isAdjustView={
+                    frame.id === selectedItem.id && currentTool === "adjust"
+                  }
                   isTour={isTour}
+                  setCo={setCo}
+                  ContextMenuPosition={ContextMenuPosition}
+                  canRef={canRef}
+                  setPaths={setPaths}
+                  paths={paths}
                 />
               ))
             ) : (
