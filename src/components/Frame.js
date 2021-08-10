@@ -107,10 +107,6 @@ function Frame({
     }
   };
 
-  useEffect(() => {
-    if (bgSrc) setLoadingBg(true);
-  }, [bgSrc]);
-
   const handleItemSelect = (item) => {
     if (item) {
       console.log(item);
@@ -374,6 +370,7 @@ function Frame({
             viewBox="0 0 1200 600"
           >
             <image
+              onLoadStart={() => setLoadingBg(true)}
               onLoad={() => setLoadingBg(false)}
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
               xlinkHref={bgSrc}

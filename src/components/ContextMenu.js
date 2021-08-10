@@ -37,20 +37,6 @@ function ContextMenu({
       onClick={handleContextMenuSelect}
     >
       <Menu.Item
-        key="edit"
-        style={{
-          color: "rgba(0,0,0,0.8)",
-          fontWeight: 500,
-          backgroundColor: colors.menu_bg,
-          padding: "0px 35px",
-          margin: "0px",
-          borderRadius: "3px 3px 0px 0px",
-          borderBottom: `1px solid ${colors.primary}`,
-        }}
-      >
-        Edit
-      </Menu.Item>
-      <Menu.Item
         id="delete_option"
         key="delete"
         style={{
