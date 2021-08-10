@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Path from "./Path";
 import Info from "./Info";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -106,6 +106,10 @@ function Frame({
         return "auto";
     }
   };
+
+  useEffect(() => {
+    if (bgSrc) setLoadingBg(true);
+  }, [bgSrc]);
 
   const handleItemSelect = (item) => {
     if (item) {
@@ -304,6 +308,27 @@ function Frame({
     };
   };
 
+  const ImageSelectOption = () => (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100%",
+        color: colors.secondary,
+      }}
+    >
+      <div style={{ margin: "10px", cursor: "pointer" }}>
+        <PlusCircleOutlined
+          style={{ fontSize: "1.4rem" }}
+          onClick={() => setDisplayImageUploader(true)}
+        />
+      </div>
+      <div>Select Bg Image</div>
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -326,10 +351,11 @@ function Frame({
         className="svgContainer custom_scroll"
         ref={canRef}
       >
-        {loadingBg && <Loading />}
+        {loadingBg && <Loading left="40%" />}
 
         {bgSrc ? (
           <svg
+            visibility={loadingBg ? "hidden" : "visible"}
             style={{
               // backgroundImage: `url(${bgSrc})`,
               ...styles.svgStyle,
@@ -349,7 +375,6 @@ function Frame({
           >
             <image
               onLoad={() => setLoadingBg(false)}
-              visibility={loadingBg ? "hidden" : "visible"}
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
               xlinkHref={bgSrc}
             />
@@ -373,27 +398,10 @@ function Frame({
               <Path co={co} tempEnd={tempEnd} frame={{ id: 0, status: 0 }} />
             )}
           </svg>
+        ) : isTour ? (
+          <div>Nothing Here</div>
         ) : (
-          !loadingBg && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                flexDirection: "column",
-                alignItems: "center",
-                height: "100%",
-                color: colors.secondary,
-              }}
-            >
-              <div style={{ margin: "10px", cursor: "pointer" }}>
-                <PlusCircleOutlined
-                  style={{ fontSize: "1.4rem" }}
-                  onClick={() => setDisplayImageUploader(true)}
-                />
-              </div>
-              <div>Select Bg Image</div>
-            </div>
-          )
+          <ImageSelectOption />
         )}
       </div>
     </div>

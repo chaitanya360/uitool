@@ -5,13 +5,17 @@ import {
   CopyOutlined,
   CopyTwoTone,
 } from "@ant-design/icons";
-import { Tooltip } from "antd";
+import { Button, Tooltip } from "antd";
+import { Link, useHistory } from "react-router-dom";
 function PublishedTagline({
   visible = true,
   setVisible,
   projectId = "somewhere",
 }) {
   const [copied, setCopied] = useState(false);
+  const history = useHistory();
+  const baseUrl = window.location.origin;
+  const URL = `${baseUrl}/project/${projectId}/tour`;
 
   const handleCopy = () => {
     document.execCommand("copy");
@@ -19,8 +23,10 @@ function PublishedTagline({
     setTimeout(() => setCopied(false), 3000);
   };
 
-  const baseUrl = window.location.origin;
-  const URL = `${baseUrl}/project/${projectId}/tour`;
+  const handleOpenSiteBtnPressed = () => {
+    setVisible(false);
+  };
+
   return (
     <>
       <div
@@ -36,7 +42,7 @@ function PublishedTagline({
         <div>You Site Is publically available on Url</div>
         <div className="publish_link_wrapper">
           <input id="published_link" href={URL} defaultValue={URL} />
-          <div>
+          {/* <div>
             {copied ? (
               <CopyTwoTone onClick={handleCopy} />
             ) : (
@@ -46,7 +52,21 @@ function PublishedTagline({
                 </CopyToClipboard>
               </Tooltip>
             )}
-          </div>
+          </div> */}
+          <Link to={`/project/${projectId}/tour`} target="_blank">
+            <Button
+              style={{
+                fontSize: "0.8rem",
+                marginLeft: "20px",
+                borderRadius: "5px",
+                transform: "scale(0.9)",
+                fontWeight: "500",
+              }}
+              onClick={handleOpenSiteBtnPressed}
+            >
+              Open
+            </Button>
+          </Link>
         </div>
       </div>
       {visible && (

@@ -177,12 +177,8 @@
 }
 
 #slider {
-  background: rgb(255, 71, 105);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 71, 105, 1) 0%,
-    rgba(255, 104, 90, 1) 100%
-  );
+  /* background: rgb(255, 71, 105); */
+  /* background-color: "white"; */
   height: 100%;
   box-shadow: 2px 1px 4px rgba(56, 56, 56, 0.664);
 }

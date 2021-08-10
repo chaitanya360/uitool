@@ -9,7 +9,6 @@ import DropDownGroupItem from "./DropDownGroupItem";
 import { colors } from "../utility";
 
 function MenuList({
-  isSliderCollapsed,
   selectedItemState,
   projectName,
   Frames,
@@ -145,14 +144,14 @@ function MenuList({
         ))}
       </Menu.ItemGroup>
 
-      {selectedItem !== false && (
+      {/* {selectedItem !== false && (
         <>
           <SelectedPathId
             isSliderCollapsed={isSliderCollapsed}
             selectedItem={selectedItem}
           />
         </>
-      )}
+      )} */}
       <div
         style={{
           display: "flex",
