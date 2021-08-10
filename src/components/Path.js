@@ -12,6 +12,7 @@ const Path = ({
   setCurrentFrameId,
   handleShowInfo,
   info,
+  isTour,
 }) => {
   const id = frame.id;
   const [bgColor, setBgColor] = useState("transparent");
@@ -118,6 +119,8 @@ const Path = ({
   };
 
   const handleAuxClick = (e) => {
+    if (isFreeView) return;
+    if (status === 0) return;
     e.stopPropagation();
     if (selectedItem.id === id && tempEnd.x1) {
       handleItemSelect(false);

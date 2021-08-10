@@ -80,6 +80,10 @@ function MainLayout({ project, isTour = false }) {
     Frames.find((frame) => frame.id === currentFrameId);
 
   useEffect(() => {
+    setContextMenuPosition(false);
+  }, []);
+
+  useEffect(() => {
     setCurrentFrameId(Frames[Frames.length - 1].id);
   }, [Frames]);
 
@@ -141,6 +145,11 @@ function MainLayout({ project, isTour = false }) {
     switch (e.key) {
       case "delete":
         deleteAlertState[1](true);
+        break;
+      case "adjust":
+        setContextMenuPosition(false);
+        setCurrentTool("adjust");
+        break;
     }
   };
 

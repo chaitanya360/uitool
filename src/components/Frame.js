@@ -92,7 +92,7 @@ function Frame({
   // 0: nothing is clicked
   // 1: first point is clicked
   // 2: last point is clicked, cursor leaves
-  let status = useRef(0);
+  let status = useRef(2);
   const canRef = useRef(null);
 
   const getCursor = () => {
@@ -226,7 +226,7 @@ function Frame({
     }));
 
     // for first point
-    if (status.current == 0) {
+    if (status.current === 0 || status.current === 2) {
       setCo([
         {
           x: getCursorPos(e, canRef).x,
@@ -389,6 +389,7 @@ function Frame({
                   info={getInfo()}
                   handleShowInfo
                   setCurrentFrameId={setCurrentFrameId}
+                  isTour={isTour}
                 />
               ))
             ) : (

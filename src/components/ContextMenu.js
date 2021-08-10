@@ -37,13 +37,26 @@ function ContextMenu({
       onClick={handleContextMenuSelect}
     >
       <Menu.Item
+        id="adust_option"
+        key="adjust"
+        style={{
+          fontSize: "16px",
+          fontWeight: "600",
+          padding: "0px 35px",
+          height: "25px",
+          lineHeight: "25px",
+        }}
+      >
+        Adjust
+      </Menu.Item>
+      <Menu.Item
         id="delete_option"
         key="delete"
         style={{
           fontSize: "16px",
           fontWeight: "600",
-          backgroundColor: "transparent",
           padding: "0px 35px",
+          lineHeight: "20px",
         }}
       >
         Delete
