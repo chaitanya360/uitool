@@ -396,7 +396,8 @@ function Frame({
                   setInfo={setInfo}
                   setCurrentFrameId={setCurrentFrameId}
                   isAdjustView={
-                    frame.id === selectedItem.id && currentTool === "adjust"
+                    true
+                    // frame.id === selectedItem.id && currentTool === "adjust"
                   }
                   isTour={isTour}
                   setCo={setCo}

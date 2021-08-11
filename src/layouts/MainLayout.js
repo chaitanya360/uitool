@@ -38,8 +38,12 @@ function MainLayout({ project, isTour = false }) {
   const [projectName, setProjectName] = useState(project.project_name);
 
   const getTowerId = () => {
-    for (let i = 0; i < Frames.length; i++)
-      if (Frames[i].frameName === "Tower") return Frames[i].id;
+    return Frames.find((frame) => frame.frameName === "Tower").id;
+    // for (let i = 0; i < Frames.length; i++)
+    //   if (Frames[i].frameName === "Tower") {
+    //     // console.log(Frames[i]);
+    //     return Frames[i].id;
+    //   }
   };
 
   const pathsState = useState([]);
@@ -62,6 +66,7 @@ function MainLayout({ project, isTour = false }) {
   const [currentTool, setCurrentTool] = currentToolState;
   const [showPublishTagline, setShowPublishTagline] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
+  const [saving, setSaving] = useState(false);
 
   const setCurrentFrame = (values) => {
     let tempFrames = Frames;
@@ -168,6 +173,7 @@ function MainLayout({ project, isTour = false }) {
   }, []);
 
   const handleSave = () => {
+    setSaving(true);
     setProject(
       project._id,
       projectName,
@@ -175,6 +181,7 @@ function MainLayout({ project, isTour = false }) {
       storage.getToken(),
       Frames
     ).then((response) => {
+      setSaving(false);
       if (response.ok) {
         if (response.data.status) console.log("saved");
         else setErrorMsg("Your Session is Expired Try Login Again");
@@ -270,6 +277,7 @@ function MainLayout({ project, isTour = false }) {
             Frames={Frames}
             location={location}
             setCurrentFrameId={setCurrentFrameId}
+            saving={saving}
           />
         )}
         <PublishedTagline

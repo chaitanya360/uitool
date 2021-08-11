@@ -11,6 +11,7 @@ import NewProjectPopup from "./NewProjectPopup";
 import storage from "../../api/storage";
 import { getAllProjects } from "../../api/projects";
 import ErrorContext from "../../context/ErrorContext";
+import UploadImage from "../../components/UploadImage";
 const { Content } = Layout;
 
 function Dashboard(props) {
@@ -26,6 +27,7 @@ function Dashboard(props) {
 
   const getProjects = () => {
     const token = storage.getToken();
+    setLoading(true);
     getAllProjects(token).then((response) => {
       console.log(response);
       setLoading(false);
@@ -39,16 +41,21 @@ function Dashboard(props) {
     if (!user) return history.push("/login");
     if (projects) setLoading(false);
     else getProjects();
-  }, []);
+  }, [projects]);
 
-  const getProjectSrc = (Project) => {
-    if (Project) {
-      let frames = JSON.parse(Project.frames);
-      for (let i = 0; i < frames.length; i++) {
-        if (frames[i].frameName === "Tower") return frames[i].bgImg;
+  const getThumbnailSrc = (id) => {
+    let src;
+    projects.forEach((project) => {
+      if (project._id === id) {
+        const frames = JSON.parse(project.frames);
+        src = frames[0].thumbnailImg;
+        return;
       }
-    }
-    return `${process.env.PUBLIC_URL}/statics/Images/project_placeholder.jpg`;
+    });
+
+    return src
+      ? src
+      : `${process.env.PUBLIC_URL}/statics/Images/project_placeholder.jpg`;
   };
 
   return user ? (
@@ -81,8 +88,7 @@ function Dashboard(props) {
                     key={project._id}
                     name={project.project_name}
                     id={project._id}
-                    nothing={getProjectSrc(project)}
-                    src={getProjectSrc()}
+                    src={getThumbnailSrc(project._id)}
                   />
                 );
               })

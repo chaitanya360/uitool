@@ -87,20 +87,37 @@ const Path = ({
     };
 
     return co.map((singlePoint, index) => (
-      <circle
-        key={index}
-        r="4"
-        cx={singlePoint.x}
-        cy={singlePoint.y}
-        stroke={"red"}
-        strokeWidth="1"
-        fill="transparent"
-        onMouseDownCapture={() => handleMouseClick(singlePoint)}
-        onMouseUpCapture={() => {
-          AdjustStatus = 0;
-          canRef.current.onmousemove = null;
-        }}
-      />
+      <g>
+        {/* <circle
+          key={index}
+          r="48"
+          cx={singlePoint.x}
+          cy={singlePoint.y}
+          stroke={"red"}
+          strokeWidth="1"
+          fill="transparent"
+          style={{
+            userSelect: "none",
+            opacity: "1",
+            cursor: AdjustStatus === 1 ? "pointer" : "inherit",
+          }}
+        /> */}
+        <circle
+          key={index}
+          r="4"
+          cx={singlePoint.x}
+          cy={singlePoint.y}
+          stroke={"red"}
+          className="vertex_point"
+          strokeWidth="1"
+          fill="transparent"
+          onMouseDownCapture={() => handleMouseClick(singlePoint)}
+          onMouseUpCapture={() => {
+            AdjustStatus = 0;
+            canRef.current.onmousemove = null;
+          }}
+        />
+      </g>
     ));
   };
 

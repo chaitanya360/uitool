@@ -36,7 +36,7 @@ function ContextMenu({
       }}
       onClick={handleContextMenuSelect}
     >
-      <Menu.Item
+      {/* <Menu.Item
         id="adust_option"
         key="adjust"
         style={{
@@ -48,7 +48,7 @@ function ContextMenu({
         }}
       >
         Adjust
-      </Menu.Item>
+      </Menu.Item> */}
       <Menu.Item
         id="delete_option"
         key="delete"

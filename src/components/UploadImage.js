@@ -27,7 +27,6 @@ function UploadImage({
         imgClient.post("", formData).then((response) => {
           setLoading(false);
           if (response.ok) {
-            console.log(response);
             setImg(response.data.url);
             onImageChanged();
           } else {

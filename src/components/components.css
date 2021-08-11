@@ -192,3 +192,37 @@
   height: 40px;
   box-shadow: 2px 2px 4px grey;
 }
+
+.loader {
+  border: 2px solid #f3f3f3; /* Light grey */
+  border-top: 2px solid dodgerblue; /* Blue */
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  animation: spin 1s linear infinite;
+  margin-left: 5px;
+}
+
+.thumnail-loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #ff655b; /* Blue */
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+  position: absolute;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.vertex_point:hover {
+  fill: #ff4769;
+}

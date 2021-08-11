@@ -11,6 +11,7 @@ import ErrorContext from "../../context/ErrorContext";
 import AuthContext from "../../context/AuthContext";
 import { colors } from "../../utility";
 import Loading from "../../components/Loading";
+import UploadImage from "../../components/UploadImage";
 
 function NewProjectPopup({ setBtnClicked }) {
   const { setUser } = useContext(AuthContext);
@@ -19,6 +20,9 @@ function NewProjectPopup({ setBtnClicked }) {
   const { setErrorMsg } = useContext(ErrorContext);
   const [loading, setLoading] = useState(false);
   const [nameError, setNameError] = useState(false);
+  const [displayImageUploaderPopup, setDisplayImageUploaderPopup] =
+    useState(false);
+  const [thumbnailSrc, setThumbnailSrc] = useState(false);
 
   const handleCreateNewProject = async () => {
     if (projectName.length === 0) {
@@ -27,8 +31,12 @@ function NewProjectPopup({ setBtnClicked }) {
     }
     // let token = await getNewToken();
     setLoading(true);
-    const frames = JSON.stringify(initialFrameValues);
+
+    let newFrame = initialFrameValues;
+    if (thumbnailSrc) newFrame[0].thumbnailImg = thumbnailSrc;
+    const frames = JSON.stringify(newFrame);
     const token = storage.getToken();
+
     addProject(projectName, frames, token).then((response) => {
       if (response.ok) {
         if (response.data.status) {
@@ -41,9 +49,21 @@ function NewProjectPopup({ setBtnClicked }) {
     });
   };
 
+  const handleAddThumbnail = () => {
+    setDisplayImageUploaderPopup(true);
+  };
+
   return (
     <div className="new_project_wrapper">
       {loading && <Loading />}
+      <UploadImage
+        setImg={setThumbnailSrc}
+        shouldDisplay={displayImageUploaderPopup}
+        setShouldDisplay={setDisplayImageUploaderPopup}
+        onImageChanged={() => {
+          setDisplayImageUploaderPopup(false);
+        }}
+      />
       <div className="new_project_container">
         <div className="new_project_header">
           <div>New Project</div>
@@ -87,6 +107,7 @@ function NewProjectPopup({ setBtnClicked }) {
                 type="text"
                 icon={<PlusCircleOutlined style={{ fontSize: "1.1rem" }} />}
                 className="thumbnail_btn"
+                onClick={handleAddThumbnail}
               >
                 Add Thumbnail Image
               </Button>

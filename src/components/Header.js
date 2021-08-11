@@ -16,6 +16,7 @@ import storage from "../api/storage";
 import AuthContext from "../context/AuthContext";
 import { useHistory } from "react-router-dom";
 import ProjectsContext from "../context/ProjectsContext";
+import { colors } from "../utility";
 
 const { Header: AntHeader } = Layout;
 
@@ -28,6 +29,7 @@ function Header({
   Frames,
   onSaveClick,
   setSelectedItem,
+  saving,
 }) {
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(currentTool);
@@ -78,6 +80,27 @@ function Header({
     setSelectedMenuItem(currentTool);
   }, [currentTool]);
 
+  const SaveButton = () => (
+    <div
+      style={{
+        fontWeight: "500",
+        display: "flex",
+        backgroundColor: colors.secondary,
+        height: "30px",
+        padding: "5px 15px",
+        borderRadius: "3px",
+        boxShadow: "0px 0px 3px rgba(0,0,0,0.3)",
+        cursor: "pointer",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+      onClick={onSaveClick}
+    >
+      <span style={{ transform: "translateY(-2px)" }}>Save</span>
+      <span class="loader" style={{ display: saving ? "block" : "none" }} />
+    </div>
+  );
+
   return (
     <AntHeader id="tools_header">
       <AlertBox
@@ -114,13 +137,7 @@ function Header({
             height: "35px",
           }}
         >
-          <Button
-            type="primary"
-            style={{ fontWeight: "500" }}
-            onClick={onSaveClick}
-          >
-            Save
-          </Button>
+          <SaveButton />
           <IconMenuItem
             tooltip="Free View"
             Icon={<EyeIcon />}

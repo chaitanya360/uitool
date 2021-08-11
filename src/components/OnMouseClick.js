@@ -44,6 +44,7 @@ function OnMouseClick({
       <DropDown
         title="On Mouse Click"
         titleStyle={{ color: "black", padding: "10px 20px" }}
+        open={false}
       >
         <Menu
           theme="light"

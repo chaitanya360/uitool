@@ -58,6 +58,7 @@ function OnMouseOver({ pathsState, selectedItem }) {
       <DropDown
         title="On Mouse Over"
         titleStyle={{ color: "black", padding: "10px 20px" }}
+        open={false}
       >
         <Menu theme="light">
           {selectedItem && (
