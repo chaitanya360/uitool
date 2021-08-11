@@ -4,6 +4,7 @@ import Info from "./Info";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { colors } from "../utility";
 import Loading from "./Loading";
+import AlertBox from "./AlertBox";
 
 const getId = () => new Date().getTime();
 
@@ -89,6 +90,10 @@ function Frame({
   const [info, setInfo] = useState(false);
   const [isCloserToClose, setIsCloserToClose] = useState(false);
   const [loadingBg, setLoadingBg] = useState(false);
+
+  // state used to display delete popup
+  // for deleting currently drawing polygon
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   // 0: nothing is clicked
   // 1: first point is clicked
@@ -219,7 +224,7 @@ function Frame({
   const handleMouseDown = (e) => {
     if (selectedItem) {
       setContextMenuPosition(false);
-      if (currentTool === "adjust") setCurrentTool("free");
+      // if (currentTool === "adjust") setCurrentTool("free");
       setSelectedItem(false);
       return;
     }
@@ -312,6 +317,10 @@ function Frame({
     };
   };
 
+  const handleDeleteCureentPolygon = () => {
+    resetValues();
+  };
+
   const ImageSelectOption = () => (
     <div
       style={{
@@ -342,6 +351,24 @@ function Frame({
         backgroundColor: "rgba(17,145,255,0.01)",
       }}
     >
+      <AlertBox
+        show={showDeleteAlert}
+        onClose={() => setShowDeleteAlert(false)}
+        message={"Are you sure to delete"}
+        autoClose={false}
+        variant={"danger"}
+        handleYes={() => {
+          setContextMenuPosition(false);
+          setShowDeleteAlert(false);
+          setCurrentTool("draw");
+          setSelectedItem(false);
+          handleDeleteCureentPolygon();
+        }}
+        handleNo={() => {
+          setShowDeleteAlert(false);
+          setCurrentTool("draw");
+        }}
+      />
       {info && <Info show info={getInfo()} pos={getInfoPos()} />}
       <div
         style={{
@@ -370,6 +397,7 @@ function Frame({
             onAuxClick={(e) => {
               setContextMenuPosition(false);
               setSelectedItem(false);
+              if (status.current === 1) setShowDeleteAlert(true);
             }}
             fill="none"
             id="svg"
@@ -396,7 +424,7 @@ function Frame({
                   setInfo={setInfo}
                   setCurrentFrameId={setCurrentFrameId}
                   isAdjustView={
-                    true
+                    !isFreeView
                     // frame.id === selectedItem.id && currentTool === "adjust"
                   }
                   isTour={isTour}

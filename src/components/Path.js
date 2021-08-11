@@ -143,7 +143,6 @@ const Path = ({
 
   const EndCircle = () => {
     return (
-      status === 0 &&
       co[0].x !== 0 && (
         <circle
           r="3"
@@ -194,8 +193,8 @@ const Path = ({
   };
 
   const handleAuxClick = (e) => {
-    if (isTour) return;
-    // if (status === 0) return;
+    if (isTour || status === 0) return;
+
     setInfo(false);
     e.stopPropagation();
     if (isSelected && tempEnd.x1) {
