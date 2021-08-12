@@ -17,6 +17,7 @@ const Path = ({
   canRef,
   setPaths,
   paths,
+  drawing,
 }) => {
   const id = frame.id;
   const [bgColor, setBgColor] = useState("transparent");
@@ -26,11 +27,17 @@ const Path = ({
   const hoverProps = frame.hoverProps;
   const clickProps = frame.clickProps;
 
+  // 0 for drawing current polygon
+  // 1 for finished drawing current polygon
   const status = frame.status;
 
   // 0 for nothing
   // 1 for clicked
   let AdjustStatus = 0;
+
+  // 0 for nothing
+  // 1 for clicked;
+  let MoveStatus = 0;
 
   const Styles = {
     body: {
@@ -88,20 +95,6 @@ const Path = ({
 
     return co.map((singlePoint, index) => (
       <g>
-        {/* <circle
-          key={index}
-          r="48"
-          cx={singlePoint.x}
-          cy={singlePoint.y}
-          stroke={"red"}
-          strokeWidth="1"
-          fill="transparent"
-          style={{
-            userSelect: "none",
-            opacity: "1",
-            cursor: AdjustStatus === 1 ? "pointer" : "inherit",
-          }}
-        /> */}
         <circle
           key={index}
           r="4"
@@ -131,17 +124,77 @@ const Path = ({
     />
   );
 
-  const Polygon = () => (
-    <PathLine
-      points={co}
-      stroke="red"
-      strokeWidth="1"
-      fill={isSelected ? selectedColor : bgColor}
-      r={2}
-    />
-  );
+  const Polygon = () => {
+    let initialX = 0;
+    let initialY = 0;
+
+    const getUpdatedPosition = (pointPosition, xDiff, yDiff) => ({
+      x: pointPosition.x + xDiff,
+      y: pointPosition.y + yDiff,
+    });
+
+    const handleMouseMove = (e) => {
+      if (MoveStatus !== 1) return;
+
+      let newCo = [];
+
+      const xDiff = getCursorPos(e).x - initialX;
+      const yDiff = getCursorPos(e).y - initialY;
+      co.forEach((singlePoint) =>
+        newCo.push(getUpdatedPosition(singlePoint, xDiff, yDiff))
+      );
+
+      let newPath = [];
+      let changed = false;
+      for (let i = 0; i < paths.length; i++) {
+        let path = paths[i];
+        if (path === frame) {
+          path.co = newCo;
+          changed = true;
+        }
+        newPath.push(path);
+      }
+
+      if (changed) setPaths(newPath);
+    };
+
+    const handleMouseClick = (e) => {
+      initialX = getCursorPos(e).x;
+      initialY = getCursorPos(e).y;
+      MoveStatus = 1;
+      canRef.current.onmousemove = (e) => handleMouseMove(e);
+      return;
+    };
+
+    const getPointsFromCo = (co) => {
+      let points = "";
+      co.forEach(
+        (currentPoint) =>
+          (points += currentPoint.x + "," + currentPoint.y + " ")
+      );
+      return points;
+    };
+
+    return (
+      <g>
+        <polyline
+          points={getPointsFromCo(co)}
+          fill={isSelected ? selectedColor : bgColor}
+          stroke="red"
+          strokeWidth="1"
+          onMouseDownCapture={(e) => handleMouseClick(e)}
+          onMouseUpCapture={() => {
+            MoveStatus = 0;
+            canRef.current.onmousemove = null;
+          }}
+          className="polyline"
+        />
+      </g>
+    );
+  };
 
   const EndCircle = () => {
+    if (status !== 0) return <></>;
     return (
       co[0].x !== 0 && (
         <circle
@@ -193,7 +246,7 @@ const Path = ({
   };
 
   const handleAuxClick = (e) => {
-    if (isTour || status === 0) return;
+    if (isTour || drawing) return;
 
     setInfo(false);
     e.stopPropagation();
@@ -204,19 +257,17 @@ const Path = ({
   };
 
   return (
-    <g>
-      <g
-        style={Styles.body}
-        onMouseOver={handleOnMouseOver}
-        onMouseLeave={handleOnMouseLeave}
-        onClick={handleOnMouseClick}
-        onAuxClick={handleAuxClick}
-      >
-        <Polygon />
-        <EndCircle />
-        <TempLine />
-        <VertexPoints />
-      </g>
+    <g
+      style={Styles.body}
+      onMouseOver={handleOnMouseOver}
+      onMouseLeave={handleOnMouseLeave}
+      onClick={handleOnMouseClick}
+      onAuxClick={handleAuxClick}
+    >
+      <Polygon />
+      <EndCircle />
+      <TempLine />
+      <VertexPoints />
     </g>
   );
 };

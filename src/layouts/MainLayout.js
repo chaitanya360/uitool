@@ -29,8 +29,6 @@ const styles = {
   },
 };
 
-const defaultBgImage = `${process.env.PUBLIC_URL}/statics/Images/bg.jpg`;
-
 function MainLayout({ project, isTour = false }) {
   const { user } = useContext(AuthContext);
   const [Frames, setFrames] = useState(JSON.parse(project.frames));

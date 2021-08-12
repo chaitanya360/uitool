@@ -3,7 +3,6 @@ import ImageUploader from "react-images-upload";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import imgClient from "../api/imgClient";
 import Loading from "./Loading";
-import { colors } from "../utility";
 import ErrorContext from "../context/ErrorContext";
 function UploadImage({
   setImg,

@@ -94,6 +94,7 @@ function Frame({
   // state used to display delete popup
   // for deleting currently drawing polygon
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [drawing, setDrawing] = useState(false);
 
   // 0: nothing is clicked
   // 1: first point is clicked
@@ -192,6 +193,7 @@ function Frame({
   };
 
   const resetValues = () => {
+    setDrawing(false);
     status.current = 0;
     setCo([{ x: 0, y: 0 }]);
 
@@ -240,6 +242,7 @@ function Frame({
 
     // for first point
     if (status.current === 0 || status.current === 2) {
+      setDrawing(true);
       setCo([
         {
           x: getCursorPos(e, canRef).x,
@@ -254,6 +257,7 @@ function Frame({
       setCo((old) => [...old, { x: old[0].x, y: old[0].y }]);
       status.current = 2;
       setIsCloserToClose(false);
+      setDrawing(false);
       return;
     }
 
@@ -433,10 +437,16 @@ function Frame({
                   canRef={canRef}
                   setPaths={setPaths}
                   paths={paths}
+                  drawing={drawing}
                 />
               ))
             ) : (
-              <Path co={co} tempEnd={tempEnd} frame={{ id: 0, status: 0 }} />
+              <Path
+                co={co}
+                tempEnd={tempEnd}
+                frame={{ id: 0, status: 0 }}
+                isAdjustView={false}
+              />
             )}
           </svg>
         ) : isTour ? (

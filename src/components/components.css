@@ -223,6 +223,15 @@
   }
 }
 
+.vertex_point {
+  opacity: 0;
+}
+
 .vertex_point:hover {
+  opacity: 1;
   fill: #ff4769;
+}
+
+.polyline:hover {
+  stroke: black;
 }

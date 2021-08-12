@@ -5,13 +5,12 @@ import Header from "./Header";
 import ProjectCard from "./ProjectCard";
 import ProjectsContext from "../../context/ProjectsContext";
 import AuthContext from "../../context/AuthContext";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import Loading from "../../components/Loading";
 import NewProjectPopup from "./NewProjectPopup";
 import storage from "../../api/storage";
 import { getAllProjects } from "../../api/projects";
 import ErrorContext from "../../context/ErrorContext";
-import UploadImage from "../../components/UploadImage";
 const { Content } = Layout;
 
 function Dashboard(props) {
