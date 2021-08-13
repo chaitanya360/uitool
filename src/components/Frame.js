@@ -73,7 +73,6 @@ function Frame({
   bgSrc,
   setCurrentFrameId,
   setContextMenuPosition,
-  setBgImg,
   displayImageUploaderState,
   isTour,
   ContextMenuPosition,
@@ -94,13 +93,13 @@ function Frame({
   // state used to display delete popup
   // for deleting currently drawing polygon
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [drawing, setDrawing] = useState(false);
 
   // 0: nothing is clicked
   // 1: first point is clicked
   // 2: last point is clicked, cursor leaves
   let status = useRef(0);
   const canRef = useRef(null);
+  const editorRef = useRef(null);
 
   const getCursor = () => {
     if (selectedItem || !bgSrc) return "default";
@@ -133,7 +132,26 @@ function Frame({
   };
 
   const addNewFrame = () => {
+    // if (frame) console.log(frame);
+
     console.log("adding new");
+    const newFrame = {
+      co: [{ x: 0, y: 0 }],
+      tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
+      id: "temp",
+      hoverProps: {
+        isInfoEnable: false,
+        isColorEnable: false,
+        hoverColor: "",
+        hoverInfo: "",
+      },
+      clickProps: {
+        isClickEnable: false,
+        targetFrameId: 0,
+      },
+      status: 0,
+    };
+
     if (co.length > 1) {
       let curr = {
         co,
@@ -156,30 +174,16 @@ function Frame({
         // previous paths
         ...old.filter((frame) => frame.id !== "temp"),
 
-        // current frame
+        // saving curr frame
         curr,
 
         // temp frame used for current drawing
-        {
-          co: [{ x: 0, y: 0 }],
-          tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
-          id: "temp",
-          hoverProps: {
-            isInfoEnable: false,
-            isColorEnable: false,
-            hoverColor: "",
-            hoverInfo: "",
-          },
-          clickProps: {
-            isClickEnable: false,
-            targetFrameId: 0,
-          },
-          status: 0,
-        },
+        newFrame,
       ]);
 
       if (co.length != 1) resetValues();
     }
+    return { ...newFrame, id: getId() };
   };
 
   const getInfo = () => {
@@ -193,7 +197,6 @@ function Frame({
   };
 
   const resetValues = () => {
-    setDrawing(false);
     status.current = 0;
     setCo([{ x: 0, y: 0 }]);
 
@@ -242,7 +245,6 @@ function Frame({
 
     // for first point
     if (status.current === 0 || status.current === 2) {
-      setDrawing(true);
       setCo([
         {
           x: getCursorPos(e, canRef).x,
@@ -253,14 +255,16 @@ function Frame({
       return;
     }
 
+    // if it is closed to close
+    // push last co as first point
     if (isCloserToClose && status.current === 1) {
       setCo((old) => [...old, { x: old[0].x, y: old[0].y }]);
       status.current = 2;
       setIsCloserToClose(false);
-      setDrawing(false);
       return;
     }
 
+    // random points
     if (status.current === 1) {
       setCo((old) => [
         ...old,
@@ -346,6 +350,17 @@ function Frame({
     </div>
   );
 
+  const cursor = (e) => {
+    let customCursor = document.getElementById("customCursor");
+    console.log(e);
+    customCursor.style.top = e.pageY + "px";
+    customCursor.style.left = e.pageX + "px";
+  };
+
+  const editorSetup = () => {
+    editorRef.current.onmousemove = (e) => cursor(e);
+  };
+
   return (
     <div
       style={{
@@ -353,8 +368,25 @@ function Frame({
         height: "100%",
         width: "100%",
         backgroundColor: "rgba(17,145,255,0.01)",
+        // cursor: "none",
       }}
+      ref={editorRef}
+      // onLoad={editorSetup}
     >
+      {/* <img
+        id="customCursor"
+        style={{
+          position: "absolute",
+          zIndex: 999,
+          height: "100%",
+          width: "100%",
+          // transform: "translate(-50%, -50%)",
+          // backgroundSize: "fit",
+          pointerEvents: "none",
+          // backgroundImage: ,
+        }}
+        src={`${process.env.PUBLIC_URL}/statics/Icons/penClose.svg`}
+      /> */}
       <AlertBox
         show={showDeleteAlert}
         onClose={() => setShowDeleteAlert(false)}
@@ -379,12 +411,13 @@ function Frame({
           cursor: isCloserToClose
             ? `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`
             : getCursor(),
+          // cursor: "inherit",
           height: "600px",
           width: "1200px",
         }}
+        ref={canRef}
         id="canvas"
         className="svgContainer custom_scroll"
-        ref={canRef}
       >
         {loadingBg && <Loading left="40%" />}
 
@@ -397,7 +430,7 @@ function Frame({
             }}
             onMouseLeave={handleMouseLeave}
             onMouseMove={handleMouseMove}
-            onClickCapture={handleMouseDown}
+            onMouseDown={handleMouseDown}
             onAuxClick={(e) => {
               setContextMenuPosition(false);
               setSelectedItem(false);
@@ -437,7 +470,7 @@ function Frame({
                   canRef={canRef}
                   setPaths={setPaths}
                   paths={paths}
-                  drawing={drawing}
+                  addNewFrame={addNewFrame}
                 />
               ))
             ) : (

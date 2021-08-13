@@ -156,6 +156,7 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
               type="text"
               value={state.email}
               setValue={setEmail}
+              
             />
 
             <InputUnderline

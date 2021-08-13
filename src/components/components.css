@@ -230,8 +230,14 @@
 .vertex_point:hover {
   opacity: 1;
   fill: #ff4769;
+  /* cursor: pointer; */
 }
 
-.polyline:hover {
+/* .polyline:hover {
   stroke: black;
+} */
+
+.copy-point:hover > * {
+  /* stroke: black; */
+  fill: green;
 }
