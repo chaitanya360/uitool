@@ -1,6 +1,6 @@
 import "antd/dist/antd.less";
 import "./App.less";
-// import "animate.css";
+import "animate.css";
 // import "bootstrap/dist/css/bootstrap.css";
 import "react-super-treeview/dist/style.css";
 import { useEffect, useState } from "react";

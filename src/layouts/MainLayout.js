@@ -35,14 +35,8 @@ function MainLayout({ project, isTour = false }) {
 
   const [projectName, setProjectName] = useState(project.project_name);
 
-  const getTowerId = () => {
-    return Frames.find((frame) => frame.frameName === "Tower").id;
-    // for (let i = 0; i < Frames.length; i++)
-    //   if (Frames[i].frameName === "Tower") {
-    //     // console.log(Frames[i]);
-    //     return Frames[i].id;
-    //   }
-  };
+  const getTowerId = () =>
+    Frames.find((frame) => frame.frameName === "Tower").id;
 
   const pathsState = useState([]);
   const deleteAlertState = useState(false);
@@ -65,6 +59,7 @@ function MainLayout({ project, isTour = false }) {
   const [showPublishTagline, setShowPublishTagline] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
   const [saving, setSaving] = useState(false);
+  const [showDeletePagePopup, setShowDeletePagePopup] = useState(false);
 
   const setCurrentFrame = (values) => {
     let tempFrames = Frames;
@@ -180,6 +175,13 @@ function MainLayout({ project, isTour = false }) {
     if (isTour) setCurrentTool("free");
   }, []);
 
+  const handlePageDelete = () => {
+    const deletePageId = showDeletePagePopup.id;
+    setCurrentFrameId(Frames[0].id);
+    setFrames((frames) => frames.filter((frame) => frame.id !== deletePageId));
+    setShowDeletePagePopup(false);
+  };
+
   const handleSave = () => {
     setSaving(true);
     setProject(
@@ -245,6 +247,7 @@ function MainLayout({ project, isTour = false }) {
               setCurrentFrameId={setCurrentFrameId}
               displayNewFramePopupState={displayNewFramePopupState}
               currentFrameType={getCurrentFrame().type}
+              setShowDeletePagePopup={setShowDeletePagePopup}
               setNewPageFormDetails={setNewPageFormDetails}
             />
           </Menu>
@@ -341,6 +344,9 @@ function MainLayout({ project, isTour = false }) {
             setContextMenuPosition={setContextMenuPosition}
             newPageFormDetails={newPageFormDetails}
             Frames={Frames}
+            displayDeletePagePopup={showDeletePagePopup}
+            setDisplayDeletePagePopup={setShowDeletePagePopup}
+            handleDeletePage={handlePageDelete}
           />
         </Content>
       </Layout>

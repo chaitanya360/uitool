@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import UploadImage from "./UploadImage";
 import AlertBox from "./AlertBox";
 import NewFramePopup from "./NewFramePopup";
+import DeletePopup from "./DeletePopup";
 
 function Popups({
   setBgImg,
@@ -16,6 +17,9 @@ function Popups({
   setContextMenuPosition,
   newPageFormDetails,
   Frames,
+  setDisplayDeletePagePopup,
+  displayDeletePagePopup,
+  handleDeletePage,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -28,7 +32,6 @@ function Popups({
 
   function deletePath() {
     setPaths((old) => [...old.filter((frame) => frame.id !== selectedItem.id)]);
-
     setSelectedItem(false);
   }
 
@@ -92,6 +95,13 @@ function Popups({
           setCurrentTool(false);
         }}
       />
+      {displayDeletePagePopup && (
+        <DeletePopup
+          handleDeletePage={handleDeletePage}
+          setShowPopup={setDisplayDeletePagePopup}
+          showPopup={displayDeletePagePopup}
+        />
+      )}
     </>
   );
 }

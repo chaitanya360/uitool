@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Menu, Tree } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { colors } from "../utility";
 // Importing from esm
 
@@ -83,6 +83,7 @@ function NavigationTree({
   setCurrentFrameId,
   displayNewFramePopupState,
   setNewPageFormDetails,
+  setShowDeletePagePopup,
 }) {
   let tree;
   const [displayNewFramePopup, setDisplayNewFramePopup] =
@@ -161,6 +162,19 @@ function NavigationTree({
           }}
           className="new_btn_icon"
           onClick={() => handleAddNewBtnClicked(element.type, element.key)}
+        />
+        <DeleteOutlined
+          style={{
+            margin: "0px 5px",
+            display:
+              element.type === "tower" || element.key !== currentFrameId
+                ? "none"
+                : "inline-block",
+          }}
+          className="delete_btn_icon"
+          onClick={() =>
+            setShowDeletePagePopup({ name: element.title, id: element.key })
+          }
         />
       </div>
     );

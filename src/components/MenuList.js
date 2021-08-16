@@ -8,6 +8,7 @@ import SelectedPathId from "./SelectedPathId";
 import DropDownGroupItem from "./DropDownGroupItem";
 import { colors } from "../utility";
 import NavigationTree from "./NavigationTree";
+import DeletePopup from "./DeletePopup";
 
 function MenuList({
   selectedItemState,
@@ -19,6 +20,7 @@ function MenuList({
   currentFrameType,
   setNewPageFormDetails,
   handlePublishPressed,
+  setShowDeletePagePopup,
 }) {
   useEffect(() => {
     setSelectedFrameType(currentFrameType);
@@ -78,40 +80,43 @@ function MenuList({
   );
 
   return (
-    <div id="slider" style={{ display: "flex", flexDirection: "column" }}>
-      <Menu.ItemGroup title={<ProjectTitle />}>
-        <NavigationTree
-          Frames={Frames}
-          currentFrameId={currentFrameId}
-          setCurrentFrameId={setCurrentFrameId}
-          displayNewFramePopupState={displayNewFramePopupState}
-          setNewPageFormDetails={setNewPageFormDetails}
-        />
-      </Menu.ItemGroup>
+    <>
+      <div id="slider" style={{ display: "flex", flexDirection: "column" }}>
+        <Menu.ItemGroup title={<ProjectTitle />}>
+          <NavigationTree
+            Frames={Frames}
+            currentFrameId={currentFrameId}
+            setCurrentFrameId={setCurrentFrameId}
+            displayNewFramePopupState={displayNewFramePopupState}
+            setShowDeletePagePopup={setShowDeletePagePopup}
+            setNewPageFormDetails={setNewPageFormDetails}
+          />
+        </Menu.ItemGroup>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          height: "fit-content",
-        }}
-      >
-        <Button
-          type="primary"
+        <div
           style={{
-            position: "absolute",
-            bottom: "10px",
-            fontWeight: "500",
-            width: "100%",
-            backgroundColor: "rgba(255,255,255,0.8)",
-            color: "black",
+            display: "flex",
+            justifyContent: "center",
+            height: "fit-content",
           }}
-          onClick={handlePublishPressed}
         >
-          Publish
-        </Button>
+          <Button
+            type="primary"
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              fontWeight: "500",
+              width: "100%",
+              backgroundColor: "rgba(255,255,255,0.8)",
+              color: "black",
+            }}
+            onClick={handlePublishPressed}
+          >
+            Publish
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

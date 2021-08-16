@@ -445,10 +445,7 @@ function Frame({
                   isFreeView={isFreeView}
                   setInfo={setInfo}
                   setCurrentFrameId={setCurrentFrameId}
-                  isAdjustView={
-                    !isFreeView
-                    // frame.id === selectedItem.id && currentTool === "adjust"
-                  }
+                  isAdjustView={!isFreeView && status !== 1}
                   isTour={isTour}
                   setCo={setCo}
                   ContextMenuPosition={ContextMenuPosition}
