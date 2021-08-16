@@ -30,8 +30,8 @@ input[type="submit"],
 .formWrapper {
   width: 100%;
   height: 100%;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   z-index: -2;
   position: absolute;
   background: white;
@@ -63,7 +63,7 @@ input[type="submit"],
 
 .register_success_login_info {
   opacity: 0.9;
-  margin: 0px 0px 20px 0px;
+  margin: 0 0 20px;
   background-color: dodgerblue;
   color: white;
   padding: 5px;
