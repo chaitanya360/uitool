@@ -7,6 +7,7 @@ import AuthContext from "../../context/AuthContext";
 import storage from "../../api/storage";
 import { login } from "../../api/users";
 import Loading from "../../components/Loading";
+import ErrorContext from "../../context/ErrorContext";
 
 const emailRegularExpression = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -17,6 +18,8 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
   const [loading, setLoading] = useState(false);
 
   const authContext = useContext(AuthContext);
+  const { setErrorMsg } = useContext(ErrorContext);
+
   const history = useHistory();
   useEffect(() => {
     if (justRegistered) setTimeout(() => setJustRegistered(false), 3000);
@@ -62,8 +65,8 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
 
             // redirecting to "workspace"
             history.push("/dashboard");
-          } else alert(response.data.message);
-        } else alert(response.problem);
+          } else setErrorMsg(response.data.message);
+        } else setErrorMsg(response.problem);
       });
     }
   };
@@ -156,7 +159,6 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
               type="text"
               value={state.email}
               setValue={setEmail}
-              
             />
 
             <InputUnderline

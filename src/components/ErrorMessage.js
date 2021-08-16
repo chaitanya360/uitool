@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { CloseCircleOutlined } from "@ant-design/icons";
 
 function ErrorMessage({ errorMsg, setErrorMsg }) {
+  let timeOutId;
   useEffect(() => {
-    setTimeout(() => setErrorMsg(false), 4000);
+    timeOutId = setTimeout(() => setErrorMsg(false), 4000);
   }, [errorMsg]);
   return (
     <div
