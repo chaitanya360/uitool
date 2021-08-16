@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { DeletepopupStyle } from "./components.style";
 import { CloseCircleOutlined } from "@ant-design/icons";
 
-function DeletePopup({ showPopup, setShowPopup, handleDeletePage }) {
+function DeletePopup({
+  showPopup,
+  setShowPopup,
+  handleDeletePage,
+  isProject = false,
+}) {
   const [name, setName] = useState("");
   useEffect(() => {
     setName("");
@@ -20,9 +25,11 @@ function DeletePopup({ showPopup, setShowPopup, handleDeletePage }) {
           className="close-btn"
           onClick={() => setShowPopup(false)}
         />
-        <div className="title">Delete Page</div>
+        <div className="title">Delete {isProject ? "Project" : "Page"}</div>
         <div className="content">
-          <label for="page-name">Enter Page Name to Confirm</label>
+          <label for="page-name">
+            ReEnter {isProject ? "Project" : "Page"} Name to Confirm
+          </label>
           <input
             className="input"
             value={name}

@@ -135,6 +135,7 @@ function Header({
             alignItems: "center",
             justifyContent: "center",
             height: "35px",
+            marginRight: "80px",
           }}
         >
           <SaveButton />

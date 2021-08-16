@@ -57,13 +57,16 @@ const DeletepopupStyle = styled.div`
     }
 
     .del {
-      background: rgba(250, 10, 30, 0.3);
+      color: white;
+      cursor: default;
+      background: rgba(255, 0, 0, 0.3);
       transition: background 200ms linear;
       ${({ delete_active }) =>
         delete_active &&
         css`
-          background: tomato;
-          color: rgba(55, 55, 55, 1);
+          background: rgba(255, 0, 0, 0.9);
+          color: white;
+          cursor: pointer;
         `};
     }
   }

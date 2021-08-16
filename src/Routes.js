@@ -11,6 +11,7 @@ import NotFound from "./Pages/NotFound/NotFound";
 import Landing from "./Pages/Landing/Landing";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Project from "./Pages/Project/Project";
+import Profile from "./Pages/Profile/Profile";
 
 const Routes = (props) => {
   const [justRegistered, setJustRegistered] = useState(false);
@@ -27,6 +28,7 @@ const Routes = (props) => {
         <Route path="/register">
           <Register setJustRegistered={setJustRegistered} />
         </Route>
+        <Route path="/profile" component={Profile}></Route>
         <Route path="/landing">
           <Landing />
         </Route>

@@ -9,6 +9,7 @@ const initialFrameValues = [
     parentId: false,
     type: "tower",
     status: false,
+    thumbnailImg: false,
   },
   // {
   //   paths: [],

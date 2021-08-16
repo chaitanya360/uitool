@@ -50,6 +50,7 @@ function OnMouseClick({
           theme="light"
           onMouseEnter={() => setTitleColor(colors.secondary)}
           onMouseLeave={() => setTitleColor("black")}
+          triggerSubMenuAction="click"
         >
           {selectedItem && (
             <SubMenu

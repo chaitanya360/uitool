@@ -91,86 +91,78 @@ function PageSelector({
 
   return (
     <div style={{ height: "fit-content" }}>
-      <DropDown
-        title="Select Page"
-        titleStyle={{ color: "black", padding: "10px 20px" }}
-      >
-        <Menu theme="light">
-          <Menu.Item
-            key="new"
-            style={{ width: "100%" }}
-            onClick={() => handleMenuItemSelect({ key: "new" })}
-          >
-            <div>
-              <Button
-                // type="link"
-                icon={<PlusCircleOutlined />}
-                key="new"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  color: colors.primary,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                className="dropdown_title"
-              >
-                Create New Page
-              </Button>
-            </div>
-          </Menu.Item>
-
-          {getListedData().map((singleType) => (
-            <div
+      <Menu theme="light">
+        <Menu.Item
+          key="new"
+          style={{ width: "100%" }}
+          onClick={() => handleMenuItemSelect({ key: "new" })}
+        >
+          <div>
+            <Button
+              // type="link"
+              icon={<PlusCircleOutlined />}
+              key="new"
               style={{
-                padding: "5px 0px",
-                width: "90%",
-                fontWeight: "600",
-                margin: "10px auto",
+                width: "100%",
+                height: "100%",
+                color: colors.primary,
+                display: "flex",
+                alignItems: "center",
               }}
-              id="page_list"
+              className="dropdown_title"
             >
-              <DropDownGroupItem
-                titleBgChangeOnSelect={false}
-                title={singleType.type + "s"}
-                visible={selectedFrameType == singleType.type}
-                onDropDownArrowClick={() =>
-                  selectedFrameType === singleType.type
-                    ? setSelectedFrameType(false)
-                    : setSelectedFrameType(singleType.type)
-                }
-              >
-                {singleType.list.filter((frame) => frame.id !== currentFrameId)
-                  .length === 0 ? (
-                  <Menu.Item>Not Available</Menu.Item>
-                ) : (
-                  singleType.list
-                    .filter((frame) => frame.id !== currentFrameId)
-                    .map((frame) => (
-                      <Menu.Item
-                        key={frame.id}
-                        onClick={() =>
-                          handleOnMouseClickValuesChange(
-                            "change_page",
-                            frame.id
-                          )
-                        }
-                        style={{
-                          color:
-                            selectedPageid === frame.id
-                              ? colors.primary
-                              : "black",
-                        }}
-                      >
-                        {frame.frameName}
-                      </Menu.Item>
-                    ))
-                )}
-              </DropDownGroupItem>
-            </div>
-          ))}
-        </Menu>
-      </DropDown>
+              Create New Page
+            </Button>
+          </div>
+        </Menu.Item>
+
+        {getListedData().map((singleType) => (
+          <div
+            style={{
+              padding: "5px 0px",
+              width: "90%",
+              fontWeight: "600",
+              margin: "0px auto",
+            }}
+            id="page_list"
+          >
+            <DropDownGroupItem
+              titleBgChangeOnSelect={true}
+              title={singleType.type + "s"}
+              visible={selectedFrameType == singleType.type || true}
+              onDropDownArrowClick={() =>
+                selectedFrameType === singleType.type
+                  ? setSelectedFrameType(false)
+                  : setSelectedFrameType(singleType.type)
+              }
+            >
+              {singleType.list.filter((frame) => frame.id !== currentFrameId)
+                .length === 0 ? (
+                <Menu.Item>Not Available</Menu.Item>
+              ) : (
+                singleType.list
+                  .filter((frame) => frame.id !== currentFrameId)
+                  .map((frame) => (
+                    <Menu.Item
+                      key={frame.id}
+                      onClick={() =>
+                        handleOnMouseClickValuesChange("change_page", frame.id)
+                      }
+                      style={{
+                        color:
+                          selectedPageid === frame.id
+                            ? colors.primary
+                            : "black",
+                      }}
+                    >
+                      {frame.frameName}
+                    </Menu.Item>
+                  ))
+              )}
+            </DropDownGroupItem>
+          </div>
+        ))}
+      </Menu>
     </div>
   );
 }

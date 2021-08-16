@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Layout } from "antd";
 import "./Dashboard.css";
 import Header from "./Header";
@@ -9,8 +9,10 @@ import { Redirect, useHistory } from "react-router-dom";
 import Loading from "../../components/Loading";
 import NewProjectPopup from "./NewProjectPopup";
 import storage from "../../api/storage";
-import { getAllProjects } from "../../api/projects";
+import { getAllProjects, setProject } from "../../api/projects";
 import ErrorContext from "../../context/ErrorContext";
+import DeletePopup from "../../components/DeletePopup";
+import UploadImage from "../../components/UploadImage";
 const { Content } = Layout;
 
 function Dashboard(props) {
@@ -18,11 +20,14 @@ function Dashboard(props) {
   const { projects, setProjects } = useContext(ProjectsContext);
   const [loading, setLoading] = useState(true);
   const [btnClicked, setBtnClicked] = useState(false);
+  const [seletedProject, setSelectedProject] = useState(false);
+  const [deleteProjectPopup, setDeleteProjectPopup] = useState(false);
+  const [thumbnailImg, setThumbnailImg] = useState(false);
+  const selectedProjectRef = useRef(false);
+  const [displayImageUploader, setDisplayImageUploader] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
 
   const history = useHistory();
-
-  useEffect(() => {}, [projects]);
 
   const getProjects = () => {
     const token = storage.getToken();
@@ -57,8 +62,67 @@ function Dashboard(props) {
       : `${process.env.PUBLIC_URL}/statics/Images/project_placeholder.jpg`;
   };
 
+  const handleDeleteProject = () => {
+    const currProjectId = selectedProjectRef.current;
+    console.log(currProjectId);
+    setDeleteProjectPopup(false);
+  };
+
+  useEffect(() => {
+    handleChangeThumbnail();
+  }, [thumbnailImg]);
+
+  const handleChangeThumbnail = () => {
+    if (!selectedProjectRef.current) return;
+    const currProjectId = selectedProjectRef.current;
+    const project = projects.find((project) => project._id === currProjectId);
+    let frames = JSON.parse(project.frames);
+    for (let i = 0; i < frames.length; i++) {
+      
+      if (frames[i].type === "tower") {
+        frames[i].thumbnailImg = thumbnailImg;
+        break;
+      }
+    }
+
+    project.frames = JSON.stringify(frames);
+
+    setProject(project);
+
+    save(project, frames);
+  };
+
+  const save = (project, frames) => {
+    setProject(
+      project._id,
+      project.project_name,
+      JSON.stringify(frames),
+      storage.getToken(),
+      frames
+    ).then((response) => {
+      if (response.ok) {
+        if (response.data.status) console.log("saved");
+        else setErrorMsg("Your Session is Expired Try Login Again");
+      }
+    });
+  };
+
   return user ? (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
+      {deleteProjectPopup && (
+        <DeletePopup
+          handleDeletePage={handleDeleteProject}
+          isProject
+          showPopup={deleteProjectPopup}
+          setShowPopup={setDeleteProjectPopup}
+        />
+      )}
+      <UploadImage
+        setImg={setThumbnailImg}
+        shouldDisplay={displayImageUploader}
+        onImageChanged={() => setDisplayImageUploader(false)}
+        setShouldDisplay={setDisplayImageUploader}
+      />
       <Header userName={user.firstName} setBtnClicked={setBtnClicked} />
       <Content
         style={{
@@ -84,6 +148,11 @@ function Dashboard(props) {
               projects.map((project) => {
                 return (
                   <ProjectCard
+                    handleFocusCapture={() =>
+                      (selectedProjectRef.current = project._id)
+                    }
+                    setDisplayImageUploader={setDisplayImageUploader}
+                    setDeleteProjectPopup={setDeleteProjectPopup}
                     key={project._id}
                     name={project.project_name}
                     id={project._id}

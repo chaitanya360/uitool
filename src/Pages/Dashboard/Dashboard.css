@@ -28,6 +28,16 @@
   padding: 0 2rem;
 }
 
+.project-setting-icon:hover {
+  transform: rotate(150deg) scale(1.2);
+  transition: transform 200ms linear;
+}
+
+.project-icon {
+  font-size: 1.2rem;
+  margin-left: 10px;
+}
+
 .project_card_body {
   display: flex;
   flex-direction: column;
@@ -41,14 +51,21 @@
   margin: 20px 10px;
   cursor: pointer;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.493);
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   background-color: white;
 }
 
 .project_card_body:hover {
-  border-color: var(--primary);
-  box-shadow: 1px 1px 1px var(--primary);
-  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.project_card_body:hover .project-setting-icon {
+  color: black !important;
+}
+
+.project-icon:hover {
+  transform: scale(1.3);
+  transition: transform 200ms linear;
 }
 
 .blue_on_hover:hover {

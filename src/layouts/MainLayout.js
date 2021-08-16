@@ -162,7 +162,8 @@ function MainLayout({ project, isTour = false }) {
   };
 
   // don't know why but it just fixed
-  // the problem of routepipeline
+  // the problem of routepipeline and many other
+  // don't change this, just dont
   useState(() => {
     setTimeout(() => {
       setCurrentFrameId(getTowerId());
@@ -176,9 +177,33 @@ function MainLayout({ project, isTour = false }) {
   }, []);
 
   const handlePageDelete = () => {
+    // delete page id is set in deletepagepopup
     const deletePageId = showDeletePagePopup.id;
+
+    // making tower as current frame
     setCurrentFrameId(Frames[0].id);
-    setFrames((frames) => frames.filter((frame) => frame.id !== deletePageId));
+
+    // removing page
+
+    let tempFrames = Frames;
+
+    tempFrames = tempFrames.filter((frame) => frame.id !== deletePageId);
+
+    for (let i = 0; i < tempFrames.length; i++) {
+      let frame = tempFrames[i];
+      for (let j = 0; j < frame.paths.length; j++) {
+        let path = frame.paths[i];
+        if (path.clickProps)
+          if (path.clickProps.isClickEnable)
+            if (path.clickProps.targetFrameId === deletePageId) {
+              path.clickProps.isClickEnable = false;
+              path.clickProps.targetFrameId = 0;
+            }
+      }
+    }
+
+    setFrames(tempFrames);
+
     setShowDeletePagePopup(false);
   };
 

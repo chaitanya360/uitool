@@ -1,16 +1,31 @@
 import React, { useState } from "react";
-import { SettingOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FileImageOutlined,
+} from "@ant-design/icons";
 import { colors } from "../../utility";
-import { Link, Redirect } from "react-router-dom";
-function ProjectCard({ name, id, src }) {
+import { Link, Redirect, useHistory } from "react-router-dom";
+
+function ProjectCard({
+  name,
+  id,
+  src,
+  setDeleteProjectPopup,
+  setDisplayImageUploader,
+  handleFocusCapture,
+}) {
   const [loadingThumbnail, setLoadingThumbnail] = useState(true);
+  const [imgScale, setImgScale] = useState(1);
+  const history = useHistory();
   return (
-    <Link
-      to={`/workspace/${id}`}
-      params={id}
-      style={{ textDecoration: "none", color: "black" }}
-    >
-      <div className="project_card_body">
+    <div onMouseEnter={handleFocusCapture}>
+      <div
+        className="project_card_body"
+        onClick={() => history.push(`/workspace/${id}`)}
+        onMouseEnter={() => setImgScale(1.2)}
+        onMouseLeave={() => setImgScale(1)}
+      >
         <div
           style={{
             width: "100%",
@@ -19,6 +34,7 @@ function ProjectCard({ name, id, src }) {
             justifyContent: "center",
             alignItems: "center",
             position: "relative",
+            overflow: "hidden",
           }}
         >
           <img
@@ -28,7 +44,10 @@ function ProjectCard({ name, id, src }) {
               borderRadius: "3px",
               objectFit: "cover",
               visibility: loadingThumbnail ? "hidden" : "visible",
+              transform: `scale(${imgScale})`,
+              transition: "transform 200ms linear",
             }}
+            className="project-thumb"
             onLoadStart={() => setLoadingThumbnail(true)}
             onLoad={() => setLoadingThumbnail(false)}
             src={src}
@@ -51,7 +70,7 @@ function ProjectCard({ name, id, src }) {
               flex: "1",
               textAlign: "center",
               fontWeight: "bold",
-              fontSize: "1rem",
+              fontSize: "1.2rem",
             }}
           >
             {name}
@@ -63,11 +82,26 @@ function ProjectCard({ name, id, src }) {
               alignItems: "center",
             }}
           >
-            <SettingOutlined style={{ fontSize: "1.3rem", color: "inherit" }} />
+            <DeleteOutlined
+              className="project-icon"
+              style={{ color: "red" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setDeleteProjectPopup({ name });
+              }}
+            />
+            <EditOutlined className="project-icon" />
+            <FileImageOutlined
+              className="project-icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setDisplayImageUploader(true);
+              }}
+            />
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

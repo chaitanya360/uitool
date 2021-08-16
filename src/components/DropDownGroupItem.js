@@ -29,7 +29,7 @@ function DropDownGroupItem({
           justifyContent: "space-between",
           alignItems: "center",
           cursor: "pointer",
-
+          color: "white",
           backgroundColor:
             visible && titleBgChangeOnSelect ? colors.secondary : "transparent",
         }}

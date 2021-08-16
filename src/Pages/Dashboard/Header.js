@@ -86,6 +86,7 @@ function Header({ userName, setBtnClicked }) {
             text="Profile"
             id="edit"
             key="edit"
+            onClick={() => history.push("/profile")}
           />
           <IconTextItem
             onClick={() => setShowLogoutAlert(true)}
