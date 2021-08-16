@@ -7,6 +7,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import SelectedPathId from "./SelectedPathId";
 import DropDownGroupItem from "./DropDownGroupItem";
 import { colors } from "../utility";
+import NavigationTree from "./NavigationTree";
 
 function MenuList({
   selectedItemState,
@@ -25,6 +26,7 @@ function MenuList({
 
   const [selectedFrameType, setSelectedFrameType] = useState("Tower");
   const getListedData = () => {
+    console.log(Frames);
     let Resultlist = [];
 
     for (let i = 0; i < Frames.length; i++) {
@@ -76,87 +78,22 @@ function MenuList({
   );
 
   return (
-    <div id="slider">
+    <div id="slider" style={{ display: "flex", flexDirection: "column" }}>
       <Menu.ItemGroup title={<ProjectTitle />}>
-        {getListedData().map((singleType) => (
-          <div
-            key={singleType.type}
-            style={{
-              padding: "5px 0px",
-              width: "90%",
-              fontWeight: "600",
-              margin: "10px auto",
-            }}
-          >
-            <DropDownGroupItem
-              titleBgChangeOnSelect
-              title={singleType.type + "s"}
-              visible={selectedFrameType == singleType.type}
-              onDropDownArrowClick={() =>
-                selectedFrameType === singleType.type
-                  ? setSelectedFrameType(false)
-                  : setSelectedFrameType(singleType.type)
-              }
-            >
-              {singleType.list.map((frame) => (
-                <Menu.Item
-                  key={frame.id}
-                  style={{
-                    margin: "0px",
-                    color: frame.id === currentFrameId ? "white" : "unset",
-                    padding: "0px 10px",
-                  }}
-                  onClick={() => setCurrentFrameId(frame.id)}
-                >
-                  {frame.frameName}
-                </Menu.Item>
-              ))}
-
-              {singleType.type !== "Tower" && (
-                <Menu.Item
-                  key="new"
-                  style={{ width: "100%", margin: "0px", padding: "0px" }}
-                >
-                  <Button
-                    type="link"
-                    icon={<PlusCircleOutlined />}
-                    key="new"
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      color: "black",
-                      borderTop: "1px solid rgba(255,255,255,0.3)",
-                    }}
-                    onClick={() => {
-                      setNewPageFormDetails({ type: singleType.type });
-                      displayNewFramePopupState[1](true);
-                    }}
-                    className=".hover_for_black"
-                  >
-                    Add {singleType.type}
-                  </Button>
-                </Menu.Item>
-              )}
-            </DropDownGroupItem>
-          </div>
-        ))}
+        <NavigationTree
+          Frames={Frames}
+          currentFrameId={currentFrameId}
+          setCurrentFrameId={setCurrentFrameId}
+          displayNewFramePopupState={displayNewFramePopupState}
+          setNewPageFormDetails={setNewPageFormDetails}
+        />
       </Menu.ItemGroup>
 
-      {/* {selectedItem !== false && (
-        <>
-          <SelectedPathId
-            isSliderCollapsed={isSliderCollapsed}
-            selectedItem={selectedItem}
-          />
-        </>
-      )} */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          height: "100%",
+          height: "fit-content",
         }}
       >
         <Button

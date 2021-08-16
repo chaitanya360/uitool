@@ -5,6 +5,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { colors } from "../utility";
 import Loading from "./Loading";
 import AlertBox from "./AlertBox";
+import { newFrame } from "../utility/data";
 
 const getId = () => new Date().getTime();
 
@@ -135,22 +136,6 @@ function Frame({
     // if (frame) console.log(frame);
 
     console.log("adding new");
-    const newFrame = {
-      co: [{ x: 0, y: 0 }],
-      tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
-      id: "temp",
-      hoverProps: {
-        isInfoEnable: false,
-        isColorEnable: false,
-        hoverColor: "",
-        hoverInfo: "",
-      },
-      clickProps: {
-        isClickEnable: false,
-        targetFrameId: 0,
-      },
-      status: 0,
-    };
 
     if (co.length > 1) {
       let curr = {

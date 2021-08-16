@@ -53,7 +53,7 @@ const Polygon = ({
     initialX = getCursorPos(e).x;
     initialY = getCursorPos(e).y;
     MoveStatus = 1;
-    canRef.current.onmousemove = (e) => handleMouseMove(e);
+    if (canRef) canRef.current.onmousemove = (e) => handleMouseMove(e);
     return;
   };
 

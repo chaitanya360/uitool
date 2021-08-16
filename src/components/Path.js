@@ -47,8 +47,12 @@ const Path = ({
   };
 
   const getCursorPos = (e) => ({
-    x: e.pageX - canRef.current.offsetLeft + canRef.current.scrollLeft,
-    y: e.pageY - canRef.current.offsetTop + canRef.current.scrollTop,
+    x: canRef
+      ? e.pageX - canRef.current.offsetLeft + canRef.current.scrollLeft
+      : 0,
+    y: canRef
+      ? e.pageY - canRef.current.offsetTop + canRef.current.scrollTop
+      : 0,
   });
 
   const TempLine = () => (

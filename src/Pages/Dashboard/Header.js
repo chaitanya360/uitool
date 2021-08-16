@@ -47,7 +47,7 @@ function Header({ userName, setBtnClicked }) {
       />
       <Button
         type="link"
-        icon={<PlusCircleOutlined />}
+        icon={<PlusCircleOutlined style={{ transform: "translateY(2px)" }} />}
         key="new"
         className="new_project_btn"
         onClick={() => setBtnClicked(true)}

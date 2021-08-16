@@ -114,11 +114,21 @@ function MainLayout({ project, isTour = false }) {
     description,
     bgImg,
     id = "not specified",
-    type = "Tower"
+    type = "tower",
+    parentId
   ) => {
+    console.log(type, parentId);
     setFrames((old) => [
       ...old,
-      { paths: [], bgImg, frameName, id, description, type },
+      {
+        paths: [],
+        bgImg,
+        frameName,
+        id,
+        description,
+        type,
+        parentId: parentId ? parentId : false,
+      },
     ]);
 
     setLocation((old) => [...old, id]);
@@ -207,10 +217,9 @@ function MainLayout({ project, isTour = false }) {
           style={{
             padding: "0",
             margin: "0",
-            width: "100%",
             maxHeight: "fit-content",
           }}
-          width={150}
+          width={"fit-content"}
           className="slider"
           theme="dark"
           collapsible={false}

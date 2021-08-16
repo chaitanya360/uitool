@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-
+import { newFrame } from "../../utility/data";
 const CopyPoint = ({
   co,
   drawing,
@@ -28,22 +28,6 @@ const CopyPoint = ({
   let initialY = 0;
   const circleRadius = 5;
 
-  const newFrame = {
-    co: [{ x: 0, y: 0 }],
-    tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
-    id: "temp",
-    hoverProps: {
-      isInfoEnable: false,
-      isColorEnable: false,
-      hoverColor: "",
-      hoverInfo: "",
-    },
-    clickProps: {
-      isClickEnable: false,
-      targetFrameId: 0,
-    },
-    status: 0,
-  };
   const handleMouseMove = (e) => {
     if (CopyStatus !== 1) return;
     let newCo = [];
@@ -59,7 +43,6 @@ const CopyPoint = ({
     for (let i = 0; i < newPath.length; i++) {
       let path = newPath[i];
       if (path.id === copyiedId) {
-        console.log(copyiedId);
         changed = true;
         path.co = newCo;
         copied = true;
@@ -82,7 +65,6 @@ const CopyPoint = ({
     initialY = getCursorPos(e).y;
     CopyStatus = 1;
     canRef.current.onmousemove = (e) => handleMouseMove(e);
-    console.log("coping ");
     let newCo = [];
 
     const xDiff = getCursorPos(e).x - initialX;

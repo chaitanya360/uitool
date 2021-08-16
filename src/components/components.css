@@ -178,7 +178,7 @@
 
 #slider {
   /* background: rgb(255, 71, 105); */
-  /* background-color: "white"; */
+  /* background-color: "white" !important; */
   height: 100%;
   box-shadow: 2px 1px 4px rgba(56, 56, 56, 0.664);
 }
@@ -240,4 +240,16 @@
 .copy-point:hover > * {
   /* stroke: black; */
   fill: green;
+}
+
+.new_btn_icon:hover {
+  transform: rotate(90deg);
+  transition: transform 400ms linear;
+}
+
+.errorsContainer > .errorMessage {
+  padding: 5px 15px;
+  font-weight: 500;
+  border-radius: 3px;
+  background-color: #3f4257;
 }

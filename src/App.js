@@ -1,7 +1,8 @@
 import "antd/dist/antd.less";
 import "./App.less";
-import "animate.css";
-import "bootstrap/dist/css/bootstrap.css";
+// import "animate.css";
+// import "bootstrap/dist/css/bootstrap.css";
+import "react-super-treeview/dist/style.css";
 import { useEffect, useState } from "react";
 import AuthContext from "./context/AuthContext";
 import storage from "./api/storage";
@@ -16,6 +17,7 @@ import ErrorMessage from "./components/ErrorMessage";
 import ErrorContext from "./context/ErrorContext";
 import { message } from "antd";
 import { getAllProjects } from "./api/projects";
+import NavigationTree from "./components/NavigationTree";
 
 function App() {
   const [user, setUser] = useState(true);

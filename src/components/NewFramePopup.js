@@ -21,6 +21,7 @@ const styles = {
     flexDirection: "column",
     fontSize: "16px",
     padding: "30px 0px",
+    position: "relative",
   },
 };
 function NewFramePopup({
@@ -39,19 +40,21 @@ function NewFramePopup({
   const [description, setDescription] = useState("");
   const [selectedItem, setSelectedItem] = selectedItemState;
 
-  const [selectedType, setSelectedType] = useState("Flat");
+  const [selectedType, setSelectedType] = useState("flat");
 
   const { TextArea } = Input;
   const handleAddNewFrame = () => {
     if (name.length === 0) return alert("Enter Name");
     const newFrameId = getId();
+    console.log(newPageFormDetails.parentKey);
     if (newPageFormDetails.type)
       addNewFrame(
         name,
         description,
         bgImg,
         newFrameId,
-        newPageFormDetails.type
+        newPageFormDetails.type,
+        newPageFormDetails.parentKey
       );
     else addNewFrame(name, description, bgImg, newFrameId, selectedType);
 
@@ -68,6 +71,13 @@ function NewFramePopup({
     setName("");
     setDescription("");
   };
+
+  const type = newPageFormDetails
+    ? newPageFormDetails.type[0].toUpperCase() +
+      newPageFormDetails.type.substring(1)
+    : selectedType
+    ? selectedType
+    : "Page";
 
   return (
     show && (
@@ -103,8 +113,9 @@ function NewFramePopup({
             />
           </div>
 
-          <h3 style={{}}>
-            New {newPageFormDetails ? newPageFormDetails.type : "Page"}
+          <h3>
+            New {type}
+            {}
           </h3>
 
           <div style={{ width: "70%", margin: "10px 0px" }}>
@@ -116,11 +127,7 @@ function NewFramePopup({
               />
             )}
             <div style={{ margin: "10px 0" }}>
-              {newPageFormDetails
-                ? newPageFormDetails.type
-                : selectedType
-                ? selectedType
-                : "Page"}
+              {type + " "}
               Name
             </div>
             <Input
@@ -133,11 +140,7 @@ function NewFramePopup({
           </div>
           <div style={{ width: "70%", margin: "10px 0px" }}>
             <div style={{ margin: "10px 0" }}>
-              {newPageFormDetails
-                ? newPageFormDetails.type
-                : selectedType
-                ? selectedType
-                : "Page"}
+              {type + " "}
               Description
             </div>
             <TextArea
@@ -189,11 +192,7 @@ function NewFramePopup({
               onClick={handleAddNewFrame}
             >
               Add
-              {newPageFormDetails
-                ? newPageFormDetails.type
-                : selectedType
-                ? selectedType
-                : "Page"}
+              {" " + type}
             </Button>
           </div>
         </form>
