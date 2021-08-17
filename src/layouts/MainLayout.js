@@ -14,6 +14,7 @@ import { colors } from "../utility";
 import PublishedTagline from "../components/PublishedTagline";
 import storage from "../api/storage";
 import ErrorContext from "../context/ErrorContext";
+import { Node, TreeStructure } from "../utility/functions";
 
 const { Content, Sider } = Layout;
 
@@ -60,6 +61,8 @@ function MainLayout({ project, isTour = false }) {
   const { setErrorMsg } = useContext(ErrorContext);
   const [saving, setSaving] = useState(false);
   const [showDeletePagePopup, setShowDeletePagePopup] = useState(false);
+  const [treeData, setTreeData] = useState(false);
+  let tree;
 
   const setCurrentFrame = (values) => {
     let tempFrames = Frames;
@@ -103,6 +106,22 @@ function MainLayout({ project, isTour = false }) {
   useEffect(() => {
     if (!selectedItem) setContextMenuPosition(false);
   }, [selectedItem]);
+
+  useEffect(() => {
+    // mapping Frames into the tree so that it can be used for navigation
+    for (let i = 0; i < Frames.length; i++) {
+      let frame = Frames[i];
+      if (frame.type === "tower")
+        tree = new TreeStructure(
+          new Node(frame.type, frame.frameName, frame.id, frame.parentId)
+        );
+      else
+        tree.addNode(
+          new Node(frame.type, frame.frameName, frame.id, frame.parentId)
+        );
+    }
+    setTreeData(tree);
+  }, [Frames]);
 
   const addNewFrame = (
     frameName,
@@ -263,6 +282,7 @@ function MainLayout({ project, isTour = false }) {
             // onClick={(e) => console.log(e)}
           >
             <MenuList
+              treeData={treeData}
               handlePublishPressed={handlePublish}
               currentFrameId={currentFrameId}
               isSliderCollapsed={isSliderCollapsed}
@@ -303,15 +323,15 @@ function MainLayout({ project, isTour = false }) {
         )}
         {!isTour && (
           <Header
+            treeData={treeData}
+            currentFrameId={currentFrameId}
             setSelectedItem={setSelectedItem}
+            setCurrentFrameId={setCurrentFrameId}
             onSaveClick={handleSave}
             currentTool={currentTool}
             setCurrentTool={setCurrentTool}
             setshowImgChangeAlert={setshowImgChangeAlert}
             FrameName={getCurrentFrame().frameName}
-            Frames={Frames}
-            location={location}
-            setCurrentFrameId={setCurrentFrameId}
             saving={saving}
           />
         )}
@@ -334,10 +354,10 @@ function MainLayout({ project, isTour = false }) {
               }}
             >
               <RoutePipeline
-                setCurrentTool={setCurrentTool}
-                location={location}
+                currentFrameId={currentFrameId}
                 setCurrentFrameId={setCurrentFrameId}
-                Frames={Frames}
+                setCurrentTool={setCurrentTool}
+                treeData={treeData}
               />
             </div>
           )}

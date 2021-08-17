@@ -25,12 +25,12 @@ function Header({
   setCurrentTool,
   setshowImgChangeAlert,
   currentTool,
-  location,
-  setCurrentFrameId,
-  Frames,
   onSaveClick,
   setSelectedItem,
   saving,
+  setCurrentFrameId,
+  treeData,
+  currentFrameId,
 }) {
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(currentTool);
@@ -126,9 +126,9 @@ function Header({
       >
         <RoutePipeline
           setCurrentTool={setCurrentTool}
-          location={location}
+          treeData={treeData}
+          currentFrameId={currentFrameId}
           setCurrentFrameId={setCurrentFrameId}
-          Frames={Frames}
         />
         <div
           style={{

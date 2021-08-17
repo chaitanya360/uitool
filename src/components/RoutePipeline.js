@@ -2,35 +2,55 @@ import React from "react";
 import { Breadcrumb } from "antd";
 
 function RoutePipeline({
-  location,
   setCurrentFrameId,
-  Frames,
   setCurrentTool,
+  treeData,
+  currentFrameId,
 }) {
-  const getFrameName = (id) => {
-    for (let i = 0; i < Frames.length; i++) {
-      if (Frames[i].id === id) {
-        return Frames[i].frameName;
-      }
-    }
+  const getLocation = () => {
+    if (!treeData) return [];
+    let curr = false;
+    let tempKey = currentFrameId;
+    let location = [];
+    let is_last = true;
+    do {
+      curr = treeData.getNode(tempKey);
+      let key = curr.key;
+      let title = curr.title;
+      let parentKey = curr.title;
+      let type = curr.type;
+      let isLast = is_last;
+      location.unshift({
+        key,
+        title,
+        parentKey,
+        type,
+        isLast,
+      });
+      is_last = false;
+
+      tempKey = curr.parentKey;
+    } while (curr.type !== "tower");
+
+    return location;
   };
   return (
     <Breadcrumb>
-      {location.map((singleLocation, index) => (
+      {getLocation().map((singleLocation, index) => (
         <Breadcrumb.Item
           key={index.toString()}
           onClick={() => {
             setCurrentTool("free");
-            setCurrentFrameId(singleLocation);
+            setCurrentFrameId(singleLocation.key);
           }}
         >
           <span
             style={{
               cursor: "pointer",
-              color: index === location.length - 1 ? "white" : "inherit",
+              color: singleLocation.isLast ? "white" : "inherit",
             }}
           >
-            {getFrameName(singleLocation)}
+            {singleLocation.title}
           </span>
         </Breadcrumb.Item>
       ))}
