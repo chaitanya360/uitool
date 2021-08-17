@@ -19,7 +19,6 @@ function NewProjectPopup({ setBtnClicked }) {
   const [projectName, setProjectName] = useState("");
   const { setErrorMsg } = useContext(ErrorContext);
   const [loading, setLoading] = useState(false);
-  const [nameError, setNameError] = useState(false);
   const [displayImageUploaderPopup, setDisplayImageUploaderPopup] =
     useState(false);
   const [thumbnailSrc, setThumbnailSrc] = useState(false);
@@ -64,7 +63,7 @@ function NewProjectPopup({ setBtnClicked }) {
           setDisplayImageUploaderPopup(false);
         }}
       />
-      <div className="new_project_container">
+      <div className="new_project_container animate__animated animate__flipInX animate__delay-0s animate__faster">
         <div className="new_project_header">
           <div>New Project</div>
           <div
@@ -77,8 +76,19 @@ function NewProjectPopup({ setBtnClicked }) {
         <div className="new_project_body">
           <div className="illustration_container">
             <img
-              style={{ width: "40vw", height: "auto", maxWidth: "300px" }}
-              src={`${process.env.PUBLIC_URL}/statics/Images/new_project.png`}
+              style={{
+                height: "auto",
+                width: "320px",
+                borderRadius: "4px",
+                height: "200px",
+                border: `2px solid ${colors.primary}`,
+                objectFit: "cover",
+              }}
+              src={
+                thumbnailSrc
+                  ? thumbnailSrc
+                  : `${process.env.PUBLIC_URL}/statics/Images/new_project.png`
+              }
             />
           </div>
           <div>
@@ -109,7 +119,7 @@ function NewProjectPopup({ setBtnClicked }) {
                 className="thumbnail_btn"
                 onClick={handleAddThumbnail}
               >
-                Add Thumbnail Image
+                {thumbnailSrc ? "Change" : "Add"} Thumbnail Image
               </Button>
               <Button className="publish_btn" onClick={handleCreateNewProject}>
                 Publish

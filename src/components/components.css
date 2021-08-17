@@ -2,6 +2,7 @@
   --menu_bg: #ffeeec;
   --primary: #ff4769;
   --secondary: #ff655b;
+  --dark: #3f4257;
 }
 
 .black_bg_wrapper {
@@ -258,5 +259,17 @@
   padding: 5px 15px;
   font-weight: 500;
   border-radius: 3px;
+  background-color: #3f4257;
+}
+
+.icon-dropdown-item {
+  color: var(--dark) !important;
+}
+
+.icon-dropdown-item :hover {
+  color: var(--primary);
+}
+
+.icon-dropdown-title :hover {
   background-color: #3f4257;
 }

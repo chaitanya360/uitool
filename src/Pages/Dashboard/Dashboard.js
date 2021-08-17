@@ -34,7 +34,6 @@ function Dashboard(props) {
     const token = storage.getToken();
     setLoading(true);
     getAllProjects(token).then((response) => {
-      console.log(response);
       setLoading(false);
       if (response.ok) {
         if (response.data.status) setProjects(response.data.data);
@@ -49,6 +48,11 @@ function Dashboard(props) {
   }, [projects]);
 
   const getThumbnailSrc = (id) => {
+    // this is for just changed thumbnail
+    if (thumbnailImg && selectedProjectRef.current === id) {
+      console.log("returing new thumbinai imag");
+      return thumbnailImg;
+    }
     let src;
     projects.forEach((project) => {
       if (project._id === id) {
@@ -70,7 +74,10 @@ function Dashboard(props) {
   };
 
   useEffect(() => {
-    handleChangeThumbnail();
+    if (thumbnailImg) {
+      handleChangeThumbnail();
+      setThumbnailImg(false);
+    }
   }, [thumbnailImg]);
 
   const handleChangeThumbnail = () => {
@@ -88,9 +95,10 @@ function Dashboard(props) {
     project.frames = JSON.stringify(frames);
 
     setProject(project);
-
     save(project, frames);
   };
+
+  console.log(projects);
 
   const handleProjectRename = (newName) => {
     if (!selectedProjectRef.current) return;
@@ -98,7 +106,6 @@ function Dashboard(props) {
     const project = projects.find((project) => project._id === currProjectId);
 
     project.project_name = newName;
-    console.log(project);
 
     setProject(project);
     save(project, JSON.parse(project.frames));

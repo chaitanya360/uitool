@@ -15,6 +15,7 @@ function IconDropDown({
   setSelected,
   setCurrentTool,
 }) {
+  const [border, setBorder] = useState(`2px solid transparent`);
   return (
     <>
       {selected && (
@@ -58,8 +59,12 @@ function IconDropDown({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            border: border,
+            borderRadius: "4px",
             transition: "background-color 0.2s linear",
           }}
+          onMouseEnter={() => setBorder(`2px solid ${colors.secondary}`)}
+          onMouseLeave={() => setBorder(`2px solid transparent`)}
           onClick={onTitleClicked}
         >
           {Icon}
@@ -71,6 +76,7 @@ function IconDropDown({
             position: "absolute",
             top: listOffset,
           }}
+          className="animate__animated animate__flipInX animate__delay-0s animate__faster"
         >
           <Menu
             style={{

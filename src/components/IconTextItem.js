@@ -20,6 +20,7 @@ function IconTextItem({
         fontSize: "1rem",
       }}
       onClick={onClick}
+      className="icon-dropdown-item"
     >
       <div
         style={{
