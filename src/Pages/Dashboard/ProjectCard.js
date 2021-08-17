@@ -14,6 +14,7 @@ function ProjectCard({
   setDeleteProjectPopup,
   setDisplayImageUploader,
   handleFocusCapture,
+  setRenameProjectPopup,
 }) {
   const [loadingThumbnail, setLoadingThumbnail] = useState(true);
   const [imgScale, setImgScale] = useState(1);
@@ -90,7 +91,13 @@ function ProjectCard({
                 setDeleteProjectPopup({ name });
               }}
             />
-            <EditOutlined className="project-icon" />
+            <EditOutlined
+              className="project-icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setRenameProjectPopup({ name });
+              }}
+            />
             <FileImageOutlined
               className="project-icon"
               onClick={(e) => {

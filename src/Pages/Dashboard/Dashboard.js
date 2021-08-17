@@ -13,6 +13,7 @@ import { getAllProjects, setProject } from "../../api/projects";
 import ErrorContext from "../../context/ErrorContext";
 import DeletePopup from "../../components/DeletePopup";
 import UploadImage from "../../components/UploadImage";
+import ProjectNameChangepopup from "../../components/ProjectNameChangePopup";
 const { Content } = Layout;
 
 function Dashboard(props) {
@@ -20,8 +21,8 @@ function Dashboard(props) {
   const { projects, setProjects } = useContext(ProjectsContext);
   const [loading, setLoading] = useState(true);
   const [btnClicked, setBtnClicked] = useState(false);
-  const [seletedProject, setSelectedProject] = useState(false);
   const [deleteProjectPopup, setDeleteProjectPopup] = useState(false);
+  const [renameProjectPopup, setRenameProjectPopup] = useState(false);
   const [thumbnailImg, setThumbnailImg] = useState(false);
   const selectedProjectRef = useRef(false);
   const [displayImageUploader, setDisplayImageUploader] = useState(false);
@@ -78,7 +79,6 @@ function Dashboard(props) {
     const project = projects.find((project) => project._id === currProjectId);
     let frames = JSON.parse(project.frames);
     for (let i = 0; i < frames.length; i++) {
-      
       if (frames[i].type === "tower") {
         frames[i].thumbnailImg = thumbnailImg;
         break;
@@ -90,6 +90,19 @@ function Dashboard(props) {
     setProject(project);
 
     save(project, frames);
+  };
+
+  const handleProjectRename = (newName) => {
+    if (!selectedProjectRef.current) return;
+    const currProjectId = selectedProjectRef.current;
+    const project = projects.find((project) => project._id === currProjectId);
+
+    project.project_name = newName;
+    console.log(project);
+
+    setProject(project);
+    save(project, JSON.parse(project.frames));
+    setRenameProjectPopup(false);
   };
 
   const save = (project, frames) => {
@@ -117,6 +130,14 @@ function Dashboard(props) {
           setShowPopup={setDeleteProjectPopup}
         />
       )}
+      {renameProjectPopup && (
+        <ProjectNameChangepopup
+          handleProjectNameChange={handleProjectRename}
+          setShowPopup={setRenameProjectPopup}
+          showPopup={renameProjectPopup}
+        />
+      )}
+
       <UploadImage
         setImg={setThumbnailImg}
         shouldDisplay={displayImageUploader}
@@ -153,6 +174,7 @@ function Dashboard(props) {
                     }
                     setDisplayImageUploader={setDisplayImageUploader}
                     setDeleteProjectPopup={setDeleteProjectPopup}
+                    setRenameProjectPopup={setRenameProjectPopup}
                     key={project._id}
                     name={project.project_name}
                     id={project._id}
