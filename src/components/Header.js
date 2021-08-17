@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Layout, Button } from "antd";
 import {
   UserOutlined,
-  EditOutlined,
   LogoutOutlined,
   FileOutlined,
+  ProfileOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
 import IconDropDown from "./IconDropDown";
 import RoutePipeline from "./RoutePipeline";
@@ -163,11 +164,18 @@ function Header({
             selected={selectedMenuItem === "user"}
             onTitleClicked={() => handleHeaderMenuSelect("user")}
             handleMenuItemSelect={handleUserMenuItemSelect}
-            Icon={<UserOutlined />}
+            Icon={<MenuOutlined />}
             listWidth="150px"
           >
             <IconTextItem
-              Icon={<EditOutlined style={{ fontSize: "1.2rem" }} />}
+              Icon={<UserOutlined style={{ fontSize: "1.2rem" }} />}
+              text="Profile"
+              id="profile"
+              key="profile"
+              onClick={() => history.push("/profile")}
+            />
+            <IconTextItem
+              Icon={<ProfileOutlined style={{ fontSize: "1.2rem" }} />}
               text="Dashboard"
               id="edit"
               key="edit"

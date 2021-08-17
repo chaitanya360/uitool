@@ -1,7 +1,9 @@
 import apiClient from "./client";
+import axios from "axios";
 import {
   addProjectEndpoint,
   allProjectsEndpoint,
+  deleteProjectEndpoint,
   getProjectEndpoint,
   setProjectEndpoint,
 } from "./config";
@@ -26,4 +28,22 @@ const getProject = (id) =>
 const getAllProjects = (token) =>
   apiClient.get(allProjectsEndpoint, {}, { headers: { Authorization: token } });
 
-export { addProject, setProject, getProject, getAllProjects };
+const deleteProject = (token, project_id, images_list = []) => {
+  var data = JSON.stringify({
+    project_id: project_id,
+    images_url: images_list,
+  });
+
+  var config = {
+    method: "delete",
+    url: "https://estatetool.herokuapp.com/project/userproject",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+    data: data,
+  };
+  return axios(config);
+};
+
+export { addProject, setProject, getProject, getAllProjects, deleteProject };

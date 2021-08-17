@@ -9,11 +9,12 @@ import { Redirect, useHistory } from "react-router-dom";
 import Loading from "../../components/Loading";
 import NewProjectPopup from "./NewProjectPopup";
 import storage from "../../api/storage";
-import { getAllProjects, setProject } from "../../api/projects";
+import { deleteProject, getAllProjects, setProject } from "../../api/projects";
 import ErrorContext from "../../context/ErrorContext";
 import DeletePopup from "../../components/DeletePopup";
 import UploadImage from "../../components/UploadImage";
 import ProjectNameChangepopup from "../../components/ProjectNameChangePopup";
+import { getNewToken } from "../../api/users";
 const { Content } = Layout;
 
 function Dashboard(props) {
@@ -31,8 +32,8 @@ function Dashboard(props) {
   const history = useHistory();
 
   const getProjects = () => {
-    const token = storage.getToken();
     setLoading(true);
+    const token = storage.getToken();
     getAllProjects(token).then((response) => {
       setLoading(false);
       if (response.ok) {
@@ -68,8 +69,25 @@ function Dashboard(props) {
   };
 
   const handleDeleteProject = () => {
+    if (!loading) setLoading(true);
     const currProjectId = selectedProjectRef.current;
-    console.log(currProjectId);
+    let token = storage.getToken();
+    if (!token) {
+      setErrorMsg("Failed to delete project, try login again");
+      return;
+    }
+
+    deleteProject(token, currProjectId, []).then((response) => {
+      let success = false;
+      if (response.status) {
+        if (response.data.status) {
+          setErrorMsg(response.data.message);
+          success = true;
+          getProjects();
+        }
+      }
+      if (!success) setErrorMsg("Failed to delete project, try login again");
+    });
     setDeleteProjectPopup(false);
   };
 
@@ -97,8 +115,6 @@ function Dashboard(props) {
     setProject(project);
     save(project, frames);
   };
-
-  console.log(projects);
 
   const handleProjectRename = (newName) => {
     if (!selectedProjectRef.current) return;
@@ -157,13 +173,20 @@ function Dashboard(props) {
           height: "100%",
         }}
       >
-        {btnClicked && <NewProjectPopup setBtnClicked={setBtnClicked} />}
+        {btnClicked && (
+          <NewProjectPopup
+            setDashboardLoading={setLoading}
+            setBtnClicked={setBtnClicked}
+            getProjects={getProjects}
+          />
+        )}
 
-        {loading ? (
+        {loading && (
           <div style={{ position: "absolute", top: 0, left: 0 }}>
             <Loading />
           </div>
-        ) : (
+        )}
+        {projects && (
           <div
             style={{
               display: "grid",

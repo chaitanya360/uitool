@@ -13,9 +13,7 @@ import { colors } from "../../utility";
 import Loading from "../../components/Loading";
 import UploadImage from "../../components/UploadImage";
 
-function NewProjectPopup({ setBtnClicked }) {
-  const { setUser } = useContext(AuthContext);
-
+function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
   const [projectName, setProjectName] = useState("");
   const { setErrorMsg } = useContext(ErrorContext);
   const [loading, setLoading] = useState(false);
@@ -23,28 +21,28 @@ function NewProjectPopup({ setBtnClicked }) {
     useState(false);
   const [thumbnailSrc, setThumbnailSrc] = useState(false);
 
-  const handleCreateNewProject = async () => {
+  const handleCreateNewProject = () => {
     if (projectName.length === 0) {
       setErrorMsg("Please Enter Valid Project Name");
       return;
     }
     // let token = await getNewToken();
-    setLoading(true);
+    setDashboardLoading(true);
 
     let newFrame = initialFrameValues;
     if (thumbnailSrc) newFrame[0].thumbnailImg = thumbnailSrc;
     const frames = JSON.stringify(newFrame);
     const token = storage.getToken();
+    setBtnClicked(false);
 
     addProject(projectName, frames, token).then((response) => {
       if (response.ok) {
         if (response.data.status) {
           // rerender dashboard projects
-          setUser(storage.getUser());
-          setBtnClicked(false);
+          getProjects();
         } else setErrorMsg("Failed To add New project, Try login again");
       }
-      setLoading(false);
+      setThumbnailSrc(false);
     });
   };
 
@@ -54,7 +52,7 @@ function NewProjectPopup({ setBtnClicked }) {
 
   return (
     <div className="new_project_wrapper">
-      {loading && <Loading />}
+      {loading && <Loading top="30%" />}
       <UploadImage
         setImg={setThumbnailSrc}
         shouldDisplay={displayImageUploaderPopup}

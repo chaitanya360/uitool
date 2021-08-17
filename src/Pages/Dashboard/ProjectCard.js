@@ -81,7 +81,10 @@ function ProjectCard({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              padding: "0px 1rem",
+              paddingLeft: "0.5rem",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <DeleteOutlined
               className="project-icon"
