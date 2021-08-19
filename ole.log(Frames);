@@ -1,0 +1,45 @@
+[33m2e840d7[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m fixed page delete issue, not also deleting all the page references
+[33m8500894[m fixed routepipeline showing repeating blocks, made it tree to use tree structure route
+[33mb7399f8[m delete option added, fixed some loading issue on dashboard, added one more option in header of project
+[33m09d6a71[m thumbnail image gets changed on new frame popup added animations
+[33md37eb7e[m finished with renaming project
+[33mc925e3c[m added change thumbnail, project delete, rename feature
+[33m8446354[m added page delete feature
+[33mdfc9c99[m styled error msg in login
+[33mcffaffa[m Merge branch 'master' of https://github.com/chaitanya360/uitool
+[33m6a54a72[m added heirarchical drop drown
+[33m4ae29ed[m[33m ([m[1;31mheroku/master[m[33m)[m added copy polygon feature
+[33ma9800de[m now polygons can be moved
+[33m22e2902[m added delete handler when drawing current polygon
+[33mc115c4f[m added project thumbnail, save loading, show vertex everytime
+[33mf16a6a6[m added movable pen paths
+[33m10b660e[m fixed context showing while drawing
+[33m7e3a0da[m fix minor issues
+[33m853efe2[m removed selected id, fix some loading issue, added open btn
+[33m8a54fae[m fix projects not loading
+[33meda870c[m fix contineous and removes project when logout
+[33md06b3ea[m fix some issues changed loading svg
+[33m4ab3488[m fixed color change when status is changed
+[33m3884152[m Merge pull request #1 from chaitanya360/master-cf-autofix
+[33m1554fc3[m changed theme to tomato
+[33m1d0c5c9[m added status property, removed color picker
+[33m4c77909[m fixed setFrames api error (save)
+[33m571b689[m integrated for the first time with backend
+[33m04a4e81[m changed label position
+[33m09148ab[m added projects page
+[33mdd22e71[m[33m ([m[1;31morigin/master-cf-autofix[m[33m)[m [CodeFactor] Apply fixes
+[33m8e3cb0e[m fixed new page form overlaps image uploader
+[33m6622192[m added type selector for new page on click option
+[33m7c58ed8[m completed menu list and on click options
+[33m23e4ce9[m done with main page in blue frame
+[33m99a0c99[m added landing page
+[33m8a5b963[m added login and register
+[33m97626b2[m added on location click change page feature
+[33mc304ce4[m major changes in on click
+[33m2ec0b58[m refactoring currentframe
+[33m8bd59c2[m added on click feature
+[33m9533958[m added change image feature
+[33ma3e448f[m changed homepage for heroku deployment
+[33m579ab1f[m added path close change cursor icon
+[33mc9e1aea[m added color and info in onhover action
+[33me42a672[m Initialize project using Create React App

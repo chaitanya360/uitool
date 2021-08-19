@@ -35,6 +35,7 @@ function Dashboard(props) {
     setLoading(true);
     const token = storage.getToken();
     getAllProjects(token).then((response) => {
+      console.log("fetched all projects");
       setLoading(false);
       if (response.ok) {
         if (response.data.status) setProjects(response.data.data);
@@ -44,9 +45,8 @@ function Dashboard(props) {
 
   useEffect(() => {
     if (!user) return history.push("/login");
-    if (projects) setLoading(false);
-    else getProjects();
-  }, [projects]);
+    getProjects();
+  }, []);
 
   const getThumbnailSrc = (id) => {
     // this is for just changed thumbnail
@@ -102,6 +102,7 @@ function Dashboard(props) {
     if (!selectedProjectRef.current) return;
     const currProjectId = selectedProjectRef.current;
     const project = projects.find((project) => project._id === currProjectId);
+
     let frames = JSON.parse(project.frames);
     for (let i = 0; i < frames.length; i++) {
       if (frames[i].type === "tower") {
@@ -109,11 +110,7 @@ function Dashboard(props) {
         break;
       }
     }
-
-    project.frames = JSON.stringify(frames);
-
-    setProject(project);
-    save(project, frames);
+    save(project, frames).then(() => getProjects());
   };
 
   const handleProjectRename = (newName) => {
@@ -121,26 +118,26 @@ function Dashboard(props) {
     const currProjectId = selectedProjectRef.current;
     const project = projects.find((project) => project._id === currProjectId);
 
+    console.log(project);
     project.project_name = newName;
-
-    setProject(project);
     save(project, JSON.parse(project.frames));
     setRenameProjectPopup(false);
   };
 
-  const save = (project, frames) => {
-    setProject(
-      project._id,
-      project.project_name,
-      JSON.stringify(frames),
-      storage.getToken(),
-      frames
-    ).then((response) => {
-      if (response.ok) {
-        if (response.data.status) console.log("saved");
-        else setErrorMsg("Your Session is Expired Try Login Again");
-      }
-    });
+  const save = async (project, frames) => {
+    if (project && frames)
+      await setProject(
+        project._id,
+        project.project_name,
+        JSON.stringify(frames),
+        storage.getToken(),
+        frames
+      ).then((response) => {
+        if (response.ok) {
+          if (response.data.status) console.log("saved");
+          else setErrorMsg("Your Session is Expired Try Login Again");
+        }
+      });
   };
 
   return user ? (

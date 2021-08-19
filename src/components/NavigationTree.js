@@ -13,8 +13,7 @@ function NavigationTree({
   setShowDeletePagePopup,
   treeData,
 }) {
-  const [displayNewFramePopup, setDisplayNewFramePopup] =
-    displayNewFramePopupState;
+  const setDisplayNewFramePopup = displayNewFramePopupState[1];
 
   const handleAddNewBtnClicked = (type, parentKey) => {
     setNewPageFormDetails({ type: getChildType(type), parentKey: parentKey });

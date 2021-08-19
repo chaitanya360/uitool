@@ -17,7 +17,6 @@ function PageSelector({
   currentFrameId,
   setPaths,
 }) {
-  console.log(Frames);
   const [selectedFrameType, setSelectedFrameType] = useState(false);
   const [selectedPageid, setSelectedPageid] = useState(
     selectedItem.clickProps &&

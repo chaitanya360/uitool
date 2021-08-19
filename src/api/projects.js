@@ -8,6 +8,7 @@ import {
   setProjectEndpoint,
 } from "./config";
 
+// adding new project
 const addProject = (name, frames, token) =>
   apiClient.post(
     addProjectEndpoint,
@@ -15,6 +16,7 @@ const addProject = (name, frames, token) =>
     { headers: { Authorization: token } }
   );
 
+// saving existing project
 const setProject = (id, name, frames, token, frames_obj) =>
   apiClient.post(
     setProjectEndpoint,
