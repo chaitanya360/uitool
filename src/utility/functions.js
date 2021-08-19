@@ -1,3 +1,5 @@
+import { List } from "antd/lib/form/Form";
+
 class Node {
   constructor(type, title, key, parentKey) {
     this.title = title;
@@ -8,7 +10,7 @@ class Node {
   }
   getTitle = () => this.title;
   getKey = () => this.key;
-  getParentKey = () => this.getParentKey;
+  getParentKey = () => this.parentKey;
   getchildren = () => this.children;
 }
 
@@ -43,17 +45,6 @@ class TreeStructure {
     }
   };
 
-  removeNode = (node, root = this.root) => {
-    for (let i = 0; i < root.children.length; i++) {
-      let singleChild = root.children[i];
-      if (singleChild.key === node.key) {
-        root.children = removeItem(root.children, node);
-        return true;
-      } else if (this.removeNode(node, singleChild)) return true;
-    }
-    return false;
-  };
-
   getNode = (key, root = this.root) => {
     if (root.key === key) return root;
     for (let i = 0; i < root.children.length; i++) {
@@ -78,6 +69,31 @@ class TreeStructure {
   getDataList = () => {
     let string = JSON.stringify(this.root);
     return [JSON.parse(string)];
+  };
+
+  getArrayList = (root = this.root, list = []) => {
+    console.log("in getArrayList");
+    if (list.length === 0)
+      list.push({
+        key: root.key,
+        title: root.title,
+        type: root.type,
+        parentKey: root.parentKey,
+      });
+    if (root.children.length === 0) {
+      return list;
+    } else
+      for (let i = 0; i < root.children.length; i++) {
+        let child = root.children[i];
+        list.push({
+          key: child.key,
+          title: child.title,
+          type: child.type,
+          parentKey: child.parentKey,
+        });
+        this.getArrayList(child, list);
+      }
+    return list;
   };
 }
 

@@ -50,7 +50,6 @@ function MainLayout({ project, isTour = false }) {
   const [isSliderCollapsed, setIsSliderCollpased] = useState(false);
   const [currentFrameId, setCurrentFrameId] = useState(getTowerId());
   const [ContextMenuPosition, setContextMenuPosition] = useState(false);
-  const [location, setLocation] = useState([getTowerId()]);
   const [newPageFormDetails, setNewPageFormDetails] = useState(false);
   const [paths, setPaths] = pathsState;
   const setshowImgChangeAlert = imgeChangeAlertState[1];
@@ -62,7 +61,9 @@ function MainLayout({ project, isTour = false }) {
   const [saving, setSaving] = useState(false);
   const [showDeletePagePopup, setShowDeletePagePopup] = useState(false);
   const [treeData, setTreeData] = useState(false);
+  const [newPageId, setNewPageId] = useState(false);
   let tree;
+  let justDeleted = false;
 
   const setCurrentFrame = (values) => {
     let tempFrames = Frames;
@@ -85,22 +86,18 @@ function MainLayout({ project, isTour = false }) {
   }, []);
 
   useEffect(() => {
-    setCurrentFrameId(Frames[Frames.length - 1].id);
-  }, [Frames]);
-
-  useEffect(() => {
     setCurrentFrame({
       paths,
       bgImg,
     });
   }, [bgImg, paths]);
 
+  // if page is changed updating bg image and its path
   useEffect(() => {
     let tempFrames = Frames;
     const frame = tempFrames.find((frame) => frame.id === currentFrameId);
     setBgImg(frame.bgImg);
     setPaths(frame.paths);
-    updateLocation(currentFrameId);
   }, [currentFrameId]);
 
   useEffect(() => {
@@ -109,6 +106,7 @@ function MainLayout({ project, isTour = false }) {
 
   useEffect(() => {
     // mapping Frames into the tree so that it can be used for navigation
+    console.log("transpiling");
     for (let i = 0; i < Frames.length; i++) {
       let frame = Frames[i];
       if (frame.type === "tower")
@@ -145,28 +143,15 @@ function MainLayout({ project, isTour = false }) {
       },
     ]);
 
-    setLocation((old) => [...old, id]);
     setDisplayNewFramePopup(false);
     setCurrentTool(false);
     setSelectedItem(false);
+    setNewPageId(id);
   };
 
-  const updateLocation = (currentId) => {
-    let index = location.indexOf(currentId);
-    let newLocation = [];
-    // if (location.length == 0) setLocation([currentFrameId]);
-    if (location.length > 0) {
-      // if currentId is not visited (moving forward)
-      if (index === -1) {
-        setLocation((old) => [...old, currentId]);
-      }
-      // if currentId is visited and clicked (going backward)
-      else {
-        for (let i = 0; i <= index; i++) newLocation.push(location[i]);
-        setLocation(newLocation);
-      }
-    }
-  };
+  useEffect(() => {
+    if (newPageId) setCurrentFrameId(newPageId);
+  }, [newPageId]);
 
   const handleContextMenuItemSelected = (e) => {
     switch (e.key) {
@@ -195,35 +180,64 @@ function MainLayout({ project, isTour = false }) {
     if (isTour) setCurrentTool("free");
   }, []);
 
+  const getFallBackPageId = (id) => {
+    const parentId = treeData.getNode(id).getParentKey();
+    const parent = treeData.getNode(parentId);
+    const childrenList = parent.getchildren();
+
+    // checking whether node being deleted is the only child of its parent
+    if (childrenList.length < 2) return parentId;
+    // this will return id of it's brothers
+    else
+      for (let i = 0; i < childrenList.length; i++) {
+        let child = childrenList[i];
+        if (child.key === id)
+          return childrenList[i > 0 ? i - 1 : childrenList.length - 1].key;
+      }
+  };
+
   const handlePageDelete = () => {
     // delete page id is set in deletepagepopup
     const deletePageId = showDeletePagePopup.id;
 
-    // making tower as current frame
-    setCurrentFrameId(Frames[0].id);
+    // removing all the references to the page being deleted
 
-    // removing page
+    // list of items being deleted
+    let tobeDeletedList = treeData.getArrayList(treeData.getNode(deletePageId));
 
-    let tempFrames = Frames;
+    // list of ids being deleted
+    tobeDeletedList = tobeDeletedList.map((item) => item.key);
+    console.log(tobeDeletedList);
 
-    tempFrames = tempFrames.filter((frame) => frame.id !== deletePageId);
-
-    for (let i = 0; i < tempFrames.length; i++) {
-      let frame = tempFrames[i];
-      for (let j = 0; j < frame.paths.length; j++) {
-        let path = frame.paths[i];
-        if (path.clickProps)
-          if (path.clickProps.isClickEnable)
-            if (path.clickProps.targetFrameId === deletePageId) {
-              path.clickProps.isClickEnable = false;
-              path.clickProps.targetFrameId = 0;
-            }
+    setFrames((Frames) => {
+      for (let i = 0; i < Frames.length; i++) {
+        let frame = Frames[i];
+        for (let j = 0; j < frame.paths.length; j++) {
+          let path = frame.paths[j];
+          if (path.clickProps)
+            if (path.clickProps.isClickEnable)
+              if (
+                tobeDeletedList.indexOf(path.clickProps.targetFrameId) !== -1
+              ) {
+                Frames[i].paths[j].clickProps = {
+                  ...Frames[i].paths[j].clickProps,
+                  isClickEnable: false,
+                  targetFrameId: 0,
+                };
+              }
+        }
       }
-    }
-
-    setFrames(tempFrames);
-
+      return Frames;
+    });
+    // removing all the pages being deleted
+    setFrames((Frames) => {
+      console.log(
+        Frames.filter((frame) => tobeDeletedList.indexOf(frame.id) === -1)
+      );
+      return Frames.filter((frame) => tobeDeletedList.indexOf(frame.id) === -1);
+    });
     setShowDeletePagePopup(false);
+    setCurrentFrameId(getFallBackPageId(deletePageId));
   };
 
   const handleSave = () => {
@@ -291,7 +305,9 @@ function MainLayout({ project, isTour = false }) {
               Frames={Frames}
               setCurrentFrameId={setCurrentFrameId}
               displayNewFramePopupState={displayNewFramePopupState}
-              currentFrameType={getCurrentFrame().type}
+              currentFrameType={
+                getCurrentFrame() ? getCurrentFrame().type : "null"
+              }
               setShowDeletePagePopup={setShowDeletePagePopup}
               setNewPageFormDetails={setNewPageFormDetails}
             />
@@ -331,7 +347,9 @@ function MainLayout({ project, isTour = false }) {
             currentTool={currentTool}
             setCurrentTool={setCurrentTool}
             setshowImgChangeAlert={setshowImgChangeAlert}
-            FrameName={getCurrentFrame().frameName}
+            FrameName={
+              getCurrentFrame() ? getCurrentFrame().frameName : "unnamed"
+            }
             saving={saving}
           />
         )}
