@@ -3,7 +3,11 @@ import CopyPoint from "./atoms/CopyPoint";
 import Polygon from "./atoms/Polygon";
 import VertexPoints from "./atoms/VertexPoints";
 import Info from "./Info";
+
+const stack = [];
+
 const Path = ({
+  setCursor,
   co,
   tempEnd,
   isSelected,
@@ -20,10 +24,12 @@ const Path = ({
   setPaths,
   paths,
   addNewFrame,
+  cursor,
 }) => {
   const id = frame.id;
   const [bgColor, setBgColor] = useState("transparent");
   const [drawing, setDrawing] = useState(false);
+  const [adjusting, setAdjusting] = useState(false);
   const hoverColor = "rgba(255,0,0,0.15)";
   const selectedColor = "rgba(255,0,0,0.25)";
   const hoverProps = frame.hoverProps;
@@ -36,15 +42,6 @@ const Path = ({
   useEffect(() => {
     setDrawing(status === 0 ? true : false);
   }, [status]);
-
-  const Styles = {
-    body: {
-      cursor:
-        isFreeView && clickProps && clickProps.isClickEnable
-          ? "pointer"
-          : "inherit",
-    },
-  };
 
   const getCursorPos = (e) => ({
     x: canRef
@@ -82,8 +79,12 @@ const Path = ({
   };
 
   const handleOnMouseOver = (e) => {
-    if (hoverProps && isFreeView && !ContextMenuPosition) {
+    if (isFreeView && hoverProps && !ContextMenuPosition) {
       if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
+        setCursor((cursor) => {
+          stack.push(cursor);
+          return "pointer";
+        });
         if (hoverProps.isColorEnable) {
           setBgColor(hoverProps.hoverColor);
         }
@@ -97,20 +98,22 @@ const Path = ({
 
   const handleOnMouseLeave = () => {
     setBgColor("transparent");
-
     if (hoverProps) {
       if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
         setInfo(false);
+        if (isFreeView) setCursor(stack.pop());
       }
     }
   };
 
-  const handleOnMouseClick = () => {
+  const handleOnMouseClick = (e) => {
     if (isFreeView) {
       if (clickProps) {
         if (clickProps.isClickEnable) {
-          if (clickProps.targetFrameId)
+          if (clickProps.targetFrameId) {
+            setCursor("default");
             setCurrentFrameId(parseInt(clickProps.targetFrameId));
+          }
           setInfo(false);
         }
       }
@@ -118,7 +121,7 @@ const Path = ({
   };
 
   const handleAuxClick = (e) => {
-    if (isTour || drawing) return;
+    if (isTour || drawing || isFreeView) return;
 
     setInfo(false);
     e.stopPropagation();
@@ -130,13 +133,14 @@ const Path = ({
 
   return (
     <g
-      style={Styles.body}
       onMouseOver={handleOnMouseOver}
       onMouseLeave={handleOnMouseLeave}
-      onClick={handleOnMouseClick}
+      onClickCapture={handleOnMouseClick}
       onAuxClick={handleAuxClick}
     >
       <Polygon
+        setCursor={setCursor}
+        isFreeView={isFreeView}
         bgColor={bgColor}
         canRef={canRef}
         co={co}
@@ -146,31 +150,38 @@ const Path = ({
         paths={paths}
         selectedColor={selectedColor}
         setPaths={setPaths}
-        drawing={drawing}
+        drawing={drawing || adjusting}
       />
-      <VertexPoints
-        canRef={canRef}
-        co={co}
-        frame={frame}
-        getCursorPos={getCursorPos}
-        isAdjustView={isAdjustView}
-        paths={paths}
-        setPaths={setPaths}
-        drawing={drawing}
-      />
-      <EndCircle />
-      <TempLine />
-      <CopyPoint
-        co={co}
-        setCo={setCo}
-        drawing={drawing}
-        canRef={canRef}
-        frame={frame}
-        getCursorPos={getCursorPos}
-        paths={paths}
-        setPaths={setPaths}
-        addNewFrame={addNewFrame}
-      />
+      {!isFreeView && (
+        <>
+          <VertexPoints
+            canRef={canRef}
+            co={co}
+            frame={frame}
+            getCursorPos={getCursorPos}
+            isAdjustView={isAdjustView}
+            paths={paths}
+            setPaths={setPaths}
+            drawing={drawing}
+            setAdjusting={setAdjusting}
+            setCursor={setCursor}
+          />
+          <EndCircle />
+          <TempLine />
+          <CopyPoint
+            setCursor={setCursor}
+            co={co}
+            setCo={setCo}
+            drawing={drawing}
+            canRef={canRef}
+            frame={frame}
+            getCursorPos={getCursorPos}
+            paths={paths}
+            setPaths={setPaths}
+            addNewFrame={addNewFrame}
+          />
+        </>
+      )}
     </g>
   );
 };

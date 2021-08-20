@@ -141,7 +141,7 @@ function Header({
         >
           <SaveButton />
           <IconMenuItem
-            tooltip="Free View"
+            tooltip="Preview"
             Icon={<EyeIcon />}
             selected={selectedMenuItem === "free"}
             onClick={() => handleHeaderMenuSelect("free")}

@@ -11,6 +11,8 @@ import NavigationTree from "./NavigationTree";
 import DeletePopup from "./DeletePopup";
 
 function MenuList({
+  setFrames,
+  setTreeData,
   selectedItemState,
   projectName,
   Frames,
@@ -85,6 +87,9 @@ function MenuList({
       <div id="slider" style={{ display: "flex", flexDirection: "column" }}>
         <Menu.ItemGroup title={<ProjectTitle />}>
           <NavigationTree
+            Frames={Frames}
+            setFrames={setFrames}
+            setTreeData={setTreeData}
             currentFrameId={currentFrameId}
             setCurrentFrameId={setCurrentFrameId}
             displayNewFramePopupState={displayNewFramePopupState}

@@ -111,11 +111,29 @@ function MainLayout({ project, isTour = false }) {
       let frame = Frames[i];
       if (frame.type === "tower")
         tree = new TreeStructure(
-          new Node(frame.type, frame.frameName, frame.id, frame.parentId)
+          new Node(
+            frame.type,
+            frame.frameName,
+            frame.id,
+            frame.parentId,
+            frame.bgImg,
+            frame.paths,
+            frame.status,
+            frame.thumbnailImg
+          )
         );
       else
         tree.addNode(
-          new Node(frame.type, frame.frameName, frame.id, frame.parentId)
+          new Node(
+            frame.type,
+            frame.frameName,
+            frame.id,
+            frame.parentId,
+            frame.bgImg,
+            frame.paths,
+            frame.status,
+            false
+          )
         );
     }
     setTreeData(tree);
@@ -296,7 +314,9 @@ function MainLayout({ project, isTour = false }) {
             // onClick={(e) => console.log(e)}
           >
             <MenuList
+              setFrames={setFrames}
               treeData={treeData}
+              setTreeData={setTreeData}
               handlePublishPressed={handlePublish}
               currentFrameId={currentFrameId}
               isSliderCollapsed={isSliderCollapsed}
@@ -392,6 +412,7 @@ function MainLayout({ project, isTour = false }) {
             setBgImg={setBgImg}
             isTour={isTour}
             ContextMenuPosition={ContextMenuPosition}
+            currentFrameId={currentFrameId}
           />
 
           <Popups

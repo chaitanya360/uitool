@@ -122,4 +122,13 @@ const newFrame = {
   status: 0,
 };
 
-export { initialFrameValues, newFrame };
+const CURSOR = {
+  penClose: `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`,
+  pen: `url(${process.env.PUBLIC_URL}/statics/Icons/pen.svg) 0 20, auto`,
+  pointer: `url(${process.env.PUBLIC_URL}/statics/Icons/select.svg) 5 5, auto`,
+  pick: `url(${process.env.PUBLIC_URL}/statics/Icons/pick.svg) -5 -5, auto`,
+  resize: `url(${process.env.PUBLIC_URL}/statics/Icons/resize.svg) 5 5, auto`,
+  copy: "copy",
+};
+
+export { initialFrameValues, newFrame, CURSOR };

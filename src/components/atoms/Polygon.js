@@ -1,7 +1,11 @@
 import { configConsumerProps } from "antd/lib/config-provider";
 import React, { useEffect, useRef, useState } from "react";
+import { CURSOR } from "../../utility/data";
 
+const stack = [];
 const Polygon = ({
+  setCursor,
+  isFreeView,
   getCursorPos,
   co,
   paths,
@@ -49,16 +53,28 @@ const Polygon = ({
   };
 
   const handleMouseClick = (e) => {
+    if (isFreeView || drawing) return;
     e.stopPropagation();
     initialX = getCursorPos(e).x;
     initialY = getCursorPos(e).y;
     MoveStatus = 1;
+    setCursor((cursor) => {
+      stack.push(cursor);
+      return CURSOR.pick;
+    });
     if (canRef) canRef.current.onmousemove = (e) => handleMouseMove(e);
     return;
   };
 
   const handleMouseEnter = () => {
-    if (!drawing) setPolygonStroke("black");
+    if (isFreeView || drawing) return;
+    if (!drawing) {
+      setPolygonStroke("black");
+      setCursor((cursor) => {
+        stack.push(cursor);
+        return CURSOR.pointer;
+      });
+    }
   };
 
   const getPointsFromCo = (co) => {
@@ -79,10 +95,17 @@ const Polygon = ({
         onMouseDown={(e) => handleMouseClick(e)}
         onMouseUpCapture={() => {
           MoveStatus = 0;
-          if (canRef) canRef.current.onmousemove = null;
+          if (canRef) {
+            canRef.current.onmousemove = null;
+            if (!drawing) setCursor(stack.pop());
+          }
         }}
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={() => setPolygonStroke("red")}
+        onMouseLeave={() => {
+          if (isFreeView || drawing) return;
+          setPolygonStroke("red");
+          setCursor(stack.pop());
+        }}
         className="polyline"
       />
     </g>

@@ -5,7 +5,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { colors } from "../utility";
 import Loading from "./Loading";
 import AlertBox from "./AlertBox";
-import { newFrame } from "../utility/data";
+import { CURSOR, newFrame } from "../utility/data";
 
 const getId = () => new Date().getTime();
 
@@ -77,6 +77,7 @@ function Frame({
   displayImageUploaderState,
   isTour,
   ContextMenuPosition,
+  currentFrameId,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -90,11 +91,11 @@ function Frame({
   const [info, setInfo] = useState(false);
   const [isCloserToClose, setIsCloserToClose] = useState(false);
   const [loadingBg, setLoadingBg] = useState(false);
+  const [cursor, setCursor] = useState(false);
 
   // state used to display delete popup
   // for deleting currently drawing polygon
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-
   // 0: nothing is clicked
   // 1: first point is clicked
   // 2: last point is clicked, cursor leaves
@@ -103,16 +104,21 @@ function Frame({
   const editorRef = useRef(null);
 
   const getCursor = () => {
+    if (isCloserToClose) return CURSOR.penClose;
     if (selectedItem || !bgSrc) return "default";
     switch (currentTool) {
       case "draw":
-        return `url(${process.env.PUBLIC_URL}/statics/Icons/pen.svg) 0 20, auto`;
+        return CURSOR.pen;
       case "select":
         return "pointer";
       default:
         return "auto";
     }
   };
+
+  useEffect(() => {
+    setCursor(getCursor());
+  }, [currentTool, isCloserToClose]);
 
   useEffect(() => {
     setInfo(false);
@@ -335,17 +341,6 @@ function Frame({
     </div>
   );
 
-  const cursor = (e) => {
-    let customCursor = document.getElementById("customCursor");
-    console.log(e);
-    customCursor.style.top = e.pageY + "px";
-    customCursor.style.left = e.pageX + "px";
-  };
-
-  const editorSetup = () => {
-    editorRef.current.onmousemove = (e) => cursor(e);
-  };
-
   return (
     <div
       style={{
@@ -393,9 +388,7 @@ function Frame({
       {info && <Info show info={getInfo()} pos={getInfoPos()} />}
       <div
         style={{
-          cursor: isCloserToClose
-            ? `url(${process.env.PUBLIC_URL}/statics/Icons/penClose.svg) 0 20, auto`
-            : getCursor(),
+          cursor: cursor,
           // cursor: "inherit",
           height: "600px",
           width: "1200px",
@@ -413,6 +406,7 @@ function Frame({
               // backgroundImage: `url(${bgSrc})`,
               ...styles.svgStyle,
             }}
+            onMouseEnter={() => getCursor()}
             onMouseLeave={handleMouseLeave}
             onMouseMove={handleMouseMove}
             onMouseDown={handleMouseDown}
@@ -436,6 +430,7 @@ function Frame({
             {paths.length > 0 ? (
               paths.map((frame) => (
                 <Path
+                  cursor={cursor}
                   co={isLast(frame) ? co : frame.co}
                   tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
                   key={frame.id}
@@ -453,6 +448,7 @@ function Frame({
                   setPaths={setPaths}
                   paths={paths}
                   addNewFrame={addNewFrame}
+                  setCursor={setCursor}
                 />
               ))
             ) : (

@@ -1,12 +1,16 @@
 import { List } from "antd/lib/form/Form";
 
 class Node {
-  constructor(type, title, key, parentKey) {
+  constructor(type, title, key, parentKey, bgImg, paths, status, thumbnailImg) {
     this.title = title;
     this.key = key;
     this.type = type;
     this.parentKey = parentKey;
     this.children = [];
+    this.bgImg = bgImg;
+    this.paths = paths;
+    this.status = status;
+    this.thumbnailImg = thumbnailImg;
   }
   getTitle = () => this.title;
   getKey = () => this.key;
@@ -79,6 +83,10 @@ class TreeStructure {
         title: root.title,
         type: root.type,
         parentKey: root.parentKey,
+        bgImg: root.bgImg,
+        paths: root.paths,
+        status: root.status,
+        thumbnailImg: root.thumbnailImg,
       });
     if (root.children.length === 0) {
       return list;
@@ -90,6 +98,10 @@ class TreeStructure {
           title: child.title,
           type: child.type,
           parentKey: child.parentKey,
+          bgImg: child.bgImg,
+          paths: child.paths,
+          status: child.status,
+          thumbnailImg: child.thumbnailImg,
         });
         this.getArrayList(child, list);
       }

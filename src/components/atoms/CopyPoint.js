@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
-import { newFrame } from "../../utility/data";
+import { CURSOR, newFrame } from "../../utility/data";
+
+const stack = [CURSOR.pen];
 const CopyPoint = ({
+  setCursor,
   co,
   drawing,
   canRef,
@@ -14,7 +17,7 @@ const CopyPoint = ({
   let CopyStatus = false;
   const polygonVertexPosition = co[0];
   let copied;
-  const offsetPosition = 10;
+  const offsetPosition = 15;
   const getId = () => new Date().getTime();
   let newPath = [];
   let copyiedId;
@@ -61,6 +64,13 @@ const CopyPoint = ({
 
   const handleMouseClick = (e) => {
     e.stopPropagation();
+
+    if (!drawing)
+      setCursor((cursor) => {
+        stack.push(cursor);
+        return CURSOR.copy;
+      });
+
     initialX = getCursorPos(e).x;
     initialY = getCursorPos(e).y;
     CopyStatus = 1;
@@ -106,8 +116,19 @@ const CopyPoint = ({
         stroke={co.length === 1 ? "black" : "red"}
         strokeWidth="1"
         fill="transparent"
+        onMouseEnter={() => {
+          if (!drawing)
+            setCursor((cursor) => {
+              stack.push(cursor);
+              return CURSOR.copy;
+            });
+        }}
+        onMouseLeave={() => {
+          if (!drawing) setCursor(CURSOR.pen);
+        }}
         onMouseDown={(e) => handleMouseClick(e)}
         onMouseUpCapture={(e) => {
+          if (!drawing) setCursor(CURSOR.pen);
           e.stopPropagation();
           newPath = [];
           CopyStatus = 0;

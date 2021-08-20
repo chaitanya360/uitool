@@ -65,7 +65,9 @@ function IconDropDown({
           }}
           onMouseEnter={() => setBorder(`2px solid ${colors.secondary}`)}
           onMouseLeave={() => setBorder(`2px solid transparent`)}
-          onClick={onTitleClicked}
+          onClick={() =>
+            selected ? setSelected(false) : onTitleClicked && onTitleClicked()
+          }
         >
           {Icon}
         </div>
