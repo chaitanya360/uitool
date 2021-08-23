@@ -131,4 +131,12 @@ const CURSOR = {
   copy: "copy",
 };
 
-export { initialFrameValues, newFrame, CURSOR };
+const cursors = [
+  `${process.env.PUBLIC_URL}/statics/Icons/penClose.svg`,
+  `${process.env.PUBLIC_URL}/statics/Icons/pen.svg`,
+  `${process.env.PUBLIC_URL}/statics/Icons/select.svg`,
+  `${process.env.PUBLIC_URL}/statics/Icons/pick.svg`,
+  `${process.env.PUBLIC_URL}/statics/Icons/resize.svg`,
+];
+
+export { initialFrameValues, newFrame, CURSOR, cursors };

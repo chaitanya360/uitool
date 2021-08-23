@@ -11,13 +11,19 @@ import Routes from "./Routes";
 import ProjectCard from "./Pages/Dashboard/ProjectCard";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import ProjectsContext from "./context/ProjectsContext";
-import { initialFrameValues } from "./utility/data";
+import { cursors, initialFrameValues } from "./utility/data";
 import PublishedTagline from "./components/PublishedTagline";
 import ErrorMessage from "./components/ErrorMessage";
 import ErrorContext from "./context/ErrorContext";
-import { message } from "antd";
 import { getAllProjects } from "./api/projects";
 import NavigationTree from "./components/NavigationTree";
+
+const loadImage = () => {
+  cursors.forEach((cursorSrc) => {
+    const img = new Image();
+    img.src = cursorSrc;
+  });
+};
 
 function App() {
   const [user, setUser] = useState(true);
@@ -40,6 +46,7 @@ function App() {
   };
 
   useEffect(() => {
+    loadImage();
     checkUser();
   }, []);
 

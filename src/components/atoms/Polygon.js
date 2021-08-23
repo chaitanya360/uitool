@@ -1,6 +1,6 @@
 import { configConsumerProps } from "antd/lib/config-provider";
 import React, { useEffect, useRef, useState } from "react";
-import { CURSOR } from "../../utility/data";
+import { CURSOR, newFrame } from "../../utility/data";
 
 const stack = [];
 const Polygon = ({
@@ -85,9 +85,51 @@ const Polygon = ({
     return points;
   };
 
+  const handleDoubleClick = (e) => {
+    e.stopPropagation();
+    if (drawing || isFreeView) return;
+
+    const getId = () => new Date().getTime();
+    let newPath = [];
+    let copyiedId;
+
+    initialX = getCursorPos(e).x;
+    initialY = getCursorPos(e).y;
+    canRef.current.onmousemove = (e) => handleMouseMove(e);
+    let newCo = [];
+
+    const xDiff = getCursorPos(e).x - initialX;
+    const yDiff = getCursorPos(e).y - initialY;
+    co.forEach((singlePoint) =>
+      newCo.push(getUpdatedPosition(singlePoint, xDiff + 10, yDiff + 10))
+    );
+
+    let changed = false;
+    for (let i = 0; i < paths.length; i++) {
+      let path = paths[i];
+      copyiedId = getId();
+      // this is original
+      newPath.push(path);
+      if (path.id === frame.id) {
+        changed = true;
+        // this is copy
+        newPath.push({
+          ...newFrame,
+          co: newCo,
+          id: copyiedId,
+          status: "copyied",
+        });
+      }
+    }
+
+    if (changed) setPaths(newPath);
+
+    return;
+  };
   return (
     <g>
       <polyline
+        onDoubleClick={handleDoubleClick}
         points={getPointsFromCo(co)}
         fill={isSelected ? selectedColor : bgColor}
         stroke={polygonStroke}

@@ -63,9 +63,12 @@
   color: black !important;
 }
 
-.project-icon:hover {
-  transform: scale(1.3);
+.project-icon {
   transition: transform 200ms linear;
+}
+
+.project-icon:hover {
+  transform: scale(1.4);
 }
 
 .blue_on_hover:hover {

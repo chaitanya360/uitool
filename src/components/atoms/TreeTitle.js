@@ -1,6 +1,7 @@
 import React from "react";
 import { colors } from "../../utility";
 import { PlusCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { getChildType } from "../../utility/functions";
 
 const Title = ({
   element,
@@ -42,8 +43,11 @@ const Title = ({
         }}
         className="new_btn_icon"
         onClick={() => handleAddNewBtnClicked(element.type, element.key)}
+        onMouseEnter={(e) => e.preventDefault()}
+        title={"Add new " + getChildType(element.type)}
       />
       <DeleteOutlined
+        title="Delete Page"
         style={{
           margin: "0px 5px",
           display:

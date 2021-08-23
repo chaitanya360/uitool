@@ -116,12 +116,8 @@ const CopyPoint = ({
         stroke={co.length === 1 ? "black" : "red"}
         strokeWidth="1"
         fill="transparent"
-        onMouseEnter={() => {
-          if (!drawing)
-            setCursor((cursor) => {
-              stack.push(cursor);
-              return CURSOR.copy;
-            });
+        onMouseEnter={(e) => {
+          e.stopPropagation();
         }}
         onMouseLeave={() => {
           if (!drawing) setCursor(CURSOR.pen);

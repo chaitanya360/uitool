@@ -168,7 +168,7 @@ const Path = ({
           />
           <EndCircle />
           <TempLine />
-          <CopyPoint
+          {/* <CopyPoint
             setCursor={setCursor}
             co={co}
             setCo={setCo}
@@ -179,7 +179,7 @@ const Path = ({
             paths={paths}
             setPaths={setPaths}
             addNewFrame={addNewFrame}
-          />
+          /> */}
         </>
       )}
     </g>

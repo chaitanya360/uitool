@@ -92,6 +92,7 @@ function Frame({
   const [isCloserToClose, setIsCloserToClose] = useState(false);
   const [loadingBg, setLoadingBg] = useState(false);
   const [cursor, setCursor] = useState(false);
+  const [altIsDown, setAltIsDown] = useState(false);
 
   // state used to display delete popup
   // for deleting currently drawing polygon
@@ -341,6 +342,24 @@ function Frame({
     </div>
   );
 
+  const handleKeyDown = (e) => {
+    if (e.keyCode !== 18) return;
+    if (!altIsDown) setAltIsDown(true);
+    console.log(e);
+  };
+
+  const handleKeyUp = (e) => {
+    if (e.keyCode !== 18) return;
+    setAltIsDown(false);
+    console.log(e);
+  };
+
+  // useEffect(() => {
+  //   document.body.focus = true;
+  //   document.body.addEventListener("keydown", handleKeyDown);
+  //   document.body.addEventListener("keyup", handleKeyUp);
+  // }, []);
+
   return (
     <div
       style={{
@@ -449,6 +468,7 @@ function Frame({
                   paths={paths}
                   addNewFrame={addNewFrame}
                   setCursor={setCursor}
+                  altIsDown={altIsDown}
                 />
               ))
             ) : (
