@@ -9,13 +9,15 @@ align-items:center;
 width:100%;
 min-height:100vh;
 background-color:#505750;
+overflow:hidden;
 
 .badge{
+    font-size:0.8rem;
     cursor:pointer;
     color:black;
    position:absolute;
    top:0;
-   right:1.8rem;
+   right:0.8rem;
    border-radius:50%;
    width:1.4rem;
    height:1.4rem;
@@ -43,21 +45,72 @@ background-color:#505750;
         font-size:1rem;
         .name{
             font-size:2rem;
+            position:relative;
+            padding:0px 10px;
+            margin-right:3rem;
+            .first-name{
+                position:relative;
+                width:fit-content;
+            }
+            .last-name{
+                font-size:1.8rem;
+                width:fit-content;
+                position:relative;
+            }
+        }
+        
+        .name-badge{
+           right:0;
+           top:100%; 
+           transform:translateX(100%) translateY(-100%) scale(0.8);
         }
      }
      .pic-container{
             position:relative;
-            .pic{
+            width:100px;
+            height:100px;
+            border-radius:50%;
+            .pic-holder{
+                border-radius:50%;
                 border:2px solid white;
                 padding:0.8rem;
-            border-radius:50%;
-            font-size:3rem;
-            margin:0 2rem;
-            position:relative;
+                font-size:4rem;
+                width:100%;
+                height:100%;
+                position:relative;
+            }
+            .pic{
+                border-radius:50%;
+                border:2px solid white;
+                width:100%;
+                height:100%;
+                object-fit:cover;
             }
      }
 
 
+}
+
+.edit-input{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    padding:0.3rem;
+    display:inline;
+    overflow:aut;
+    width:70%;
+    background-color:transparent;
+    border:1px solid white;
+    font-size:1.2rem;
+    font-weight:400;
+
+}
+.first-name-input{
+    font-size:2rem;
+}
+.last-name-input{
+    font-size:1.8rem;
+}
+.table-container{
+    width:100%;
 }
 
  table{
@@ -78,10 +131,26 @@ background-color:#505750;
          content:" - ";
          padding-right:1rem;
      }
+
+     .mobile{
+         position:relative;
+         .badge-mobile{
+             right:-2rem;
+             top:10px;
+             font-size:0.8rem;
+         }
+     }
  }
 
+ .btn-container{
+     position:absolute;
+     bottom:0;
+     left:0;
+     display:flex;
+     margin:1rem;
+ }
 
- .dashboard-btn{
+ .btn{
     align-self:flex-start;
     background-color:var(--primary);
     padding:0.2rem 1rem;
@@ -94,7 +163,7 @@ background-color:#505750;
     border:1px solid transparent;
  }
 
- .dashboard-btn:hover{
+ .btn:hover{
      border:1px solid yellow;
  }
 

@@ -342,24 +342,6 @@ function Frame({
     </div>
   );
 
-  const handleKeyDown = (e) => {
-    if (e.keyCode !== 18) return;
-    if (!altIsDown) setAltIsDown(true);
-    console.log(e);
-  };
-
-  const handleKeyUp = (e) => {
-    if (e.keyCode !== 18) return;
-    setAltIsDown(false);
-    console.log(e);
-  };
-
-  // useEffect(() => {
-  //   document.body.focus = true;
-  //   document.body.addEventListener("keydown", handleKeyDown);
-  //   document.body.addEventListener("keyup", handleKeyUp);
-  // }, []);
-
   return (
     <div
       style={{
@@ -443,7 +425,11 @@ function Frame({
             <image
               onLoadStart={() => setLoadingBg(true)}
               onLoad={() => setLoadingBg(false)}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
               xlinkHref={bgSrc}
             />
             {paths.length > 0 ? (

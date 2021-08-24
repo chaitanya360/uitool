@@ -1,5 +1,10 @@
 import apiClient from "./client";
-import { loginEndpoint, registerEndpoint, viewUserEndpoint } from "./config";
+import {
+  loginEndpoint,
+  registerEndpoint,
+  setUserDetailsEndpoint,
+  viewUserEndpoint,
+} from "./config";
 import storage from "./storage";
 
 const viewUsers = () => apiClient.get(viewUserEndpoint);
@@ -32,4 +37,26 @@ const getNewToken = async () => {
   } else return false;
 };
 
-export { viewUsers, login, register, getNewToken };
+const setDetails = (
+  token,
+  first_name,
+  last_name,
+  email,
+  password,
+  mobile_number,
+  details
+) =>
+  apiClient.put(
+    setUserDetailsEndpoint,
+    {
+      first_name,
+      last_name,
+      email,
+      password,
+      mobile_number,
+      detail: details,
+    },
+    { headers: { Authorization: token } }
+  );
+
+export { viewUsers, login, register, getNewToken, setDetails };

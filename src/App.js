@@ -17,6 +17,7 @@ import ErrorMessage from "./components/ErrorMessage";
 import ErrorContext from "./context/ErrorContext";
 import { getAllProjects } from "./api/projects";
 import NavigationTree from "./components/NavigationTree";
+import EditableField from "./components/atoms/EditableField";
 
 const loadImage = () => {
   cursors.forEach((cursorSrc) => {

@@ -7,6 +7,7 @@ const setProjectEndpoint = "project/setFrames";
 const getProjectEndpoint = "project/getProject";
 const allProjectsEndpoint = "project/userproject";
 const deleteProjectEndpoint = "project/userproject";
+const setUserDetailsEndpoint = "user/update";
 
 export {
   baseURL,
@@ -18,4 +19,5 @@ export {
   getProjectEndpoint,
   allProjectsEndpoint,
   deleteProjectEndpoint,
+  setUserDetailsEndpoint,
 };

@@ -73,7 +73,13 @@ function Header({ userName, setBtnClicked }) {
               }}
             >
               <UserOutlined />
-              <div style={{ margin: "0px 10px" }}>{userName}</div>
+              <div
+                style={{
+                  margin: "0px 10px",
+                }}
+              >
+                {userName}
+              </div>
             </div>
           }
           selected={userMenuExpand}

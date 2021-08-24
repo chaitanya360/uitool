@@ -46,6 +46,9 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
             // login success
             const userData = response.data.data;
 
+            // check for profile pic
+            const profilePic = userData.detail.profilePic;
+
             // creating user object for storing purpose
             const user = {
               firstName: userData.first_name,
@@ -54,6 +57,7 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
               email: userData.email,
               // temporary later will store securely
               password: state.password,
+              profilePic,
             };
 
             // storing token and user object
