@@ -4,12 +4,11 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import imgClient from "../api/imgClient";
 import Loading from "./Loading";
 import ErrorContext from "../context/ErrorContext";
-function UploadImage({
-  setImg,
-  onImageChanged,
-  shouldDisplay,
-  setShouldDisplay,
-}) {
+import { deleteImage, saveImage } from "../api/image";
+import storage from "../api/storage";
+import { baseURL } from "../api/config";
+import { _deleteImage } from "../utility/functions";
+function UploadImage({ setImg, onImageChanged, setShouldDisplay, project_id }) {
   const [loading, setLoading] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
   const onImageChange = (event) => {
@@ -20,14 +19,30 @@ function UploadImage({
 
       if (file) {
         setLoading(true);
-        formData.append("file", file);
-        formData.append("upload_preset", "hn6xkfkd");
+        // formData.append("file", file);
+        // formData.append("upload_preset", "hn6xkfkd");
 
-        imgClient.post("", formData).then((response) => {
+        // imgClient.post("", formData).then((response) => {
+        //   setLoading(false);
+        //   if (response.ok) {
+        //     setImg(response.data.url);
+        //     onImageChanged();
+        //   } else {
+        //     setErrorMsg(response.problem);
+        //   }
+        // });
+
+        saveImage(file, storage.getToken(), project_id).then((response) => {
           setLoading(false);
-          if (response.ok) {
-            setImg(response.data.url);
-            onImageChanged();
+          if (response.data && response.data.status) {
+            console.log("image upload success");
+            setImg((old_img) => {
+              if (old_img) _deleteImage(storage.getToken(), old_img);
+              return baseURL + response.data.data.image_url;
+            });
+            // this parameter is only used in profile panel
+            onImageChanged(baseURL + response.data.data.image_url);
+            console.log(baseURL + response.data.data.image_url);
           } else {
             setErrorMsg(response.problem);
           }
@@ -37,10 +52,7 @@ function UploadImage({
   };
 
   return (
-    <div
-      className="black_bg_wrapper"
-      style={{ display: shouldDisplay ? "block" : "none", zIndex: "4" }}
-    >
+    <div className="black_bg_wrapper" style={{ zIndex: "4" }}>
       <div
         style={{
           width: "100vw",

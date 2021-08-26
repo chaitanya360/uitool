@@ -1,4 +1,6 @@
 import { List } from "antd/lib/form/Form";
+import { baseURL } from "../api/config";
+import { deleteImage } from "../api/image";
 
 class Node {
   constructor(type, title, key, parentKey, bgImg, paths, status, thumbnailImg) {
@@ -122,4 +124,18 @@ const getChildType = (type) => {
   }
 };
 
-export { TreeStructure, Node, getChildType };
+const _deleteImage = (token, url) => {
+  if (!url.includes(baseURL)) return false;
+  console.log("deleting", url);
+  let path = parsePathFromUrl(url);
+  deleteImage(path, token).then((response) => {
+    if (response.data && response.data.status)
+      console.log("deleted prev image");
+  });
+};
+
+const parsePathFromUrl = (url) => {
+  return url.replace(baseURL, "");
+};
+
+export { TreeStructure, Node, getChildType, _deleteImage, parsePathFromUrl };

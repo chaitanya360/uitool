@@ -31,21 +31,13 @@ function Profile(props) {
     setProfilePic(user.profilePic);
   }, [user]);
 
-  const handleSave = async () => {
+  const handleSave = async (profilePic = profilePic) => {
     setSaving(true);
     console.log("saving");
     const token = await storage.getToken();
-    setDetails(
-      token,
-      firstName,
-      lastName,
-      user.email,
-      user.password,
-      parseInt(mobile),
-      {
-        profilePic: profilePic,
-      }
-    ).then((response) => {
+    setDetails(token, firstName, lastName, user.email, user.password, mobile, {
+      profilePic: profilePic,
+    }).then((response) => {
       setSaving(false);
       if (response.data && response.data.status) {
         console.log(response);
@@ -73,14 +65,18 @@ function Profile(props) {
 
   return user ? (
     <ProfileStyle>
-      <UploadImage
-        setImg={setProfilePic}
-        shouldDisplay={displayImagePopup}
-        setShouldDisplay={setDisplayImagePopup}
-        onImageChanged={() => {
-          setDisplayImagePopup(false);
-        }}
-      />
+      {displayImagePopup && (
+        <UploadImage
+          project_id={false}
+          setImg={setProfilePic}
+          setShouldDisplay={setDisplayImagePopup}
+          onImageChanged={(profilePic) => {
+            setDisplayImagePopup(false);
+            // auto saving as prev img got deleted
+            handleSave(profilePic);
+          }}
+        />
+      )}
       <div className="header">
         <div className="pic-container">
           {profilePic ? (

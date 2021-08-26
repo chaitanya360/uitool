@@ -30,6 +30,7 @@ function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
     setDashboardLoading(true);
 
     let newFrame = initialFrameValues;
+    // saving thumbnail image
     if (thumbnailSrc) newFrame[0].thumbnailImg = thumbnailSrc;
     const frames = JSON.stringify(newFrame);
     const token = storage.getToken();
@@ -53,14 +54,16 @@ function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
   return (
     <div className="new_project_wrapper">
       {loading && <Loading top="30%" />}
-      <UploadImage
-        setImg={setThumbnailSrc}
-        shouldDisplay={displayImageUploaderPopup}
-        setShouldDisplay={setDisplayImageUploaderPopup}
-        onImageChanged={() => {
-          setDisplayImageUploaderPopup(false);
-        }}
-      />
+      {displayImageUploaderPopup && (
+        <UploadImage
+          project_id={false}
+          setImg={setThumbnailSrc}
+          setShouldDisplay={setDisplayImageUploaderPopup}
+          onImageChanged={() => {
+            setDisplayImageUploaderPopup(false);
+          }}
+        />
+      )}
       <div className="new_project_container animate__animated animate__flipInX animate__delay-0s animate__faster">
         <div className="new_project_header">
           <div>New Project</div>

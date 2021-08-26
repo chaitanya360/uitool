@@ -20,6 +20,8 @@ function Popups({
   setDisplayDeletePagePopup,
   displayDeletePagePopup,
   handleDeletePage,
+  project_id,
+  handleImageChangeSuccess,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -46,17 +48,17 @@ function Popups({
           paths={paths}
           newPageFormDetails={newPageFormDetails}
           Frames={Frames}
+          project_id={project_id}
         />
       )}
-      <UploadImage
-        setImg={setBgImg}
-        shouldDisplay={displayImageUploader}
-        setShouldDisplay={setDisplayImageUploader}
-        onImageChanged={() => {
-          setDisplayImageUploader(false);
-          setCurrentTool("draw");
-        }}
-      />
+      {displayImageUploader && (
+        <UploadImage
+          project_id={project_id}
+          setImg={setBgImg}
+          setShouldDisplay={setDisplayImageUploader}
+          onImageChanged={handleImageChangeSuccess}
+        />
+      )}
 
       <AlertBox
         show={showDeleteAlert}

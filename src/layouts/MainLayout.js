@@ -1,5 +1,5 @@
 import { Layout, Menu } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useRef, useState } from "react";
 
 import Frame from "../components/Frame";
 import Popups from "../components/Popups";
@@ -14,7 +14,7 @@ import { colors } from "../utility";
 import PublishedTagline from "../components/PublishedTagline";
 import storage from "../api/storage";
 import ErrorContext from "../context/ErrorContext";
-import { Node, TreeStructure } from "../utility/functions";
+import { Node, parsePathFromUrl, TreeStructure } from "../utility/functions";
 
 const { Content, Sider } = Layout;
 
@@ -32,6 +32,7 @@ const styles = {
 
 function MainLayout({ project, isTour = false }) {
   const { user } = useContext(AuthContext);
+
   const [Frames, setFrames] = useState(JSON.parse(project.frames));
 
   const [projectName, setProjectName] = useState(project.project_name);
@@ -55,6 +56,7 @@ function MainLayout({ project, isTour = false }) {
   const setshowImgChangeAlert = imgeChangeAlertState[1];
   const [selectedItem, setSelectedItem] = selectedItemState;
   const setDisplayNewFramePopup = displayNewFramePopupState[1];
+  const setShowImageChangeUploader = displayImageUploaderState[1];
   const [currentTool, setCurrentTool] = currentToolState;
   const [showPublishTagline, setShowPublishTagline] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
@@ -63,7 +65,8 @@ function MainLayout({ project, isTour = false }) {
   const [treeData, setTreeData] = useState(false);
   const [newPageId, setNewPageId] = useState(false);
   let tree;
-  let justDeleted = false;
+
+  // this is hold the image which needs to be deleted upon changing background
 
   const setCurrentFrame = (values) => {
     let tempFrames = Frames;
@@ -81,9 +84,7 @@ function MainLayout({ project, isTour = false }) {
   const getCurrentFrame = () =>
     Frames.find((frame) => frame.id === currentFrameId);
 
-  useEffect(() => {
-    setContextMenuPosition(false);
-  }, []);
+  // console.log(parsePathFromUrl(bgImg));
 
   useEffect(() => {
     setCurrentFrame({
@@ -94,6 +95,7 @@ function MainLayout({ project, isTour = false }) {
 
   // if page is changed updating bg image and its path
   useEffect(() => {
+    setContextMenuPosition(false);
     let tempFrames = Frames;
     const frame = tempFrames.find((frame) => frame.id === currentFrameId);
     setBgImg(frame.bgImg);
@@ -275,6 +277,16 @@ function MainLayout({ project, isTour = false }) {
     });
   };
 
+  const handleImageChangeSuccess = () => {
+    setShowImageChangeUploader(false);
+    setCurrentTool("draw");
+    // saving automatically as prev image is deleted
+    // is don't save then, old image url will finnd nothing
+    handleSave();
+
+    // previouse image needs to be deleted;
+  };
+
   const handlePublish = () => {
     setShowPublishTagline(true);
   };
@@ -416,6 +428,7 @@ function MainLayout({ project, isTour = false }) {
           />
 
           <Popups
+            project_id={project._id}
             deleteAlertState={deleteAlertState}
             imgeChangeAlertState={imgeChangeAlertState}
             setCurrentTool={setCurrentTool}
@@ -431,6 +444,7 @@ function MainLayout({ project, isTour = false }) {
             displayDeletePagePopup={showDeletePagePopup}
             setDisplayDeletePagePopup={setShowDeletePagePopup}
             handleDeletePage={handlePageDelete}
+            handleImageChangeSuccess={handleImageChangeSuccess}
           />
         </Content>
       </Layout>

@@ -32,6 +32,7 @@ function NewFramePopup({
   paths,
   newPageFormDetails,
   Frames,
+  project_id,
 }) {
   const [shouldDisplayUploadPopup, setShouldDisplayUploadPopup] =
     useState(false);
@@ -89,12 +90,14 @@ function NewFramePopup({
           alignItems: "center",
         }}
       >
-        <UploadImage
-          shouldDisplay={shouldDisplayUploadPopup}
-          setImg={setBgImg}
-          setShouldDisplay={setShouldDisplayUploadPopup}
-          onImageChanged={() => setShouldDisplayUploadPopup(false)}
-        />
+        {shouldDisplayUploadPopup && (
+          <UploadImage
+            project_id={project_id}
+            setImg={setBgImg}
+            setShouldDisplay={setShouldDisplayUploadPopup}
+            onImageChanged={() => setShouldDisplayUploadPopup(false)}
+          />
+        )}
         <form
           style={styles.form}
           className="animate__animated animate__fadeInDownBig animate__delay-0s animate__faster"

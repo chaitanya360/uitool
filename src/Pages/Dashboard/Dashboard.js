@@ -15,6 +15,7 @@ import DeletePopup from "../../components/DeletePopup";
 import UploadImage from "../../components/UploadImage";
 import ProjectNameChangepopup from "../../components/ProjectNameChangePopup";
 import { getNewToken } from "../../api/users";
+import { _deleteImage } from "../../utility/functions";
 const { Content } = Layout;
 
 function Dashboard(props) {
@@ -25,6 +26,9 @@ function Dashboard(props) {
   const [deleteProjectPopup, setDeleteProjectPopup] = useState(false);
   const [renameProjectPopup, setRenameProjectPopup] = useState(false);
   const [thumbnailImg, setThumbnailImg] = useState(false);
+
+  // selectedProjectRef.curre is used to access project id
+  // in rename or image upload popup
   const selectedProjectRef = useRef(false);
   const [displayImageUploader, setDisplayImageUploader] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
@@ -81,7 +85,7 @@ function Dashboard(props) {
       let success = false;
       if (response.status) {
         if (response.data.status) {
-          setErrorMsg(response.data.message);
+          setErrorMsg("Project Deleted");
           success = true;
           getProjects();
         }
@@ -102,14 +106,18 @@ function Dashboard(props) {
     if (!selectedProjectRef.current) return;
     const currProjectId = selectedProjectRef.current;
     const project = projects.find((project) => project._id === currProjectId);
+    let prevThumbnail = false;
 
     let frames = JSON.parse(project.frames);
     for (let i = 0; i < frames.length; i++) {
       if (frames[i].type === "tower") {
+        if (frames[i].thumbnailImg) prevThumbnail = frames[i].thumbnailImg;
         frames[i].thumbnailImg = thumbnailImg;
         break;
       }
     }
+    // deleting prev thubmnail
+    if (prevThumbnail) _deleteImage(storage.getToken, prevThumbnail);
     save(project, frames).then(() => getProjects());
   };
 
@@ -158,12 +166,14 @@ function Dashboard(props) {
         />
       )}
 
-      <UploadImage
-        setImg={setThumbnailImg}
-        shouldDisplay={displayImageUploader}
-        onImageChanged={() => setDisplayImageUploader(false)}
-        setShouldDisplay={setDisplayImageUploader}
-      />
+      {displayImageUploader && (
+        <UploadImage
+          project_id={selectedProjectRef.current}
+          setImg={setThumbnailImg}
+          onImageChanged={() => setDisplayImageUploader(false)}
+          setShouldDisplay={setDisplayImageUploader}
+        />
+      )}
       <Header userName={user.firstName} setBtnClicked={setBtnClicked} />
       <Content
         style={{
@@ -218,12 +228,6 @@ function Dashboard(props) {
     </Layout>
   ) : (
     <Redirect to="/login" />
-    // <div style={{ fontSize: "1.2rem", margin: "20px" }}>
-    //   <Link to="/login" style={{ textDecoration: "none" }}>
-    //     Login
-    //   </Link>{" "}
-    //   Required
-    // </div>
   );
 }
 
