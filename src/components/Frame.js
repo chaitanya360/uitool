@@ -433,15 +433,15 @@ function Frame({
               xlinkHref={bgSrc}
             />
             {paths.length > 0 ? (
-              paths.map((frame) => (
+              paths.map((path) => (
                 <Path
                   cursor={cursor}
-                  co={isLast(frame) ? co : frame.co}
-                  tempEnd={isLast(frame) ? tempEnd : frame.tempEnd}
-                  key={frame.id}
-                  frame={frame}
+                  co={isLast(path) ? co : path.co}
+                  tempEnd={isLast(path) ? tempEnd : path.tempEnd}
+                  key={path.id}
+                  path={path}
                   handleItemSelect={handleItemSelect}
-                  isSelected={frame.id === selectedItem.id}
+                  isSelected={path.id === selectedItem.id}
                   isFreeView={isFreeView}
                   setInfo={setInfo}
                   setCurrentFrameId={setCurrentFrameId}
@@ -461,7 +461,7 @@ function Frame({
               <Path
                 co={co}
                 tempEnd={tempEnd}
-                frame={{ id: 0, status: 0 }}
+                path={{ id: 0, status: 0 }}
                 isAdjustView={false}
               />
             )}

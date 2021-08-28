@@ -14,7 +14,7 @@ const Path = ({
   handleItemSelect,
   isFreeView,
   setInfo,
-  frame,
+  path,
   setCurrentFrameId,
   isAdjustView,
   isTour,
@@ -26,18 +26,18 @@ const Path = ({
   addNewFrame,
   cursor,
 }) => {
-  const id = frame.id;
+  const id = path.id;
   const [bgColor, setBgColor] = useState("transparent");
   const [drawing, setDrawing] = useState(false);
   const [adjusting, setAdjusting] = useState(false);
   const hoverColor = "rgba(255,0,0,0.15)";
   const selectedColor = "rgba(255,0,0,0.25)";
-  const hoverProps = frame.hoverProps;
-  const clickProps = frame.clickProps;
+  const hoverProps = path.hoverProps;
+  const clickProps = path.clickProps;
 
   // 0 for drawing current polygon
   // 1 for finished drawing current polygon
-  const status = frame.status;
+  const status = path.status;
 
   useEffect(() => {
     setDrawing(status === 0 ? true : false);
@@ -144,7 +144,7 @@ const Path = ({
         bgColor={bgColor}
         canRef={canRef}
         co={co}
-        frame={frame}
+        frame={path}
         getCursorPos={getCursorPos}
         isSelected={isSelected}
         paths={paths}
@@ -157,7 +157,7 @@ const Path = ({
           <VertexPoints
             canRef={canRef}
             co={co}
-            frame={frame}
+            frame={path}
             getCursorPos={getCursorPos}
             isAdjustView={isAdjustView}
             paths={paths}

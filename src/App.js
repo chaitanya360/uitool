@@ -18,6 +18,7 @@ import ErrorContext from "./context/ErrorContext";
 import { getAllProjects } from "./api/projects";
 import NavigationTree from "./components/NavigationTree";
 import EditableField from "./components/atoms/EditableField";
+import PageDetailsForm from "./components/molecules/PageDetailsForm";
 
 const loadImage = () => {
   cursors.forEach((cursorSrc) => {
@@ -40,6 +41,7 @@ function App() {
   const getProjects = () => {
     const token = storage.getToken();
     getAllProjects(token).then((response) => {
+      console.log("fetching project", response.data);
       if (response.ok) {
         if (response.data.status) setProjects(response.data.data);
       } else setErrorMsg("something went wrong");
@@ -67,6 +69,7 @@ function App() {
           </ProjectsContext.Provider>
         </AuthContext.Provider>
       </ErrorContext.Provider>
+      {/* <PageDetailsForm /> */}
     </>
   );
 }

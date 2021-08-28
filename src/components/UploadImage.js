@@ -38,6 +38,7 @@ function UploadImage({ setImg, onImageChanged, setShouldDisplay, project_id }) {
             console.log("image upload success");
             setImg((old_img) => {
               if (old_img) _deleteImage(storage.getToken(), old_img);
+              return response.data.data.image_url;
               return baseURL + response.data.data.image_url;
             });
             // this parameter is only used in profile panel

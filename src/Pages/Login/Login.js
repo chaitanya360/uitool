@@ -47,7 +47,10 @@ const Login = ({ justRegistered = false, setJustRegistered }) => {
             const userData = response.data.data;
 
             // check for profile pic
-            const profilePic = userData.detail.profilePic;
+            let profilePic = false;
+            if (userData && userData.detail && userData.detail.profilePic) {
+              profilePic = userData.detail.profilePic;
+            }
 
             // creating user object for storing purpose
             const user = {
