@@ -28,11 +28,7 @@ function OnMouseClick({
 
     tempPaths.forEach((frame) => {
       if (frame.id === selectedItem.id) {
-        if (id === "change_page")
-          frame.clickProps = {
-            ...frame.clickProps,
-            isClickEnable: isChecked,
-          };
+        if (id === "change_page") frame.isClickEnable = isChecked;
       }
     });
 
@@ -41,51 +37,46 @@ function OnMouseClick({
 
   return (
     <>
-      <DropDown
-        title="On Mouse Click"
-        titleStyle={{ color: "black", padding: "10px 20px" }}
-        open={false}
+      <Menu
+        theme="light"
+        onMouseEnter={() => setTitleColor(colors.secondary)}
+        onMouseLeave={() => setTitleColor("black")}
+        triggerSubMenuAction="hover"
       >
-        <Menu
-          theme="light"
-          onMouseEnter={() => setTitleColor(colors.secondary)}
-          onMouseLeave={() => setTitleColor("black")}
-          triggerSubMenuAction="click"
-        >
-          {selectedItem && (
-            <SubMenu
-              key="change_page"
-              title={
-                <Checkbox
-                  checked={selectedItem.clickProps.isClickEnable}
-                  style={{ color: titleColor }}
-                  onChange={(e) =>
-                    handleOnMouseClickOptionsCheckedChange(
-                      "change_page",
-                      e.target.checked
-                    )
-                  }
-                >
-                  Go To Page
-                </Checkbox>
-              }
-              style={{ width: "100%" }}
-            >
-              <PageSelector
-                Frames={Frames}
-                currentFrameId={currentFrameId}
-                paths={paths}
-                selectedItem={selectedItem}
-                setContextMenuPosition={setContextMenuPosition}
-                setCurrentTool={setCurrentTool}
-                setDisplayNewFramePopup={setDisplayNewFramePopup}
-                setPaths={setPaths}
-                setNewPageFormDetails={setNewPageFormDetails}
-              />
-            </SubMenu>
-          )}
-        </Menu>
-      </DropDown>
+        {selectedItem && (
+          <SubMenu
+            key="change_page"
+            title={
+              <Checkbox
+                checked={selectedItem.isClickEnable}
+                style={{ color: titleColor }}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  handleOnMouseClickOptionsCheckedChange(
+                    "change_page",
+                    e.target.checked
+                  );
+                }}
+              >
+                Link TO
+              </Checkbox>
+            }
+            style={{ width: "100%" }}
+          >
+            <PageSelector
+              Frames={Frames}
+              currentFrameId={currentFrameId}
+              paths={paths}
+              selectedItem={selectedItem}
+              setContextMenuPosition={setContextMenuPosition}
+              setCurrentTool={setCurrentTool}
+              setDisplayNewFramePopup={setDisplayNewFramePopup}
+              setPaths={setPaths}
+              setNewPageFormDetails={setNewPageFormDetails}
+            />
+          </SubMenu>
+        )}
+      </Menu>
     </>
   );
 }

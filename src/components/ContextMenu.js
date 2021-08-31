@@ -62,7 +62,7 @@ function ContextMenu({
         Delete
       </Menu.Item>
 
-      <StatusSelector pathsState={pathsState} selectedItem={selectedItem} />
+      {/* <StatusSelector pathsState={pathsState} selectedItem={selectedItem} /> */}
       <OnMouseClick
         pathsState={pathsState}
         selectedItemState={selectedItemState}
@@ -73,7 +73,7 @@ function ContextMenu({
         setNewPageFormDetails={setNewPageFormDetails}
         setContextMenuPosition={setContextMenuPosition}
       />
-      <OnMouseOver pathsState={pathsState} selectedItem={selectedItem} />
+      {/* <OnMouseOver pathsState={pathsState} selectedItem={selectedItem} /> */}
     </Menu>
   );
 }

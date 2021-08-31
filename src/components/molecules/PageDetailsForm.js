@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Input, Button, Dropdown, Menu } from "antd";
 import UploadImage from "../UploadImage";
-import { statusValues } from "../../utility/data";
+import { statusValuesList } from "../../utility/data";
 
 const getId = () => new Date().getTime();
 
@@ -70,6 +70,7 @@ function PageDetailsForm({
     addNewPage(pageTitle, bgImg, pageId, pageType, parentId, {
       features,
       status,
+      title: pageTitle,
     });
   };
 
@@ -87,7 +88,7 @@ function PageDetailsForm({
   const DropdownMenu = () => {
     return (
       <Menu onClick={(e) => setStatus(e.key)}>
-        {statusValues.map((status) => (
+        {statusValuesList.map((status) => (
           <Menu.Item key={status}>{status}</Menu.Item>
         ))}
       </Menu>

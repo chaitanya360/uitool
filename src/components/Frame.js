@@ -6,6 +6,7 @@ import { colors } from "../utility";
 import Loading from "./Loading";
 import AlertBox from "./AlertBox";
 import { CURSOR, newFrame } from "../utility/data";
+import { InfoStyle } from "./components.style";
 
 const getId = () => new Date().getTime();
 
@@ -142,7 +143,7 @@ function Frame({
   const addNewPath = () => {
     // if (frame) console.log(frame);
 
-    console.log("adding new");
+    console.log("adding new path");
 
     if (co.length > 1) {
       let curr = {
@@ -150,16 +151,8 @@ function Frame({
         id: getId(),
         targetPage: false,
         tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
-        hoverProps: {
-          isInfoEnable: false,
-          isColorEnable: false,
-          hoverColor: "",
-          hoverInfo: "",
-        },
-        clickProps: {
-          isClickEnable: false,
-          targetFrameId: 0,
-        },
+        isHoverEnable: false,
+        isClickEnable: false,
         status: 1,
       };
 
@@ -181,12 +174,26 @@ function Frame({
 
   const getInfo = () => {
     let pathInfo = false;
+    let title = "";
+    let features = [];
     if (info) {
       paths.forEach((frame) => {
-        if (frame.id === info) pathInfo = frame.hoverProps.hoverInfo;
+        if (frame.id === info) {
+          title = frame.targetPage.details.title;
+          features = frame.targetPage.details.features;
+        }
       });
     }
-    return pathInfo;
+    return (
+      <InfoStyle>
+        <div className="title">{title}</div>
+        <div className="features-container">
+          {features.map((feature) => (
+            <div className="feature">{feature}</div>
+          ))}
+        </div>
+      </InfoStyle>
+    );
   };
 
   const resetValues = () => {
@@ -355,6 +362,7 @@ function Frame({
       ref={editorRef}
       // onLoad={editorSetup}
     >
+      {info && <Info show info={getInfo()} pos={getInfoPos()} />}
       {/* <img
         id="customCursor"
         style={{
@@ -387,7 +395,6 @@ function Frame({
           setCurrentTool("draw");
         }}
       />
-      {info && <Info show info={getInfo()} pos={getInfoPos()} />}
       <div
         style={{
           cursor: cursor,

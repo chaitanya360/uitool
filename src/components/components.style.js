@@ -143,4 +143,22 @@ const NamePopupStyle = styled.div`
     }
   }
 `;
-export { DeletepopupStyle, NamePopupStyle };
+
+const InfoStyle = styled.div`
+  background-color: var(--secondary);
+  padding: 0.8px 1rem;
+  border-radius: 0.2rem;
+  .title {
+    color: white;
+    font-weight: 400;
+    font-size: 1rem;
+  }
+
+  .features-container{
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+  }
+  }
+`;
+export { DeletepopupStyle, NamePopupStyle, InfoStyle };

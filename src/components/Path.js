@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { colors } from "../utility";
+import { CURSOR, statusValues } from "../utility/data";
 import CopyPoint from "./atoms/CopyPoint";
 import Polygon from "./atoms/Polygon";
 import VertexPoints from "./atoms/VertexPoints";
@@ -78,52 +80,85 @@ const Path = ({
   };
 
   const handleOnMouseOver = (e) => {
-    if (isFreeView && hoverProps && !ContextMenuPosition) {
-      if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
-        setCursor((cursor) => {
-          stack.push(cursor);
-          return "pointer";
-        });
-        if (hoverProps.isColorEnable) {
-          setBgColor(hoverProps.hoverColor);
-        }
-
-        if (hoverProps.isInfoEnable) {
-          setInfo(id);
-        }
+    const getHoverColor = (status) => {
+      switch (status) {
+        case statusValues.available:
+          return colors.available;
+        case statusValues.booked:
+          return colors.booked;
+        case statusValues.notOpened:
+          return colors.not_open;
+        default:
+          return colors.font_dark;
       }
+    };
+    if (!isFreeView || ContextMenuPosition) return;
+    if (path.targetPage) {
+      setCursor((cursor) => {
+        stack.push(cursor);
+        return "pointer";
+      });
+      setInfo(id);
+      setBgColor(getHoverColor(path.targetPage.details.status));
     }
+
+    // if (isFreeView && hoverProps && !ContextMenuPosition) {
+    //   if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
+    //     setCursor((cursor) => {
+    //       stack.push(cursor);
+    //       return "pointer";
+    //     });
+    //     if (hoverProps.isColorEnable) {
+    //       setBgColor(hoverProps.hoverColor);
+    //     }
+
+    //     if (hoverProps.isInfoEnable) {
+    //       setInfo(id);
+    //     }
+    //   }
+    // }
   };
 
   const handleOnMouseLeave = () => {
     setBgColor("transparent");
-    if (hoverProps) {
-      if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
-        setInfo(false);
-        if (isFreeView) setCursor(stack.pop());
-      }
+    if (path.targetPage) {
+      setInfo(false);
+      setCursor(stack.pop());
     }
+    // if (hoverProps) {
+    //   if (hoverProps.isColorEnable || hoverProps.isInfoEnable) {
+    //     setInfo(false);
+    //     if (isFreeView) setCursor(stack.pop());
+    //   }
+    // }
   };
 
   const handleOnMouseClick = (e) => {
     if (isFreeView) {
-      if (clickProps) {
-        if (clickProps.isClickEnable) {
-          if (clickProps.targetFrameId) {
-            setCursor("default");
-            setCurrentFrameId(parseInt(clickProps.targetFrameId));
-          }
-          setInfo(false);
-        }
+      e.stopPropagation();
+      e.preventDefault();
+      if (path.targetPage && path.isClickEnable) {
+        setCursor("default");
+        setCurrentFrameId(parseInt(path.targetPage.id));
+        setInfo(false);
       }
+
+      // if (clickProps) {
+      //   if (clickProps.isClickEnable) {
+      //     if (clickProps.targetFrameId) {
+      //       setCursor("default");
+      //       setCurrentFrameId(parseInt(clickProps.targetFrameId));
+      //     }
+      //     setInfo(false);
+      //   }
+      // }
     }
   };
 
   const handleAuxClick = (e) => {
+    e.stopPropagation();
     if (isTour || drawing || isFreeView) return;
 
-    setInfo(false);
-    e.stopPropagation();
     if (isSelected && tempEnd.x1) {
       handleItemSelect(false);
       setBgColor(hoverColor);

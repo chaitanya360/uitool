@@ -5,6 +5,11 @@ const initialFrameValues = [
     paths: [],
     bgImg: false,
     frameName: "Tower",
+    details: {
+      features: [],
+      status: "Available",
+      title: "Tower",
+    },
     id: getId(),
     parentId: false,
     type: "tower",
@@ -109,16 +114,9 @@ const newFrame = {
   co: [{ x: 0, y: 0 }],
   tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
   id: "temp",
-  hoverProps: {
-    isInfoEnable: false,
-    isColorEnable: false,
-    hoverColor: "",
-    hoverInfo: "",
-  },
-  clickProps: {
-    isClickEnable: false,
-    targetFrameId: 0,
-  },
+  targetPage: false,
+  isHoverEnable: false,
+  isClickEnable: false,
   status: 0,
 };
 
@@ -139,6 +137,24 @@ const cursors = [
   `${process.env.PUBLIC_URL}/statics/Icons/resize.svg`,
 ];
 
-const statusValues = ["Available", "Booked", "Not Opened"];
+const statusValues = {
+  available: "Available",
+  booked: "Booked",
+  notOpened: "Not Opened",
+};
+const getStatusValuesList = () => {
+  let list = [];
+  Object.keys(statusValues).forEach((key) => list.push(statusValues[key]));
+  return list;
+};
 
-export { initialFrameValues, newFrame, CURSOR, cursors, statusValues };
+const statusValuesList = getStatusValuesList();
+
+export {
+  initialFrameValues,
+  newFrame,
+  CURSOR,
+  cursors,
+  statusValues,
+  statusValuesList,
+};

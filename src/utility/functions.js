@@ -78,7 +78,6 @@ class TreeStructure {
   };
 
   getArrayList = (root = this.root, list = []) => {
-    console.log("in getArrayList");
     if (list.length === 0)
       list.push({
         key: root.key,

@@ -29,7 +29,6 @@ const styles = {
     overflow: "scroll",
   },
 };
-
 function MainLayout({ project, isTour = false }) {
   const { user } = useContext(AuthContext);
 
@@ -149,7 +148,6 @@ function MainLayout({ project, isTour = false }) {
     parentId,
     details
   ) => {
-    console.log(type, parentId, details, id, bgImg, frameName);
     setFrames((old) => [
       ...old,
       {
@@ -227,33 +225,24 @@ function MainLayout({ project, isTour = false }) {
 
     // list of ids being deleted
     tobeDeletedList = tobeDeletedList.map((item) => item.key);
-    console.log(tobeDeletedList);
 
     setFrames((Frames) => {
       for (let i = 0; i < Frames.length; i++) {
         let frame = Frames[i];
         for (let j = 0; j < frame.paths.length; j++) {
           let path = frame.paths[j];
-          if (path.clickProps)
-            if (path.clickProps.isClickEnable)
-              if (
-                tobeDeletedList.indexOf(path.clickProps.targetFrameId) !== -1
-              ) {
-                Frames[i].paths[j].clickProps = {
-                  ...Frames[i].paths[j].clickProps,
-                  isClickEnable: false,
-                  targetFrameId: 0,
-                };
-              }
+          if (path.targetPage)
+            if (tobeDeletedList.indexOf(path.targetPage.id) !== -1) {
+              Frames[i].paths[j].isHoverEnable = false;
+              Frames[i].paths[j].isClickEnable = false;
+              Frames[i].paths[j].targetPage = false;
+            }
         }
       }
       return Frames;
     });
     // removing all the pages being deleted
     setFrames((Frames) => {
-      console.log(
-        Frames.filter((frame) => tobeDeletedList.indexOf(frame.id) === -1)
-      );
       return Frames.filter((frame) => tobeDeletedList.indexOf(frame.id) === -1);
     });
     setShowDeletePagePopup(false);
@@ -277,7 +266,6 @@ function MainLayout({ project, isTour = false }) {
     });
   };
 
-  console.log(Frames);
   const handleImageChangeSuccess = () => {
     setShowImageChangeUploader(false);
     setCurrentTool("draw");

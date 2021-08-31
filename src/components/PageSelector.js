@@ -23,27 +23,27 @@ function PageSelector({
       selectedItem.clickProps.isClickEnable &&
       selectedItem.clickProps.targetFrameId
   );
-  const handleOnMouseClickValuesChange = (id, value) => {
-    if (value === "new") {
+  const handleOnMouseClickValuesChange = (id, targetFrame) => {
+    if (targetFrame === "new") {
       setContextMenuPosition(false);
       setNewPageFormDetails(false);
       setDisplayNewFramePopup(true);
     } else {
       let tempPaths = paths;
-
-      tempPaths.forEach((frame) => {
-        if (frame.id === selectedItem.id) {
+      console.log(targetFrame);
+      tempPaths.forEach((path) => {
+        if (path.id === selectedItem.id) {
           if (id === "change_page") {
-            // setting target frame id
-            frame.clickProps = {
-              ...frame.clickProps,
-              targetFrameId: parseInt(value),
+            path.targetPage = {
+              id: targetFrame.id,
+              details: targetFrame.details,
             };
             setCurrentTool(false);
           }
         }
       });
-      setSelectedPageid(value);
+
+      setSelectedPageid(targetFrame.id);
       setPaths(tempPaths);
     }
   };
@@ -54,7 +54,7 @@ function PageSelector({
         handleOnMouseClickValuesChange("change_page", "new");
         break;
       default:
-        handleOnMouseClickValuesChange("change_page", e.key);
+        console.log("selected defualt item");
     }
   };
 
@@ -92,7 +92,7 @@ function PageSelector({
   return (
     <div style={{ height: "fit-content" }}>
       <Menu theme="light">
-        <Menu.Item
+        {/* <Menu.Item
           key="new"
           style={{ width: "100%" }}
           onClick={() => handleMenuItemSelect({ key: "new" })}
@@ -114,7 +114,7 @@ function PageSelector({
               Create New Page
             </Button>
           </div>
-        </Menu.Item>
+        </Menu.Item> */}
 
         {getListedData().map((singleType) => (
           <div
@@ -146,7 +146,7 @@ function PageSelector({
                     <Menu.Item
                       key={frame.id}
                       onClick={() =>
-                        handleOnMouseClickValuesChange("change_page", frame.id)
+                        handleOnMouseClickValuesChange("change_page", frame)
                       }
                       style={{
                         color:
