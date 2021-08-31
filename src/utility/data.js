@@ -1,5 +1,3 @@
-const getId = () => new Date().getTime();
-
 const initialFrameValues = [
   {
     paths: [],
@@ -10,7 +8,7 @@ const initialFrameValues = [
       status: "Available",
       title: "Tower",
     },
-    id: getId(),
+    id: 1,
     parentId: false,
     type: "tower",
     status: false,

@@ -36,7 +36,6 @@ function PageSelector({
           if (id === "change_page") {
             path.targetPage = {
               id: targetFrame.id,
-              details: targetFrame.details,
             };
             setCurrentTool(false);
           }

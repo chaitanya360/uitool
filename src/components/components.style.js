@@ -154,11 +154,10 @@ const InfoStyle = styled.div`
     font-size: 1rem;
   }
 
-  .features-container{
+  .features-container {
     display: flex;
     flex-direction: column;
     font-weight: 500;
-  }
   }
 `;
 export { DeletepopupStyle, NamePopupStyle, InfoStyle };

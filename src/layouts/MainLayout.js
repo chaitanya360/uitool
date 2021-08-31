@@ -15,6 +15,7 @@ import PublishedTagline from "../components/PublishedTagline";
 import storage from "../api/storage";
 import ErrorContext from "../context/ErrorContext";
 import { Node, parsePathFromUrl, TreeStructure } from "../utility/functions";
+import PageDetailsForm from "../components/molecules/PageDetailsForm";
 
 const { Content, Sider } = Layout;
 
@@ -34,10 +35,9 @@ function MainLayout({ project, isTour = false }) {
 
   const [Frames, setFrames] = useState(JSON.parse(project.frames));
 
-  const [projectName, setProjectName] = useState(project.project_name);
+  const projectName = project.project_name;
 
-  const getTowerId = () =>
-    Frames.find((frame) => frame.frameName === "Tower").id;
+  const getTowerId = () => 1;
 
   const pathsState = useState([]);
   const deleteAlertState = useState(false);
@@ -63,6 +63,7 @@ function MainLayout({ project, isTour = false }) {
   const [showDeletePagePopup, setShowDeletePagePopup] = useState(false);
   const [treeData, setTreeData] = useState(false);
   const [newPageId, setNewPageId] = useState(false);
+  const [showEditDetails, setShowEditDetails] = useState(false);
   let tree;
 
   // this is hold the image which needs to be deleted upon changing background
@@ -106,11 +107,15 @@ function MainLayout({ project, isTour = false }) {
   }, [selectedItem]);
 
   useEffect(() => {
+    transpileFrameintoTree();
+  }, [Frames]);
+
+  const transpileFrameintoTree = () => {
     // mapping Frames into the tree so that it can be used for navigation
     console.log("transpiling");
     for (let i = 0; i < Frames.length; i++) {
       let frame = Frames[i];
-      if (frame.type === "tower")
+      if (frame.id === 1)
         tree = new TreeStructure(
           new Node(
             frame.type,
@@ -138,7 +143,7 @@ function MainLayout({ project, isTour = false }) {
         );
     }
     setTreeData(tree);
-  }, [Frames]);
+  };
 
   const addNewFrame = (
     frameName,
@@ -266,6 +271,32 @@ function MainLayout({ project, isTour = false }) {
     });
   };
 
+  const handleSaveDetails = (frameId, pageTitle, features, status) => {
+    console.log("details supposed to store here");
+    console.log(frameId, pageTitle, features, status);
+
+    console.log(pageTitle);
+
+    // saving details
+    let frames = Frames;
+
+    for (let i = 0; i < frames.length; i++) {
+      if (frames[i].id === frameId) {
+        frames[i].frameName = pageTitle;
+        frames[i].details = {
+          ...frames[i].details,
+          features,
+          status,
+          title: pageTitle,
+        };
+        break;
+      }
+    }
+    setFrames(frames);
+    setShowEditDetails(false);
+    transpileFrameintoTree();
+  };
+
   const handleImageChangeSuccess = () => {
     setShowImageChangeUploader(false);
     setCurrentTool("draw");
@@ -279,6 +310,8 @@ function MainLayout({ project, isTour = false }) {
   const handlePublish = () => {
     setShowPublishTagline(true);
   };
+
+  console.log(getCurrentFrame());
 
   return user || isTour ? (
     <Layout
@@ -372,6 +405,9 @@ function MainLayout({ project, isTour = false }) {
               getCurrentFrame() ? getCurrentFrame().frameName : "unnamed"
             }
             saving={saving}
+            handleShowDetails={() => {
+              setShowEditDetails(true);
+            }}
           />
         )}
         <PublishedTagline
@@ -414,8 +450,24 @@ function MainLayout({ project, isTour = false }) {
             isTour={isTour}
             ContextMenuPosition={ContextMenuPosition}
             currentFrameId={currentFrameId}
+            getFrameDetails={(id) => {
+              for (let i = 0; i < Frames.length; i++) {
+                if (Frames[i].id === id) return Frames[i].details;
+              }
+            }}
           />
 
+          {showEditDetails && (
+            <PageDetailsForm
+              pageType={getCurrentFrame().type}
+              parentId={getCurrentFrame().parentId}
+              project_id={project.id}
+              isNewPage={false}
+              setShow={setShowEditDetails}
+              page_for_editing_details={getCurrentFrame()}
+              handleSaveDetails={handleSaveDetails}
+            />
+          )}
           <Popups
             project_id={project._id}
             deleteAlertState={deleteAlertState}

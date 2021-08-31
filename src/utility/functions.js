@@ -137,4 +137,13 @@ const parsePathFromUrl = (url) => {
   return url.replace(baseURL, "");
 };
 
-export { TreeStructure, Node, getChildType, _deleteImage, parsePathFromUrl };
+const firstUpper = (str) => str[0].toUpperCase() + str.substring(1);
+
+export {
+  TreeStructure,
+  Node,
+  getChildType,
+  _deleteImage,
+  parsePathFromUrl,
+  firstUpper,
+};

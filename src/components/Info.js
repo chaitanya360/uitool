@@ -11,7 +11,7 @@ function Info({ show, info = "this is some information", pos: { x, y } }) {
           left: x,
           zIndex: "999",
         }}
-        className="animate__animated animate__fadeIn animate__delay-0s animate__faster"
+        // className="animate__animated animate__fadeIn animate__delay-0s animate__faster"
       >
         {info}
       </div>

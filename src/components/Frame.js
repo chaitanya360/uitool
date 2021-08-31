@@ -79,6 +79,7 @@ function Frame({
   isTour,
   ContextMenuPosition,
   currentFrameId,
+  getFrameDetails,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -149,8 +150,8 @@ function Frame({
       let curr = {
         co,
         id: getId(),
-        targetPage: false,
         tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
+        targetPage: false,
         isHoverEnable: false,
         isClickEnable: false,
         status: 1,
@@ -173,14 +174,16 @@ function Frame({
   };
 
   const getInfo = () => {
+    console.log("getting info");
     let pathInfo = false;
     let title = "";
     let features = [];
     if (info) {
-      paths.forEach((frame) => {
-        if (frame.id === info) {
-          title = frame.targetPage.details.title;
-          features = frame.targetPage.details.features;
+      paths.forEach((path) => {
+        if (path.id === info) {
+          let targetPageDetails = getFrameDetails(path.targetPage.id);
+          title = targetPageDetails.title;
+          features = targetPageDetails.features;
         }
       });
     }
@@ -314,7 +317,7 @@ function Frame({
     let y = e.y;
     // x += canRef.current.offsetLeft;
     let contextWidth = 235;
-    let contextHeight = 315;
+    let contextHeight = 115;
     if (x > window.innerWidth - contextWidth) x -= contextWidth;
     if (y > window.innerHeight - contextHeight)
       y = window.innerHeight - contextHeight;
@@ -462,6 +465,7 @@ function Frame({
                   paths={paths}
                   setCursor={setCursor}
                   altIsDown={altIsDown}
+                  getPageDetails={getFrameDetails}
                 />
               ))
             ) : (

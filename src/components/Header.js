@@ -6,6 +6,7 @@ import {
   FileOutlined,
   ProfileOutlined,
   MenuOutlined,
+  InfoCircleOutlined,
 } from "@ant-design/icons";
 import IconDropDown from "./IconDropDown";
 import RoutePipeline from "./RoutePipeline";
@@ -31,6 +32,7 @@ function Header({
   setCurrentFrameId,
   treeData,
   currentFrameId,
+  handleShowDetails,
 }) {
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(currentTool);
@@ -53,6 +55,12 @@ function Header({
         break;
       case "free":
         setCurrentTool("free");
+        break;
+      case "details":
+        handleShowDetails();
+        setTimeout(() => setSelectedMenuItem(false), 500);
+        break;
+
       default:
         return;
     }
@@ -158,6 +166,14 @@ function Header({
             selected={selectedMenuItem === "draw"}
             onClick={() => handleHeaderMenuSelect("draw")}
           />
+
+          <IconMenuItem
+            tooltip="Edit Details"
+            Icon={<InfoCircleOutlined style={{ fontSize: "1.1rem" }} />}
+            selected={selectedMenuItem === "details"}
+            onClick={() => handleHeaderMenuSelect("details")}
+          />
+
           <IconDropDown
             setCurrentTool={setCurrentTool}
             setSelected={setSelectedMenuItem}

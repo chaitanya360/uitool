@@ -26,6 +26,7 @@ const Path = ({
   setPaths,
   paths,
   cursor,
+  getPageDetails,
 }) => {
   const id = path.id;
   const [bgColor, setBgColor] = useState("transparent");
@@ -99,7 +100,7 @@ const Path = ({
         return "pointer";
       });
       setInfo(id);
-      setBgColor(getHoverColor(path.targetPage.details.status));
+      setBgColor(getHoverColor(getPageDetails(path.targetPage.id).status));
     }
 
     // if (isFreeView && hoverProps && !ContextMenuPosition) {
