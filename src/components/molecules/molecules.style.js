@@ -10,7 +10,7 @@ const PageDetailsFormStyle = styled.div`
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 4;
+    z-index: 3;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -18,7 +18,6 @@ const PageDetailsFormStyle = styled.div`
 
   form {
     min-width: 500px;
-    z-index: 5;
     background-color: white;
     box-shadow: 2px 2px rgba(0, 0, 0, 0.4);
     height: fit-content;
@@ -34,8 +33,9 @@ const PageDetailsFormStyle = styled.div`
       right: 0;
       top: 0;
       margin: 1rem;
-      color: var(--primary);
+      color: black;
       font-size: 1.2rem;
+      cursor: pointer;
     }
 
     .title {
@@ -60,6 +60,7 @@ const PageDetailsFormStyle = styled.div`
         height: 280px;
         img {
           object-fit: contain;
+          border: 1px solid black;
         }
       }
       .new-img-btn {
@@ -71,7 +72,14 @@ const PageDetailsFormStyle = styled.div`
     .right-section {
       display: flex;
       flex-direction: column;
-      padding-left: 1rem;
+      padding-left: 2rem;
+    }
+
+    .status-container {
+      margin: 1rem 0;
+      .drop-down {
+        margin-left: 1rem;
+      }
     }
 
     .input {
@@ -88,11 +96,41 @@ const PageDetailsFormStyle = styled.div`
     }
 
     .features-section {
-      margin-top: 1rem;
-      .feature {
-        margin: 0.5rem 0;
-        font-size: 1rem;
+      .features {
+        margin-top: 0.5rem;
+        padding: 0 0.5rem;
+        max-height: 200px;
+        overflow: auto;
+
+        .feature-container {
+          display: flex;
+          align-items: center;
+          margin: 5px 0;
+          .delete-feature {
+            color: var(--primary);
+            margin-left: 0.3rem;
+            cursor: pointer;
+          }
+        }
+
+        .features .new-feature-btn {
+          color: var(--primary);
+          margin-left: 0.4rem;
+          font-size: 0.8rem;
+        }
       }
+    }
+
+    .save-btn {
+      width: fit-content;
+      margin: auto;
+      background-color: var(--primary);
+      padding: 0.3rem 1rem;
+      border-radius: 0.2rem;
+      color: white;
+      font-weight: 500;
+      margin-top: 1rem;
+      cursor: pointer;
     }
   }
 `;

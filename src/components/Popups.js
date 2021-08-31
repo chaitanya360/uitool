@@ -3,6 +3,7 @@ import UploadImage from "./UploadImage";
 import AlertBox from "./AlertBox";
 import NewFramePopup from "./NewFramePopup";
 import DeletePopup from "./DeletePopup";
+import PageDetailsForm from "./molecules/PageDetailsForm";
 
 function Popups({
   setBgImg,
@@ -40,14 +41,22 @@ function Popups({
   return (
     <>
       {displayNewFramePopup && (
-        <NewFramePopup
-          show={displayNewFramePopup}
+        // <NewFramePopup
+        //   show={displayNewFramePopup}
+        //   setShow={setDisplayNewFramePopup}
+        //   addNewFrame={addNewFrame}
+        //   selectedItemState={selectedItemState}
+        //   paths={paths}
+        //   newPageFormDetails={newPageFormDetails}
+        //   Frames={Frames}
+        //   project_id={project_id}
+        // />
+        <PageDetailsForm
           setShow={setDisplayNewFramePopup}
-          addNewFrame={addNewFrame}
-          selectedItemState={selectedItemState}
-          paths={paths}
-          newPageFormDetails={newPageFormDetails}
-          Frames={Frames}
+          isNewPage={true}
+          addNewPage={addNewFrame}
+          pageType={newPageFormDetails.type}
+          parentId={newPageFormDetails.parentKey}
           project_id={project_id}
         />
       )}

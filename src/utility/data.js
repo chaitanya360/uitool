@@ -139,4 +139,6 @@ const cursors = [
   `${process.env.PUBLIC_URL}/statics/Icons/resize.svg`,
 ];
 
-export { initialFrameValues, newFrame, CURSOR, cursors };
+const statusValues = ["Available", "Booked", "Not Opened"];
+
+export { initialFrameValues, newFrame, CURSOR, cursors, statusValues };

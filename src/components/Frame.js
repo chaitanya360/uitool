@@ -139,7 +139,7 @@ function Frame({
     }
   };
 
-  const addNewFrame = () => {
+  const addNewPath = () => {
     // if (frame) console.log(frame);
 
     console.log("adding new");
@@ -148,6 +148,7 @@ function Frame({
       let curr = {
         co,
         id: getId(),
+        targetPage: false,
         tempEnd: { x1: 0, y1: 0, x2: 0, y2: 0 },
         hoverProps: {
           isInfoEnable: false,
@@ -272,7 +273,7 @@ function Frame({
     if (!shouldDraw) return;
 
     if (status.current === 2) {
-      addNewFrame();
+      addNewPath();
       return;
     }
 
@@ -297,7 +298,7 @@ function Frame({
         y2: co[co.length - 1].y,
       });
       status.current = 2;
-      addNewFrame();
+      addNewPath();
     }
   };
 
@@ -452,7 +453,6 @@ function Frame({
                   canRef={canRef}
                   setPaths={setPaths}
                   paths={paths}
-                  addNewFrame={addNewFrame}
                   setCursor={setCursor}
                   altIsDown={altIsDown}
                 />

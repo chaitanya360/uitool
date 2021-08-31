@@ -23,7 +23,6 @@ const Path = ({
   canRef,
   setPaths,
   paths,
-  addNewFrame,
   cursor,
 }) => {
   const id = path.id;

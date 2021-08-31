@@ -143,13 +143,13 @@ function MainLayout({ project, isTour = false }) {
 
   const addNewFrame = (
     frameName,
-    description,
     bgImg,
     id = "not specified",
     type = "tower",
-    parentId
+    parentId,
+    details
   ) => {
-    console.log(type, parentId);
+    console.log(type, parentId, details, id, bgImg, frameName);
     setFrames((old) => [
       ...old,
       {
@@ -157,9 +157,9 @@ function MainLayout({ project, isTour = false }) {
         bgImg,
         frameName,
         id,
-        description,
         type,
         parentId: parentId ? parentId : false,
+        details,
       },
     ]);
 
@@ -277,6 +277,7 @@ function MainLayout({ project, isTour = false }) {
     });
   };
 
+  console.log(Frames);
   const handleImageChangeSuccess = () => {
     setShowImageChangeUploader(false);
     setCurrentTool("draw");

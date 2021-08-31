@@ -66,10 +66,10 @@ function App() {
         <AuthContext.Provider value={{ user, setUser }}>
           <ProjectsContext.Provider value={{ projects, setProjects }}>
             <Routes />
+            {/* <PageDetailsForm /> */}
           </ProjectsContext.Provider>
         </AuthContext.Provider>
       </ErrorContext.Provider>
-      {/* <PageDetailsForm /> */}
     </>
   );
 }
