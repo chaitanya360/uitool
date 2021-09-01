@@ -12,7 +12,7 @@ import ProjectsContext from "../../context/ProjectsContext";
 
 const { Header: HEADER, Content } = Layout;
 
-function Header({ userName, setBtnClicked }) {
+function Header({ userName, setBtnClicked, setTourState }) {
   const history = useHistory();
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
 
@@ -50,9 +50,19 @@ function Header({ userName, setBtnClicked }) {
         icon={<PlusCircleOutlined style={{ transform: "translateY(2px)" }} />}
         key="new"
         className="new_project_btn"
-        onClick={() => setBtnClicked(true)}
+        onClick={() => {
+          setBtnClicked(true);
+          setTourState((tour) => {
+            tour.tourProps.setIsTourOpen(false);
+            tour.tourProps.startAt = 0;
+            return tour;
+          });
+        }}
+        style={{ height: "20px" }}
       >
-        <span style={{ marginTop: "2px" }}>New Project</span>
+        <span style={{ marginTop: "2px" }} className="new_project_btn_tour_ref">
+          New Project
+        </span>
       </Button>
 
       <div

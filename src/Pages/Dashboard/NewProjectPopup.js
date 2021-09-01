@@ -13,13 +13,43 @@ import { colors } from "../../utility";
 import Loading from "../../components/Loading";
 import UploadImage from "../../components/UploadImage";
 
-function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
+function NewProjectPopup({
+  setBtnClicked,
+  getProjects,
+  setDashboardLoading,
+  setTourState,
+}) {
   const [projectName, setProjectName] = useState("");
   const { setErrorMsg } = useContext(ErrorContext);
   const [loading, setLoading] = useState(false);
   const [displayImageUploaderPopup, setDisplayImageUploaderPopup] =
     useState(false);
   const [thumbnailSrc, setThumbnailSrc] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTourState((tour) => {
+        tour.tourProps.disableInteraction = false;
+        tour.tourProps.setIsTourOpen(true);
+        tour.tourProps.showButtons = true;
+        tour.steps = [
+          {
+            selector: ".new_project_name",
+            content: "Give it a name",
+          },
+          {
+            selector: ".thumbnail_btn",
+            content: "Choose thumbnail image",
+          },
+          {
+            selector: ".publish_btn",
+            content: "Click to create",
+          },
+        ];
+        return tour;
+      });
+    }, 400);
+  }, []);
 
   const handleCreateNewProject = () => {
     if (projectName.length === 0) {
@@ -49,6 +79,11 @@ function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
 
   const handleAddThumbnail = () => {
     setDisplayImageUploaderPopup(true);
+    setTourState((tour) => {
+      tour.tourProps.disableInteraction = false;
+      tour.tourProps.setIsTourOpen(false);
+      return tour;
+    });
   };
 
   return (
@@ -61,6 +96,12 @@ function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
           setShouldDisplay={setDisplayImageUploaderPopup}
           onImageChanged={() => {
             setDisplayImageUploaderPopup(false);
+            setTourState((tour) => {
+              tour.tourProps.startAt = 2;
+              tour.tourProps.disableInteraction = false;
+              tour.tourProps.setIsTourOpen(true);
+              return tour;
+            });
           }}
         />
       )}
@@ -99,6 +140,7 @@ function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
                   display: "flex",
                   flexDirection: "column",
                 }}
+                className="new_project_name"
               >
                 <label style={{ opacity: 0.9, fontWeight: 500 }}>
                   Project Name
