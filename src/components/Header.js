@@ -162,7 +162,7 @@ function Header({
           />
           <IconMenuItem
             tooltip="Draw Path"
-            Icon={<PenIcon />}
+            Icon={<PenIcon className="draw_path_icon" />}
             selected={selectedMenuItem === "draw"}
             onClick={() => handleHeaderMenuSelect("draw")}
           />

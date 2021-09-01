@@ -125,7 +125,9 @@ const HeartIcon = (props) => <Icon component={HeartSvg} {...props} />;
 
 const PandaIcon = (props) => <Icon component={PandaSvg} {...props} />;
 
-const PenIcon = ({ color }) => <Icon component={PenSvg} style={{ color }} />;
+const PenIcon = ({ color, className = "" }) => (
+  <Icon component={PenSvg} style={{ color }} className={className} />
+);
 
 const EyeIcon = ({ color }) => <Icon component={EyeSvg} style={{ color }} />;
 

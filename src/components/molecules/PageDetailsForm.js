@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PageDetailsFormStyle } from "./molecules.style";
 import {
   CloseCircleOutlined,
@@ -22,6 +22,7 @@ function PageDetailsForm({
   pageType,
   page_for_editing_details,
   handleSaveDetails,
+  setTourState,
 }) {
   //  this is only need for editing exting page
   let details = false;
@@ -38,6 +39,17 @@ function PageDetailsForm({
   const [status, setStatus] = useState(details ? details.status : "Available");
   const [bgImg, setBgImg] = useState(BgImg ? BgImg : false);
   const [showImageUploader, setShowImageUploader] = useState(false);
+
+  useEffect(() => {
+    // hiding tour
+    setTourState((tour) => {
+      console.log(tour);
+      if (tour.tourProps.justFinished === "creating_new_page") {
+        tour.tourProps.setIsTourOpen(false);
+      }
+      return tour;
+    });
+  }, []);
 
   const setFeatureValue = (index, value) => {
     setFeatures((features) => {

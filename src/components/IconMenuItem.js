@@ -8,6 +8,7 @@ function IconMenuItem({
   onClick,
   selected,
   tooltip = "This is tool",
+  className = "",
 }) {
   return (
     <Tooltip title={tooltip} placement="bottom">
@@ -25,6 +26,7 @@ function IconMenuItem({
           paddingBottom: "0px",
         }}
         onClick={onClick}
+        className={className}
       >
         {Icon}
       </div>

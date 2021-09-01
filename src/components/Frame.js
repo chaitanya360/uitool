@@ -80,6 +80,7 @@ function Frame({
   ContextMenuPosition,
   currentFrameId,
   getFrameDetails,
+  setTourState,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -125,7 +126,20 @@ function Frame({
 
   useEffect(() => {
     setInfo(false);
+    // setTourState((tour) => {
+    //   tour.tourProps.setIsTourOpen(true);
+    //   return tour;
+    // });
   }, []);
+
+  useEffect(() => {
+    if (bgSrc) {
+      setTourState((tour) => {
+        tour.tourProps.setIsTourOpen(false);
+        return tour;
+      });
+    }
+  }, [bgSrc]);
 
   const handleItemSelect = (item) => {
     if (item) {
@@ -145,6 +159,25 @@ function Frame({
     // if (frame) console.log(frame);
 
     console.log("adding new path");
+
+    // tour for just finished drawing
+    if (paths.length === 0) {
+      setTourState((tour) => {
+        if (tour.tourProps.justFinished === "drawing_polygon") {
+          tour.steps = [
+            {
+              selector: ".new_btn_icon",
+              content: "Create New Block Page",
+            },
+          ];
+          tour.tourProps.startAt = 0;
+          tour.tourProps.closeWithMask = false;
+          tour.tourProps.justFinished = "creating_new_page";
+          tour.tourProps.setIsTourOpen(true);
+        }
+        return tour;
+      });
+    }
 
     if (co.length > 1) {
       let curr = {
@@ -343,13 +376,30 @@ function Frame({
         color: colors.secondary,
       }}
     >
-      <div style={{ margin: "10px", cursor: "pointer" }}>
-        <PlusCircleOutlined
-          style={{ fontSize: "1.4rem" }}
-          onClick={() => setDisplayImageUploader(true)}
-        />
+      <div
+        id="add_new_bg_img_btn"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          color: colors.secondary,
+        }}
+      >
+        <div style={{ margin: "10px", cursor: "pointer" }}>
+          <PlusCircleOutlined
+            style={{ fontSize: "1.4rem" }}
+            onClick={() => {
+              setTourState((tour) => {
+                tour.tourProps.setIsTourOpen(false);
+                return tour;
+              });
+              setDisplayImageUploader(true);
+            }}
+          />
+        </div>
+        <div>Select Bg Image</div>
       </div>
-      <div>Select Bg Image</div>
     </div>
   );
 
@@ -442,6 +492,7 @@ function Frame({
                 objectFit: "contain",
               }}
               xlinkHref={bgSrc}
+              id="page_bg_image"
             />
             {paths.length > 0 ? (
               paths.map((path) => (

@@ -23,6 +23,7 @@ const Title = ({
       }}
     >
       <span
+        className="tree_title"
         onClick={() => setCurrentFrameId(element.key)}
         style={{
           padding: "0px 10px",

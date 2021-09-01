@@ -23,6 +23,7 @@ function Popups({
   handleDeletePage,
   project_id,
   handleImageChangeSuccess,
+  setTourState,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -58,6 +59,7 @@ function Popups({
           pageType={newPageFormDetails.type}
           parentId={newPageFormDetails.parentKey}
           project_id={project_id}
+          setTourState={setTourState}
         />
       )}
       {displayImageUploader && (
