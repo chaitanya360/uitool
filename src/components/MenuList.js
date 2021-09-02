@@ -24,7 +24,6 @@ function MenuList({
   handlePublishPressed,
   setShowDeletePagePopup,
   treeData,
-  setTourState,
 }) {
   useEffect(() => {
     setSelectedFrameType(currentFrameType);
@@ -88,7 +87,6 @@ function MenuList({
       <div id="slider" style={{ display: "flex", flexDirection: "column" }}>
         <Menu.ItemGroup title={<ProjectTitle />}>
           <NavigationTree
-            setTourState={setTourState}
             Frames={Frames}
             setFrames={setFrames}
             setTreeData={setTreeData}

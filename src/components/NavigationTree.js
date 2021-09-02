@@ -15,7 +15,6 @@ function NavigationTree({
   setNewPageFormDetails,
   setShowDeletePagePopup,
   treeData,
-  setTourState,
 }) {
   const setDisplayNewFramePopup = displayNewFramePopupState[1];
 
@@ -154,30 +153,7 @@ function NavigationTree({
   return (
     <div style={{ height: "100%" }}>
       <Tree
-        onExpand={() => {
-          setTourState((tour) => {
-            if (tour.tourProps.justFinished === "expanding_tower")
-              tour.tourProps.setIsTourOpen(false);
-            return tour;
-          });
-          setTimeout(() => {
-            setTourState((tour) => {
-              if (tour.tourProps.justFinished === "expanding_tower") {
-                tour.steps = [
-                  {
-                    selector: ".ant-tree-list-holder",
-                    content: "Select Any Page to Open it",
-                  },
-                ];
-                tour.tourProps.startAt = 0;
-                tour.tourProps.closeWithMask = false;
-                tour.tourProps.justFinished = "selecting_page";
-                tour.tourProps.setIsTourOpen(true);
-              }
-              return tour;
-            });
-          }, 300);
-        }}
+        // onExpand={}
         draggable
         onSelect={onSelect}
         onDrop={onDrop}

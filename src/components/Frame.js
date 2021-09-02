@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Path from "./Path";
 import Info from "./Info";
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -7,6 +7,8 @@ import Loading from "./Loading";
 import AlertBox from "./AlertBox";
 import { CURSOR, newFrame } from "../utility/data";
 import { InfoStyle } from "./components.style";
+import TourContext from "../context/TourContext";
+import VideoCard from "./atoms/VideoCard";
 
 const getId = () => new Date().getTime();
 
@@ -80,7 +82,6 @@ function Frame({
   ContextMenuPosition,
   currentFrameId,
   getFrameDetails,
-  setTourState,
 }) {
   const [displayImageUploader, setDisplayImageUploader] =
     displayImageUploaderState;
@@ -96,6 +97,10 @@ function Frame({
   const [loadingBg, setLoadingBg] = useState(false);
   const [cursor, setCursor] = useState(false);
   const [altIsDown, setAltIsDown] = useState(false);
+  const { tourState, justFinishedStep, nextStep, hideTour, toogleArrow } =
+    useContext(TourContext);
+
+  const [showVideoTour, setShowVideoTour] = useState(false);
 
   // state used to display delete popup
   // for deleting currently drawing polygon
@@ -122,6 +127,12 @@ function Frame({
 
   useEffect(() => {
     setCursor(getCursor());
+
+    if (currentTool === "draw" && justFinishedStep() === "select_draw") {
+      toogleArrow();
+      nextStep();
+      setShowVideoTour(true);
+    }
   }, [currentTool, isCloserToClose]);
 
   useEffect(() => {
@@ -134,10 +145,8 @@ function Frame({
 
   useEffect(() => {
     if (bgSrc) {
-      setTourState((tour) => {
-        tour.tourProps.setIsTourOpen(false);
-        return tour;
-      });
+      console.log("should be next step");
+      if (justFinishedStep() === "add_bg") nextStep();
     }
   }, [bgSrc]);
 
@@ -162,21 +171,7 @@ function Frame({
 
     // tour for just finished drawing
     if (paths.length === 0) {
-      setTourState((tour) => {
-        if (tour.tourProps.justFinished === "drawing_polygon") {
-          tour.steps = [
-            {
-              selector: ".new_btn_icon",
-              content: "Create New Block Page",
-            },
-          ];
-          tour.tourProps.startAt = 0;
-          tour.tourProps.closeWithMask = false;
-          tour.tourProps.justFinished = "creating_new_page";
-          tour.tourProps.setIsTourOpen(true);
-        }
-        return tour;
-      });
+      // tour need to be handled
     }
 
     if (co.length > 1) {
@@ -390,10 +385,7 @@ function Frame({
           <PlusCircleOutlined
             style={{ fontSize: "1.4rem" }}
             onClick={() => {
-              setTourState((tour) => {
-                tour.tourProps.setIsTourOpen(false);
-                return tour;
-              });
+              if (justFinishedStep() == "add_bg") hideTour();
               setDisplayImageUploader(true);
             }}
           />
@@ -448,6 +440,10 @@ function Frame({
           setCurrentTool("draw");
         }}
       />
+      {showVideoTour && (
+        <VideoCard src={tourState.steps[tourState.startAt].justFinished} />
+      )}
+
       <div
         style={{
           cursor: cursor,

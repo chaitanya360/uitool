@@ -14,9 +14,9 @@ import { colors } from "../utility";
 import PublishedTagline from "../components/PublishedTagline";
 import storage from "../api/storage";
 import ErrorContext from "../context/ErrorContext";
-import { Node, parsePathFromUrl, TreeStructure } from "../utility/functions";
+import { Node, TreeStructure } from "../utility/functions";
 import PageDetailsForm from "../components/molecules/PageDetailsForm";
-import Tour from "reactour";
+import TourContext from "../context/TourContext";
 
 const { Content, Sider } = Layout;
 
@@ -31,7 +31,7 @@ const styles = {
     overflow: "scroll",
   },
 };
-function MainLayout({ project, isTour = false }) {
+function MainLayout({ project, _isTour = false }) {
   const { user } = useContext(AuthContext);
 
   const [Frames, setFrames] = useState(JSON.parse(project.frames));
@@ -66,27 +66,9 @@ function MainLayout({ project, isTour = false }) {
   const [newPageId, setNewPageId] = useState(false);
   const [showEditDetails, setShowEditDetails] = useState(false);
   let tree;
-  const [isTourOpen, setIsTourOpen] = useState(false);
 
-  const [tourState, setTourState] = useState({
-    steps: [
-      {
-        selector: "#add_new_bg_img_btn",
-        content: "Select Background Image For current page",
-      },
-    ],
-    tourProps: {
-      current: 0,
-      setIsTourOpen: setIsTourOpen,
-      showButtons: false,
-      disableDotsNavigation: true,
-      closeWithMask: true,
-      startAt: 0,
-      disableInteraction: false,
-      justFinished: false,
-    },
-  });
-
+  const { nextStep, gotoStep, justFinishedStep, tourState } =
+    useContext(TourContext);
   // this is hold the image which needs to be deleted upon changing background
 
   const setCurrentFrame = (values) => {
@@ -121,26 +103,6 @@ function MainLayout({ project, isTour = false }) {
     const frame = tempFrames.find((frame) => frame.id === currentFrameId);
     setBgImg(frame.bgImg);
     setPaths(frame.paths);
-
-    // tour
-
-    if (tourState.tourProps.justFinished === "creating_new_page") {
-      setTourState((tour) => {
-        console.log(tour);
-        tour.steps = [
-          {
-            selector: ".ant-tree-switcher",
-            content: "Expand Tower",
-          },
-        ];
-        tour.tourProps.startAt = 0;
-        tour.tourProps.closeWithMask = false;
-        tour.tourProps.justFinished = "expanding_tower";
-        tour.tourProps.setIsTourOpen(true);
-
-        return tour;
-      });
-    }
   }, [currentFrameId]);
 
   useEffect(() => {
@@ -156,25 +118,8 @@ function MainLayout({ project, isTour = false }) {
   }, [newPageId]);
 
   useEffect(() => {
-    if (tourState.tourProps.justFinished === "selecting_draw_tool") {
-      setIsTourOpen(false);
-
-      setTimeout(() => {
-        setTourState((tour) => {
-          tour.steps = [
-            {
-              selector: "#page_bg_image",
-              content: "Draw an Square",
-            },
-          ];
-          tour.tourProps.justFinished = "drawing_polygon";
-          tour.tourProps.startAt = 0;
-          tour.tourProps.closeWithMask = true;
-          tour.tourProps.setIsTourOpen(true);
-          return tour;
-        });
-      }, 300);
-    }
+    if (justFinishedStep() === "publish_project" || !bgImg) gotoStep(4);
+    console.log(justFinishedStep());
   }, [currentTool]);
 
   const transpileFrameintoTree = () => {
@@ -263,7 +208,7 @@ function MainLayout({ project, isTour = false }) {
 
     setBgImg(currFrame.bgImg);
     setPaths(currFrame.paths);
-    if (isTour) setCurrentTool("free");
+    if (_isTour) setCurrentTool("free");
   }, []);
 
   const getFallBackPageId = (id) => {
@@ -365,29 +310,19 @@ function MainLayout({ project, isTour = false }) {
     setCurrentTool(false);
     // saving automatically as prev image is deleted
     // is don't save then, old image url will finnd nothing
-    handleSave();
 
-    // handling tour
-    setTourState((tour) => {
-      tour.steps = [
-        {
-          selector: ".draw_path_icon",
-          content: "Select Draw Tool to Draw Polygon",
-        },
-      ];
-      tour.tourProps.startAt = 0;
-      tour.tourProps.closeWithMask = false;
-      tour.tourProps.justFinished = "selecting_draw_tool";
-      tour.tourProps.setIsTourOpen(true);
-      return tour;
-    });
+    // __________temporaryly disabled
+
+    // handleSave();
   };
+
+  console.log(justFinishedStep());
 
   const handlePublish = () => {
     setShowPublishTagline(true);
   };
 
-  return user || isTour ? (
+  return user || _isTour ? (
     <Layout
       onContextMenuCapture={(e) => e.preventDefault()}
       style={{
@@ -398,19 +333,7 @@ function MainLayout({ project, isTour = false }) {
         left: "0px",
       }}
     >
-      <Tour
-        steps={tourState.steps}
-        isOpen={isTourOpen}
-        onRequestClose={() => setIsTourOpen(false)}
-        showButtons={tourState.tourProps.showButtons}
-        disableDotsNavigation={tourState.tourProps.disableDotsNavigation}
-        closeWithMask={tourState.tourProps.closeWithMask}
-        startAt={tourState.tourProps.startAt}
-        disableInteraction={tourState.tourProps.disableInteraction}
-        disableFocusLock={true}
-      />
-
-      {!isTour && (
+      {!_isTour && (
         <Sider
           style={{
             padding: "0",
@@ -434,7 +357,6 @@ function MainLayout({ project, isTour = false }) {
             // onClick={(e) => console.log(e)}
           >
             <MenuList
-              setTourState={setTourState}
               setFrames={setFrames}
               treeData={treeData}
               setTreeData={setTreeData}
@@ -478,7 +400,7 @@ function MainLayout({ project, isTour = false }) {
             setContextMenuPosition={setContextMenuPosition}
           />
         )}
-        {!isTour && (
+        {!_isTour && (
           <Header
             treeData={treeData}
             currentFrameId={currentFrameId}
@@ -506,7 +428,7 @@ function MainLayout({ project, isTour = false }) {
           className="site-layout-background hidden_scroll"
           style={styles.content}
         >
-          {isTour && (
+          {_isTour && (
             <div
               style={{
                 width: "100%",
@@ -534,7 +456,7 @@ function MainLayout({ project, isTour = false }) {
             setCurrentFrameId={setCurrentFrameId}
             displayImageUploaderState={displayImageUploaderState}
             setBgImg={setBgImg}
-            isTour={isTour}
+            _isTour={_isTour}
             ContextMenuPosition={ContextMenuPosition}
             currentFrameId={currentFrameId}
             getFrameDetails={(id) => {
@@ -542,7 +464,6 @@ function MainLayout({ project, isTour = false }) {
                 if (Frames[i].id === id) return Frames[i].details;
               }
             }}
-            setTourState={setTourState}
           />
 
           {showEditDetails && (
@@ -575,7 +496,6 @@ function MainLayout({ project, isTour = false }) {
             setDisplayDeletePagePopup={setShowDeletePagePopup}
             handleDeletePage={handlePageDelete}
             handleImageChangeSuccess={handleImageChangeSuccess}
-            setTourState={setTourState}
           />
         </Content>
       </Layout>

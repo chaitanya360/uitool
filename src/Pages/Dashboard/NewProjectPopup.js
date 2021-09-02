@@ -12,13 +12,11 @@ import AuthContext from "../../context/AuthContext";
 import { colors } from "../../utility";
 import Loading from "../../components/Loading";
 import UploadImage from "../../components/UploadImage";
+import TourContext from "../../context/TourContext";
 
-function NewProjectPopup({
-  setBtnClicked,
-  getProjects,
-  setDashboardLoading,
-  setTourState,
-}) {
+function NewProjectPopup({ setBtnClicked, getProjects, setDashboardLoading }) {
+  const { nextStep, hideTour, toogleArrow } = useContext(TourContext);
+
   const [projectName, setProjectName] = useState("");
   const { setErrorMsg } = useContext(ErrorContext);
   const [loading, setLoading] = useState(false);
@@ -28,30 +26,14 @@ function NewProjectPopup({
 
   useEffect(() => {
     setTimeout(() => {
-      setTourState((tour) => {
-        tour.tourProps.disableInteraction = false;
-        tour.tourProps.setIsTourOpen(true);
-        tour.tourProps.showButtons = true;
-        tour.steps = [
-          {
-            selector: ".new_project_name",
-            content: "Give it a name",
-          },
-          {
-            selector: ".thumbnail_btn",
-            content: "Choose thumbnail image",
-          },
-          {
-            selector: ".publish_btn",
-            content: "Click to create",
-          },
-        ];
-        return tour;
-      });
-    }, 400);
+      toogleArrow();
+      nextStep();
+    }, 200);
   }, []);
 
-  const handleCreateNewProject = () => {
+  const handleCreateNewProject = (e) => {
+    hideTour();
+    e.preventDefault();
     if (projectName.length === 0) {
       setErrorMsg("Please Enter Valid Project Name");
       return;
@@ -78,12 +60,8 @@ function NewProjectPopup({
   };
 
   const handleAddThumbnail = () => {
+    hideTour();
     setDisplayImageUploaderPopup(true);
-    setTourState((tour) => {
-      tour.tourProps.disableInteraction = false;
-      tour.tourProps.setIsTourOpen(false);
-      return tour;
-    });
   };
 
   return (
@@ -96,12 +74,7 @@ function NewProjectPopup({
           setShouldDisplay={setDisplayImageUploaderPopup}
           onImageChanged={() => {
             setDisplayImageUploaderPopup(false);
-            setTourState((tour) => {
-              tour.tourProps.startAt = 2;
-              tour.tourProps.disableInteraction = false;
-              tour.tourProps.setIsTourOpen(true);
-              return tour;
-            });
+            nextStep();
           }}
         />
       )}

@@ -14,13 +14,13 @@ import ErrorContext from "../../context/ErrorContext";
 import DeletePopup from "../../components/DeletePopup";
 import UploadImage from "../../components/UploadImage";
 import ProjectNameChangepopup from "../../components/ProjectNameChangePopup";
-import { getNewToken } from "../../api/users";
 import { _deleteImage } from "../../utility/functions";
-import Tour from "reactour";
+import TourContext from "../../context/TourContext";
 
 const { Content } = Layout;
 
 function Dashboard(props) {
+  const { showTour } = useContext(TourContext);
   const { user } = useContext(AuthContext);
   const { projects, setProjects } = useContext(ProjectsContext);
   const [loading, setLoading] = useState(true);
@@ -28,25 +28,6 @@ function Dashboard(props) {
   const [deleteProjectPopup, setDeleteProjectPopup] = useState(false);
   const [renameProjectPopup, setRenameProjectPopup] = useState(false);
   const [thumbnailImg, setThumbnailImg] = useState(false);
-  const [isTourOpen, setIsTourOpen] = useState(true);
-
-  const [tourState, setTourState] = useState({
-    steps: [
-      {
-        selector: ".new_project_btn",
-        content: "Click to create New project",
-      },
-    ],
-    tourProps: {
-      current: 0,
-      setIsTourOpen: setIsTourOpen,
-      showButtons: false,
-      disableDotsNavigation: true,
-      closeWithMask: true,
-      startAt: 0,
-      disableInteraction: false,
-    },
-  });
 
   // selectedProjectRef.curre is used to access project id
   // in rename or image upload popup
@@ -66,7 +47,6 @@ function Dashboard(props) {
         if (response.data.status) setProjects(response.data.data);
       } else {
         setErrorMsg("something went wrong");
-        setIsTourOpen(false);
       }
     });
   };
@@ -74,6 +54,7 @@ function Dashboard(props) {
   useEffect(() => {
     if (!user) return history.push("/login");
     getProjects();
+    showTour();
   }, []);
 
   const getThumbnailSrc = (id) => {
@@ -174,17 +155,6 @@ function Dashboard(props) {
 
   return user ? (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
-      <Tour
-        steps={tourState.steps}
-        isOpen={isTourOpen}
-        onRequestClose={() => setIsTourOpen(false)}
-        showButtons={tourState.tourProps.showButtons}
-        disableDotsNavigation={tourState.tourProps.disableDotsNavigation}
-        closeWithMask={tourState.tourProps.closeWithMask}
-        startAt={tourState.tourProps.startAt}
-        disableInteraction={tourState.tourProps.disableInteraction}
-        disableFocusLock={true}
-      />
       {deleteProjectPopup && (
         <DeletePopup
           handleDeletePage={handleDeleteProject}
@@ -209,11 +179,7 @@ function Dashboard(props) {
           setShouldDisplay={setDisplayImageUploader}
         />
       )}
-      <Header
-        userName={user.firstName}
-        setBtnClicked={setBtnClicked}
-        setTourState={setTourState}
-      />
+      <Header userName={user.firstName} setBtnClicked={setBtnClicked} />
       <Content
         style={{
           height: "100%",
@@ -221,7 +187,6 @@ function Dashboard(props) {
       >
         {btnClicked && (
           <NewProjectPopup
-            setTourState={setTourState}
             setDashboardLoading={setLoading}
             setBtnClicked={setBtnClicked}
             getProjects={getProjects}

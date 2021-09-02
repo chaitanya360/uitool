@@ -9,10 +9,11 @@ import { useHistory } from "react-router-dom";
 import storage from "../../api/storage";
 import AuthContext from "../../context/AuthContext";
 import ProjectsContext from "../../context/ProjectsContext";
+import TourContext from "../../context/TourContext";
 
 const { Header: HEADER, Content } = Layout;
 
-function Header({ userName, setBtnClicked, setTourState }) {
+function Header({ userName, setBtnClicked }) {
   const history = useHistory();
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
 
@@ -52,11 +53,6 @@ function Header({ userName, setBtnClicked, setTourState }) {
         className="new_project_btn"
         onClick={() => {
           setBtnClicked(true);
-          setTourState((tour) => {
-            tour.tourProps.setIsTourOpen(false);
-            tour.tourProps.startAt = 0;
-            return tour;
-          });
         }}
         style={{ height: "20px" }}
       >

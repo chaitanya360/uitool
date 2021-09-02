@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Route,
   BrowserRouter as Router,
@@ -12,11 +12,28 @@ import Landing from "./Pages/Landing/Landing";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Project from "./Pages/Project/Project";
 import Profile from "./Pages/Profile/Profile";
+import Tour from "reactour";
+import TourContext from "./context/TourContext";
 
 const Routes = (props) => {
   const [justRegistered, setJustRegistered] = useState(false);
+  const { tourState, isTourOpen, nextStep } = useContext(TourContext);
+
   return (
     <Router {...props}>
+      <Tour
+        steps={tourState.steps}
+        isOpen={isTourOpen}
+        onRequestClose={() => alert("Please Complete the tour")}
+        showButtons={tourState.showButtons}
+        disableDotsNavigation={tourState.disableDotsNavigation}
+        closeWithMask={tourState.closeWithMask}
+        startAt={tourState.startAt}
+        disableInteraction={tourState.disableInteraction}
+        disableFocusLock={true}
+        nextStep={() => nextStep()}
+        prevStep={() => alert("can't go back")}
+      />
       <Switch>
         <Route exact path="/workspace/:id" component={Project} />
         <Route path="/login">

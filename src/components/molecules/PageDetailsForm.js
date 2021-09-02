@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PageDetailsFormStyle } from "./molecules.style";
 import {
   CloseCircleOutlined,
@@ -10,6 +10,7 @@ import { Input, Button, Dropdown, Menu } from "antd";
 import UploadImage from "../UploadImage";
 import { statusValuesList } from "../../utility/data";
 import { firstUpper } from "../../utility/functions";
+import TourContext from "../../context/TourContext";
 
 const getId = () => new Date().getTime();
 
@@ -22,8 +23,8 @@ function PageDetailsForm({
   pageType,
   page_for_editing_details,
   handleSaveDetails,
-  setTourState,
 }) {
+  const { tourState, setIsTourOpen } = useContext(TourContext);
   //  this is only need for editing exting page
   let details = false;
   let BgImg = false;
@@ -42,13 +43,9 @@ function PageDetailsForm({
 
   useEffect(() => {
     // hiding tour
-    setTourState((tour) => {
-      console.log(tour);
-      if (tour.tourProps.justFinished === "creating_new_page") {
-        tour.tourProps.setIsTourOpen(false);
-      }
-      return tour;
-    });
+
+    if (tourState.tourProps.justFinished === "creating_new_page")
+      setIsTourOpen(false);
   }, []);
 
   const setFeatureValue = (index, value) => {

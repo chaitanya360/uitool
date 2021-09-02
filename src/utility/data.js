@@ -148,6 +148,60 @@ const getStatusValuesList = () => {
 
 const statusValuesList = getStatusValuesList();
 
+const TourSteps = [
+  {
+    selector: ".new_project_btn",
+    content: "Click to create New project",
+    justFinished: "create_new_project",
+  },
+  {
+    selector: ".new_project_name",
+    content: "Give it a name",
+    justFinished: "project_name",
+  },
+  {
+    selector: ".thumbnail_btn",
+    content: "Choose thumbnail image",
+    justFinished: "chose_thumbnail",
+  },
+  {
+    selector: ".publish_btn",
+    content: "Click to create",
+    justFinished: "publish_project",
+  },
+  {
+    selector: "#add_new_bg_img_btn",
+    content: "Select Background Image For current page",
+    justFinished: "add_bg",
+  },
+  {
+    selector: ".draw_path_icon",
+    content: "Select Draw Tool to Draw Polygon",
+    justFinished: "select_draw",
+  },
+  {
+    selector: "#draw_polygon_demo",
+    content: "Draw Polygon over element you want to link to other page",
+    // for demos justfinisehd will be src
+    justFinished: "draw_polygon_demo",
+  },
+  {
+    selector: "#zoom_adjust_demo",
+    content: "Zoom in and out, and can adjust polygon by draging it's vertex",
+    justFinished: "zoom_adjust_demo",
+  },
+  {
+    selector: "#zoom_adjust_demo",
+    content: "Drag polygon to move it to other place",
+    justFinished: "zoom_adjust_demo",
+  },
+  {
+    selector: "#zoom_adjust_demo",
+    content: "Double Click inside polygon to make it's copy",
+    justFinished: "zoom_adjust_demo",
+  },
+];
+
 export {
   initialFrameValues,
   newFrame,
@@ -155,4 +209,5 @@ export {
   cursors,
   statusValues,
   statusValuesList,
+  TourSteps,
 };
