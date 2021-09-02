@@ -7,7 +7,7 @@ function VideoCard({ src }) {
     <VideoCardStyle>
       <video muted loop autoPlay id={src}>
         <source
-          src={`${process.env.PUBLIC_URL}/statics/Videos/${src}.mp4`}
+          src={`${process.env.PUBLIC_URL}/statics/videos/${src}.mp4`}
           type="video/mp4"
         />
       </video>
