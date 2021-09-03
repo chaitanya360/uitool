@@ -6,10 +6,10 @@ const VideoCardStyle = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  top: 10%;
-  video {
-    max-height: 521px;
-    max-width: 526px;
+  top: 15%;
+  img {
+    height: 500px;
+    width: 700px;
   }
 `;
 

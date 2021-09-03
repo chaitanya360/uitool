@@ -61,6 +61,8 @@ function App() {
     console.log(tourState);
     hideTour();
 
+    if (tourStepIndex >= TourSteps.length) return;
+
     setTourState((tour) => {
       if (!isTourOpen) showTour();
       tour.startAt = tourStepIndex;

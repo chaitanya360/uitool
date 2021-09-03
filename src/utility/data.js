@@ -180,25 +180,25 @@ const TourSteps = [
     justFinished: "select_draw",
   },
   {
-    selector: "#draw_polygon_demo",
+    selector: "#draw_b5qru4",
     content: "Draw Polygon over element you want to link to other page",
     // for demos justfinisehd will be src
-    justFinished: "draw_polygon_demo",
+    justFinished: "draw_b5qru4",
   },
   {
-    selector: "#zoom_adjust_demo",
+    selector: "#zoom_adjust_desorf",
     content: "Zoom in and out, and can adjust polygon by draging it's vertex",
-    justFinished: "zoom_adjust_demo",
+    justFinished: "zoom_adjust_desorf",
   },
   {
-    selector: "#zoom_adjust_demo",
+    selector: "#move_joiuqj",
     content: "Drag polygon to move it to other place",
-    justFinished: "zoom_adjust_demo",
+    justFinished: "move_joiuqj",
   },
   {
-    selector: "#zoom_adjust_demo",
+    selector: "#copy_pgfdit",
     content: "Double Click inside polygon to make it's copy",
-    justFinished: "zoom_adjust_demo",
+    justFinished: "copy_pgfdit",
   },
 ];
 

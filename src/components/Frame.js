@@ -97,8 +97,14 @@ function Frame({
   const [loadingBg, setLoadingBg] = useState(false);
   const [cursor, setCursor] = useState(false);
   const [altIsDown, setAltIsDown] = useState(false);
-  const { tourState, justFinishedStep, nextStep, hideTour, toogleArrow } =
-    useContext(TourContext);
+  const {
+    tourState,
+    justFinishedStep,
+    nextStep,
+    hideTour,
+    toogleArrow,
+    isTourOpen,
+  } = useContext(TourContext);
 
   const [showVideoTour, setShowVideoTour] = useState(false);
 
@@ -440,7 +446,7 @@ function Frame({
           setCurrentTool("draw");
         }}
       />
-      {showVideoTour && (
+      {showVideoTour && isTourOpen && (
         <VideoCard src={tourState.steps[tourState.startAt].justFinished} />
       )}
 

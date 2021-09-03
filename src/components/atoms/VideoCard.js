@@ -5,12 +5,11 @@ function VideoCard({ src }) {
   console.log(src);
   return (
     <VideoCardStyle>
-      <video muted loop autoPlay id={src}>
-        <source
-          src={`${process.env.PUBLIC_URL}/statics/videos/${src}.mp4`}
-          type="video/mp4"
-        />
-      </video>
+      <img
+        muted
+        id={src}
+        src={`${process.env.PUBLIC_URL}/statics/gifs/draw.gif`}
+      />
     </VideoCardStyle>
   );
 }

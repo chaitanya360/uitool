@@ -17,14 +17,14 @@ import TourContext from "./context/TourContext";
 
 const Routes = (props) => {
   const [justRegistered, setJustRegistered] = useState(false);
-  const { tourState, isTourOpen, nextStep } = useContext(TourContext);
+  const { tourState, isTourOpen, nextStep, hideTour } = useContext(TourContext);
 
   return (
     <Router {...props}>
       <Tour
         steps={tourState.steps}
         isOpen={isTourOpen}
-        onRequestClose={() => alert("Please Complete the tour")}
+        onRequestClose={() => hideTour()}
         showButtons={tourState.showButtons}
         disableDotsNavigation={tourState.disableDotsNavigation}
         closeWithMask={tourState.closeWithMask}
