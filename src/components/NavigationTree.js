@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Menu, TimePicker, Tree } from "antd";
 import { colors } from "../utility";
 import { TreeStructure, Node, getChildType } from "../utility/functions";
 import Title from "./atoms/TreeTitle";
+import TourContext from "../context/TourContext";
 // Importing from esm
 
 function NavigationTree({
@@ -16,6 +17,7 @@ function NavigationTree({
   setShowDeletePagePopup,
   treeData,
 }) {
+  const { justFinishedStep, nextStep } = useContext(TourContext);
   const setDisplayNewFramePopup = displayNewFramePopupState[1];
 
   const handleAddNewBtnClicked = (type, parentKey) => {
@@ -153,7 +155,10 @@ function NavigationTree({
   return (
     <div style={{ height: "100%" }}>
       <Tree
-        // onExpand={}
+        onExpand={() => {
+          console.log(justFinishedStep);
+          if (justFinishedStep == "create_new_page") nextStep();
+        }}
         draggable
         onSelect={onSelect}
         onDrop={onDrop}

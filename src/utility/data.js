@@ -175,30 +175,56 @@ const TourSteps = [
     justFinished: "add_bg",
   },
   {
+    selector: "hidden",
+    content: "",
+    justFinished: "add_bg_success",
+  },
+  {
     selector: ".draw_path_icon",
     content: "Select Draw Tool to Draw Polygon",
     justFinished: "select_draw",
   },
   {
-    selector: "#draw_b5qru4",
+    selector: "#draw",
     content: "Draw Polygon over element you want to link to other page",
     // for demos justfinisehd will be src
-    justFinished: "draw_b5qru4",
+    justFinished: "draw",
   },
   {
-    selector: "#zoom_adjust_desorf",
-    content: "Zoom in and out, and can adjust polygon by draging it's vertex",
-    justFinished: "zoom_adjust_desorf",
+    selector: "#adjust",
+    content: "Adjust polygon by draging it's vertex",
+    justFinished: "adjust",
   },
   {
-    selector: "#move_joiuqj",
+    selector: "#move",
     content: "Drag polygon to move it to other place",
-    justFinished: "move_joiuqj",
+    justFinished: "move",
   },
   {
-    selector: "#copy_pgfdit",
+    selector: "#copy",
     content: "Double Click inside polygon to make it's copy",
-    justFinished: "copy_pgfdit",
+    justFinished: "copy",
+  },
+
+  {
+    selector: ".new_btn_icon",
+    content: "Click on Plus button to create new page inside it.",
+    justFinished: "plus_btn_click",
+  },
+  {
+    selector: "hidden",
+    content: "",
+    justFinished: "create_new_page",
+  },
+  {
+    selector: ".ant-tree-switcher_close",
+    content: "Expand Tower",
+    justFinished: "expand",
+  },
+  {
+    selector: ".ant-tree-list-holder-inner",
+    content: "Select Tower to open it",
+    justFinished: "select_tower",
   },
 ];
 

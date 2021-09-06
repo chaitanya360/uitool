@@ -24,7 +24,7 @@ function PageDetailsForm({
   page_for_editing_details,
   handleSaveDetails,
 }) {
-  const { tourState, setIsTourOpen } = useContext(TourContext);
+  const { nextStep, justFinishedStep } = useContext(TourContext);
   //  this is only need for editing exting page
   let details = false;
   let BgImg = false;
@@ -44,8 +44,7 @@ function PageDetailsForm({
   useEffect(() => {
     // hiding tour
 
-    if (tourState.tourProps.justFinished === "creating_new_page")
-      setIsTourOpen(false);
+    if (justFinishedStep === "copy") nextStep();
   }, []);
 
   const setFeatureValue = (index, value) => {
@@ -106,6 +105,8 @@ function PageDetailsForm({
       status,
       title: pageTitle,
     });
+
+    if (justFinishedStep == "plus_btn_click") nextStep();
   };
 
   const FeatureInput = ({ value, handleBlur, index }) => {

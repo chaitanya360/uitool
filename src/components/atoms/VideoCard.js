@@ -5,11 +5,13 @@ function VideoCard({ src }) {
   console.log(src);
   return (
     <VideoCardStyle>
-      <img
-        muted
-        id={src}
-        src={`${process.env.PUBLIC_URL}/statics/gifs/draw.gif`}
-      />
+      <div className="img_container">
+        <img
+          muted
+          id={src}
+          src={`${process.env.PUBLIC_URL}/statics/gifs/${src}.gif`}
+        />
+      </div>
     </VideoCardStyle>
   );
 }

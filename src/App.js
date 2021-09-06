@@ -37,6 +37,7 @@ function App() {
   const [isTourOpen, setIsTourOpen] = useState(false);
 
   const [tourState, setTourState] = useState({});
+  const [justFinishedStep, setJustFinishedStep] = useState("init");
 
   const tourSetup = () => {
     setTourState({
@@ -53,15 +54,16 @@ function App() {
 
   const showTour = () => setIsTourOpen(true);
   const hideTour = () => setIsTourOpen(false);
-  const justFinishedStep = () => tourState.steps[tourStepIndex].justFinished;
 
   const nextStep = () => {
     tourStepIndex++;
     // hiding tour;
-    console.log(tourState);
     hideTour();
 
     if (tourStepIndex >= TourSteps.length) return;
+
+    // to counter ++
+    setJustFinishedStep(TourSteps[tourStepIndex - 1].justFinished);
 
     setTourState((tour) => {
       if (!isTourOpen) showTour();
@@ -69,7 +71,7 @@ function App() {
       return tour;
     });
     setTimeout(() => {
-      showTour();
+      if (TourSteps[tourStepIndex].selector !== "hidden") showTour();
     }, 200);
   };
 
@@ -82,8 +84,30 @@ function App() {
     }, 200);
   };
 
+  const prevStep = () => {
+    if (tourStepIndex === 6) return alert("Can't go back");
+    tourStepIndex--;
+    setJustFinishedStep(TourSteps[tourStepIndex + 1].justFinished);
+
+    // hiding tour;
+    hideTour();
+
+    if (tourStepIndex >= TourSteps.length) return;
+
+    setTourState((tour) => {
+      if (!isTourOpen) showTour();
+      tour.startAt = tourStepIndex;
+      return tour;
+    });
+    setTimeout(() => {
+      if (TourSteps[tourStepIndex].selector !== "hidden") showTour();
+    }, 200);
+  };
+
   const gotoStep = (stepNum) => {
     tourStepIndex = stepNum;
+    setJustFinishedStep(TourSteps[tourStepIndex - 1].justFinished);
+
     // hiding tour;
     console.log(tourState);
     hideTour();
@@ -93,7 +117,8 @@ function App() {
       tour.startAt = tourStepIndex;
       return tour;
     });
-    showTour();
+
+    if (TourSteps[tourStepIndex].selector !== "hidden") showTour();
   };
 
   useEffect(() => {
@@ -145,6 +170,7 @@ function App() {
             toogleArrow,
             gotoStep,
             justFinishedStep,
+            prevStep,
           }}
         >
           <ErrorContext.Provider value={{ errorMsg, setErrorMsg }}>

@@ -17,7 +17,8 @@ import TourContext from "./context/TourContext";
 
 const Routes = (props) => {
   const [justRegistered, setJustRegistered] = useState(false);
-  const { tourState, isTourOpen, nextStep, hideTour } = useContext(TourContext);
+  const { tourState, isTourOpen, nextStep, hideTour, prevStep } =
+    useContext(TourContext);
 
   return (
     <Router {...props}>
@@ -32,7 +33,7 @@ const Routes = (props) => {
         disableInteraction={tourState.disableInteraction}
         disableFocusLock={true}
         nextStep={() => nextStep()}
-        prevStep={() => alert("can't go back")}
+        prevStep={() => prevStep()}
       />
       <Switch>
         <Route exact path="/workspace/:id" component={Project} />

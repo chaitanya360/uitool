@@ -67,7 +67,7 @@ function MainLayout({ project, _isTour = false }) {
   const [showEditDetails, setShowEditDetails] = useState(false);
   let tree;
 
-  const { nextStep, gotoStep, justFinishedStep, tourState } =
+  const { nextStep, gotoStep, justFinishedStep, hideTour } =
     useContext(TourContext);
   // this is hold the image which needs to be deleted upon changing background
 
@@ -103,6 +103,8 @@ function MainLayout({ project, _isTour = false }) {
     const frame = tempFrames.find((frame) => frame.id === currentFrameId);
     setBgImg(frame.bgImg);
     setPaths(frame.paths);
+
+    if (justFinishedStep === "expand") hideTour();
   }, [currentFrameId]);
 
   useEffect(() => {
@@ -118,9 +120,8 @@ function MainLayout({ project, _isTour = false }) {
   }, [newPageId]);
 
   useEffect(() => {
-    if (justFinishedStep() === "publish_project" || !bgImg) gotoStep(4);
-    console.log(justFinishedStep());
-  }, [currentTool]);
+    if (justFinishedStep === "publish_project" || !bgImg) gotoStep(4);
+  }, []);
 
   const transpileFrameintoTree = () => {
     // mapping Frames into the tree so that it can be used for navigation
@@ -315,8 +316,6 @@ function MainLayout({ project, _isTour = false }) {
 
     // handleSave();
   };
-
-  console.log(justFinishedStep());
 
   const handlePublish = () => {
     setShowPublishTagline(true);

@@ -133,8 +133,7 @@ function Frame({
 
   useEffect(() => {
     setCursor(getCursor());
-
-    if (currentTool === "draw" && justFinishedStep() === "select_draw") {
+    if (currentTool === "draw" && justFinishedStep === "add_bg_success") {
       toogleArrow();
       nextStep();
       setShowVideoTour(true);
@@ -142,17 +141,19 @@ function Frame({
   }, [currentTool, isCloserToClose]);
 
   useEffect(() => {
-    setInfo(false);
-    // setTourState((tour) => {
-    //   tour.tourProps.setIsTourOpen(true);
-    //   return tour;
-    // });
-  }, []);
+    console.log(justFinishedStep);
+
+    // for hiding video tour
+    if (justFinishedStep === "copy") {
+      setShowVideoTour(false);
+    }
+  }, [justFinishedStep]);
 
   useEffect(() => {
+    // when bg image is changed
+    // show choose draw too tour
     if (bgSrc) {
-      console.log("should be next step");
-      if (justFinishedStep() === "add_bg") nextStep();
+      if (justFinishedStep === "add_bg") nextStep();
     }
   }, [bgSrc]);
 
@@ -391,7 +392,7 @@ function Frame({
           <PlusCircleOutlined
             style={{ fontSize: "1.4rem" }}
             onClick={() => {
-              if (justFinishedStep() == "add_bg") hideTour();
+              if (justFinishedStep == "publish_project") nextStep();
               setDisplayImageUploader(true);
             }}
           />

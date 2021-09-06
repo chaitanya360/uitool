@@ -6,10 +6,18 @@ const VideoCardStyle = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  top: 15%;
-  img {
-    height: 500px;
-    width: 700px;
+  align-items: center;
+  .img_container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 0.5rem;
+    width: fit-content;
+    border: 3px solid white;
+    height: fit-content;
+    img {
+      height: 350px;
+      width: 350px;
+    }
   }
 `;
 
