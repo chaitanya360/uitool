@@ -20,7 +20,6 @@ import TourContext from "../../context/TourContext";
 const { Content } = Layout;
 
 function Dashboard(props) {
-  const { showTour } = useContext(TourContext);
   const { user } = useContext(AuthContext);
   const { projects, setProjects } = useContext(ProjectsContext);
   const [loading, setLoading] = useState(true);
@@ -34,8 +33,9 @@ function Dashboard(props) {
   const selectedProjectRef = useRef(false);
   const [displayImageUploader, setDisplayImageUploader] = useState(false);
   const { setErrorMsg } = useContext(ErrorContext);
-
   const history = useHistory();
+
+  const { showTour, justFinishedStep } = useContext(TourContext);
 
   const getProjects = () => {
     setLoading(true);
@@ -45,17 +45,30 @@ function Dashboard(props) {
       setLoading(false);
       if (response.ok) {
         if (response.data.status) setProjects(response.data.data);
+        else {
+          history.push("/login");
+          setErrorMsg("something went wrong");
+        }
       } else {
         setErrorMsg("something went wrong");
+        history.push("/login");
       }
     });
   };
 
   useEffect(() => {
     if (!user) return history.push("/login");
-    getProjects();
-    showTour();
-  }, []);
+    if (projects) {
+      if (justFinishedStep === "init") showTour();
+    } else getProjects();
+  }, [projects]);
+
+  useEffect(() => {
+    if (thumbnailImg) {
+      handleChangeThumbnail();
+      setThumbnailImg(false);
+    }
+  }, [thumbnailImg]);
 
   const getThumbnailSrc = (id) => {
     // this is for just changed thumbnail
@@ -99,13 +112,6 @@ function Dashboard(props) {
     });
     setDeleteProjectPopup(false);
   };
-
-  useEffect(() => {
-    if (thumbnailImg) {
-      handleChangeThumbnail();
-      setThumbnailImg(false);
-    }
-  }, [thumbnailImg]);
 
   const handleChangeThumbnail = () => {
     if (!selectedProjectRef.current) return;

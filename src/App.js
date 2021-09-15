@@ -20,6 +20,8 @@ import NavigationTree from "./components/NavigationTree";
 import EditableField from "./components/atoms/EditableField";
 import PageDetailsForm from "./components/molecules/PageDetailsForm";
 import TourContext from "./context/TourContext";
+import { useHistory } from "react-router";
+import Instruction from "./components/atoms/Instruction";
 
 const loadImage = () => {
   cursors.forEach((cursorSrc) => {
@@ -38,6 +40,7 @@ function App() {
 
   const [tourState, setTourState] = useState({});
   const [justFinishedStep, setJustFinishedStep] = useState("init");
+  const history = useHistory();
 
   const tourSetup = () => {
     setTourState({
@@ -140,8 +143,12 @@ function App() {
     getAllProjects(token).then((response) => {
       console.log("fetching project", response.data);
       if (response.ok) {
-        if (response.data.status) setProjects(response.data.data);
-      } else setErrorMsg("something went wrong");
+        if (response.status && response.data.status)
+          setProjects(response.data.data);
+      } else {
+        setErrorMsg("something went wrong");
+        history.push("/login");
+      }
     });
   };
 

@@ -20,12 +20,10 @@ const Path = ({
   setCurrentFrameId,
   isAdjustView,
   isTour,
-  setCo,
   ContextMenuPosition,
   canRef,
   setPaths,
   paths,
-  cursor,
   getPageDetails,
 }) => {
   const id = path.id;
@@ -34,8 +32,6 @@ const Path = ({
   const [adjusting, setAdjusting] = useState(false);
   const hoverColor = "rgba(255,0,0,0.15)";
   const selectedColor = "rgba(255,0,0,0.25)";
-  const hoverProps = path.hoverProps;
-  const clickProps = path.clickProps;
 
   // 0 for drawing current polygon
   // 1 for finished drawing current polygon

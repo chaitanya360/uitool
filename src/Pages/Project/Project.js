@@ -29,7 +29,7 @@ function Project(props) {
   return loading ? (
     <Loading />
   ) : project ? (
-    <MainLayout project={project} isTour={tour === "tour"} />
+    <MainLayout project={project} _isTour={tour === "tour"} />
   ) : (
     <Redirect to="/login" />
   );

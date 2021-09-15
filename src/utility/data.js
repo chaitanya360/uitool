@@ -191,9 +191,21 @@ const TourSteps = [
     justFinished: "draw",
   },
   {
+    selector: "hidden",
+    content: "Draw",
+    // for demos justfinisehd will be src
+    justFinished: "draw_done",
+  },
+  {
     selector: "#adjust",
     content: "Adjust polygon by draging it's vertex",
     justFinished: "adjust",
+  },
+  {
+    selector: "hidden",
+    content: "",
+    // for demos justfinisehd will be src
+    justFinished: "adjust_done",
   },
   {
     selector: "#move",
@@ -201,9 +213,21 @@ const TourSteps = [
     justFinished: "move",
   },
   {
+    selector: "hidden",
+    content: "",
+    // for demos justfinisehd will be src
+    justFinished: "move_done",
+  },
+  {
     selector: "#copy",
     content: "Double Click inside polygon to make it's copy",
     justFinished: "copy",
+  },
+  {
+    selector: "hidden",
+    content: "",
+    // for demos justfinisehd will be src
+    justFinished: "copy_done",
   },
 
   {

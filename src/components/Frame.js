@@ -9,6 +9,8 @@ import { CURSOR, newFrame } from "../utility/data";
 import { InfoStyle } from "./components.style";
 import TourContext from "../context/TourContext";
 import VideoCard from "./atoms/VideoCard";
+import { InstructionStyle } from "./atoms/atoms.style";
+import Instruction from "./atoms/Instruction";
 
 const getId = () => new Date().getTime();
 
@@ -96,7 +98,7 @@ function Frame({
   const [isCloserToClose, setIsCloserToClose] = useState(false);
   const [loadingBg, setLoadingBg] = useState(false);
   const [cursor, setCursor] = useState(false);
-  const [altIsDown, setAltIsDown] = useState(false);
+  const [instruction, setInstruction] = useState(false);
   const {
     tourState,
     justFinishedStep,
@@ -118,19 +120,6 @@ function Frame({
   const canRef = useRef(null);
   const editorRef = useRef(null);
 
-  const getCursor = () => {
-    if (isCloserToClose) return CURSOR.penClose;
-    if (selectedItem || !bgSrc) return "default";
-    switch (currentTool) {
-      case "draw":
-        return CURSOR.pen;
-      case "select":
-        return "pointer";
-      default:
-        return "auto";
-    }
-  };
-
   useEffect(() => {
     setCursor(getCursor());
     if (currentTool === "draw" && justFinishedStep === "add_bg_success") {
@@ -144,8 +133,19 @@ function Frame({
     console.log(justFinishedStep);
 
     // for hiding video tour
-    if (justFinishedStep === "copy") {
+    if (justFinishedStep === "copy_done") {
       setShowVideoTour(false);
+      setInstruction(false);
+    }
+
+    if (justFinishedStep === "adjust") {
+      setInstruction("Done with Adjusting Polygon");
+    }
+    if (justFinishedStep === "move") {
+      setInstruction("Done with Moving Polygon");
+    }
+    if (justFinishedStep === "copy") {
+      setInstruction("Done with Copying Polygon");
     }
   }, [justFinishedStep]);
 
@@ -156,6 +156,19 @@ function Frame({
       if (justFinishedStep === "add_bg") nextStep();
     }
   }, [bgSrc]);
+
+  const getCursor = () => {
+    if (isCloserToClose) return CURSOR.penClose;
+    if (selectedItem || !bgSrc) return "default";
+    switch (currentTool) {
+      case "draw":
+        return CURSOR.pen;
+      case "select":
+        return "pointer";
+      default:
+        return "auto";
+    }
+  };
 
   const handleItemSelect = (item) => {
     if (item) {
@@ -178,7 +191,9 @@ function Frame({
 
     // tour for just finished drawing
     if (paths.length === 0) {
-      // tour need to be handled
+      if (justFinishedStep === "draw") {
+        nextStep();
+      }
     }
 
     if (co.length > 1) {
@@ -447,8 +462,21 @@ function Frame({
           setCurrentTool("draw");
         }}
       />
+      {/* <Instruction btnText={"Next Step"} in/> */}
       {showVideoTour && isTourOpen && (
         <VideoCard src={tourState.steps[tourState.startAt].justFinished} />
+      )}
+
+      {instruction && (
+        <Instruction
+          btnText="next"
+          instruction={instruction}
+          onNextClick={() => {
+            nextStep();
+            setShowVideoTour(true);
+          }}
+          setShow={setInstruction}
+        />
       )}
 
       <div
@@ -500,7 +528,6 @@ function Frame({
             {paths.length > 0 ? (
               paths.map((path) => (
                 <Path
-                  cursor={cursor}
                   co={isLast(path) ? co : path.co}
                   tempEnd={isLast(path) ? tempEnd : path.tempEnd}
                   key={path.id}
@@ -512,13 +539,11 @@ function Frame({
                   setCurrentFrameId={setCurrentFrameId}
                   isAdjustView={!isFreeView && status !== 1}
                   isTour={isTour}
-                  setCo={setCo}
                   ContextMenuPosition={ContextMenuPosition}
                   canRef={canRef}
                   setPaths={setPaths}
                   paths={paths}
                   setCursor={setCursor}
-                  altIsDown={altIsDown}
                   getPageDetails={getFrameDetails}
                 />
               ))
