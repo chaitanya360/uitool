@@ -138,6 +138,10 @@ function Frame({
       setInstruction(false);
     }
 
+    if (justFinishedStep === "draw") {
+      setInstruction("Done with Drawing Polygon");
+    }
+
     if (justFinishedStep === "adjust") {
       setInstruction("Done with Adjusting Polygon");
     }
@@ -188,13 +192,6 @@ function Frame({
     // if (frame) console.log(frame);
 
     console.log("adding new path");
-
-    // tour for just finished drawing
-    if (paths.length === 0) {
-      if (justFinishedStep === "draw") {
-        nextStep();
-      }
-    }
 
     if (co.length > 1) {
       let curr = {
@@ -469,7 +466,7 @@ function Frame({
 
       {instruction && (
         <Instruction
-          btnText="next"
+          btnText="Next"
           instruction={instruction}
           onNextClick={() => {
             nextStep();

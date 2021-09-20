@@ -43,8 +43,7 @@ function PageDetailsForm({
 
   useEffect(() => {
     // hiding tour
-
-    if (justFinishedStep === "copy") nextStep();
+    if (justFinishedStep === "copy_done") nextStep();
   }, []);
 
   const setFeatureValue = (index, value) => {
@@ -106,7 +105,7 @@ function PageDetailsForm({
       title: pageTitle,
     });
 
-    if (justFinishedStep == "plus_btn_click") nextStep();
+    if (justFinishedStep === "plus_btn_click") nextStep();
   };
 
   const FeatureInput = ({ value, handleBlur, index }) => {
