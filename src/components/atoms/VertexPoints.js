@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { CURSOR } from "../../utility/data";
 
-const stack = [];
+let stack = [];
 const VertexPoints = ({
   setCursor,
   setAdjusting,
@@ -13,7 +13,12 @@ const VertexPoints = ({
   paths,
   setPaths,
   drawing,
+  currentTool,
 }) => {
+  useEffect(() => {
+    stack = [];
+  }, [currentTool]);
+
   let AdjustStatus = 0;
   if (!isAdjustView) return <></>;
 
@@ -76,7 +81,7 @@ const VertexPoints = ({
         onMouseEnter={() => {
           if (drawing) return;
           setCursor((cursor) => {
-            stack.push(cursor);
+            if (currentTool == "draw") stack.push(cursor);
             return CURSOR.resize;
           });
         }}

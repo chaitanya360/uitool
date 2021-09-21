@@ -59,7 +59,10 @@ function Dashboard(props) {
   useEffect(() => {
     if (!user) return history.push("/login");
     if (projects) {
-      if (justFinishedStep === "init") showTour();
+      if (projects.length === 0)
+        if (justFinishedStep === "init")
+          // tour starts here
+          showTour();
     } else getProjects();
   }, [projects]);
 

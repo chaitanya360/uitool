@@ -120,7 +120,7 @@ function MainLayout({ project, _isTour = false }) {
   }, [newPageId]);
 
   useEffect(() => {
-    if (justFinishedStep === "publish_project" || !bgImg) gotoStep(4);
+    if (justFinishedStep === "chose_thumbnail" && !bgImg) gotoStep(4);
   }, []);
 
   const transpileFrameintoTree = () => {

@@ -12,7 +12,6 @@ function ContextMenu({
   setDisplayNewFramePopup,
   Frames,
   currentFrameId,
-  selectedItem,
   selectedItemState,
   handleContextMenuSelect,
   ContextMenuPosition = { x: 0, y: 0 },
@@ -55,8 +54,8 @@ function ContextMenu({
         style={{
           fontSize: "16px",
           fontWeight: "600",
-          padding: "0px 35px",
-          lineHeight: "20px",
+          lineHeight: "30px",
+          paddingLeft: "1rem",
         }}
       >
         Delete

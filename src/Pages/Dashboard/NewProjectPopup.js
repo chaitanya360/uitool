@@ -1,14 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Button } from "antd";
-import InputUnderline from "../../components/InputUnderline";
 import { CloseCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { getNewToken } from "../../api/users";
 import { initialFrameValues } from "../../utility/data";
 import storage from "../../api/storage";
 import { addProject } from "../../api/projects";
-import ErrorMessage from "../../components/ErrorMessage";
 import ErrorContext from "../../context/ErrorContext";
-import AuthContext from "../../context/AuthContext";
 import { colors } from "../../utility";
 import Loading from "../../components/Loading";
 import UploadImage from "../../components/UploadImage";

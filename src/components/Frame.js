@@ -170,7 +170,7 @@ function Frame({
       case "select":
         return "pointer";
       default:
-        return "auto";
+        return "default";
     }
   };
 
@@ -450,7 +450,7 @@ function Frame({
         handleYes={() => {
           setContextMenuPosition(false);
           setShowDeleteAlert(false);
-          setCurrentTool("draw");
+          // setCurrentTool("draw");
           setSelectedItem(false);
           handleDeleteCureentPolygon();
         }}
@@ -542,6 +542,7 @@ function Frame({
                   paths={paths}
                   setCursor={setCursor}
                   getPageDetails={getFrameDetails}
+                  currentTool={currentTool}
                 />
               ))
             ) : (

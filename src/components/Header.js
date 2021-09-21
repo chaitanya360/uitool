@@ -45,7 +45,8 @@ function Header({
     setSelectedItem(false);
     switch (key) {
       case "draw":
-        setCurrentTool("draw");
+        if (currentTool === "draw") setCurrentTool("default");
+        else setCurrentTool("draw");
         break;
       case "user":
         break;

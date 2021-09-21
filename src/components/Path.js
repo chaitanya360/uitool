@@ -6,7 +6,7 @@ import Polygon from "./atoms/Polygon";
 import VertexPoints from "./atoms/VertexPoints";
 import Info from "./Info";
 
-const stack = [];
+let stack = [];
 
 const Path = ({
   setCursor,
@@ -25,10 +25,12 @@ const Path = ({
   setPaths,
   paths,
   getPageDetails,
+  currentTool,
 }) => {
   const id = path.id;
   const [bgColor, setBgColor] = useState("transparent");
   const [drawing, setDrawing] = useState(false);
+  const [showVertices, setShowVertices] = useState(false);
   const [adjusting, setAdjusting] = useState(false);
   const hoverColor = "rgba(255,0,0,0.15)";
   const selectedColor = "rgba(255,0,0,0.25)";
@@ -40,6 +42,10 @@ const Path = ({
   useEffect(() => {
     setDrawing(status === 0 ? true : false);
   }, [status]);
+
+  useEffect(() => {
+    stack = [];
+  }, [currentTool]);
 
   const getCursorPos = (e) => ({
     x: canRef
@@ -77,6 +83,7 @@ const Path = ({
   };
 
   const handleOnMouseOver = (e) => {
+    setShowVertices(true);
     const getHoverColor = (status) => {
       switch (status) {
         case statusValues.available:
@@ -117,6 +124,8 @@ const Path = ({
   };
 
   const handleOnMouseLeave = () => {
+    setShowVertices(false);
+
     setBgColor("transparent");
     if (path.targetPage) {
       setInfo(false);
@@ -185,18 +194,21 @@ const Path = ({
       />
       {!isFreeView && (
         <>
-          <VertexPoints
-            canRef={canRef}
-            co={co}
-            frame={path}
-            getCursorPos={getCursorPos}
-            isAdjustView={isAdjustView}
-            paths={paths}
-            setPaths={setPaths}
-            drawing={drawing}
-            setAdjusting={setAdjusting}
-            setCursor={setCursor}
-          />
+          {showVertices && (
+            <VertexPoints
+              canRef={canRef}
+              co={co}
+              frame={path}
+              getCursorPos={getCursorPos}
+              isAdjustView={isAdjustView}
+              paths={paths}
+              setPaths={setPaths}
+              drawing={drawing}
+              setAdjusting={setAdjusting}
+              setCursor={setCursor}
+              currentTool={currentTool}
+            />
+          )}
           <EndCircle />
           <TempLine />
           {/* <CopyPoint
