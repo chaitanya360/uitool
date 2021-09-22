@@ -1,7 +1,7 @@
 :root {
   --menu_bg: #ffeeec;
-  --primary: #ff4769;
-  --secondary: #ff655b;
+  --primary: #2f2f2f;
+  --secondary: #fffff;
 }
 
 .new_project_btn:hover {
@@ -26,6 +26,7 @@
   line-height: normal;
   align-items: center;
   padding: 0 2rem;
+  background-color: var(--primary);
 }
 
 .project-setting-icon:hover {
@@ -137,7 +138,6 @@
 
 .publish_btn {
   background-color: var(--secondary);
-  color: white;
   border: none;
   box-shadow: 1px 1px 3px rgba(46, 46, 46, 0.521);
   font-weight: 500;

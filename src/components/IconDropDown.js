@@ -49,7 +49,7 @@ function IconDropDown({
       >
         <div
           style={{
-            backgroundColor: selected ? colors.secondary : colors.primary,
+            backgroundColor: selected ? colors.primary : colors.secondary,
             cursor: "pointer",
             padding: "5px 10px",
             fontSize: "1.2rem",

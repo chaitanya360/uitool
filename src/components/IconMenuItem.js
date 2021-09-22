@@ -14,16 +14,17 @@ function IconMenuItem({
     <Tooltip title={tooltip} placement="bottom">
       <div
         style={{
-          backgroundColor: selected ? colors.secondary : colors.primary,
+          backgroundColor: selected ? colors.primary : colors.secondary,
           display: "flex",
           height: "100%",
-          padding: "3px 15px",
+          padding: "0px 15px",
           justifyContent: "center",
           alignItems: "center",
-          margin: "10px 5px",
+          margin: "5px",
           cursor: "pointer",
           zIndex: "3",
           paddingBottom: "0px",
+          borderRadius: "8px",
         }}
         onClick={onClick}
         className={className}

@@ -164,7 +164,7 @@ function NavigationTree({
         onDrop={onDrop}
         treeData={treeData ? treeData.getDataList() : []}
         defaultExpandParent={treeData ? true : false}
-        style={{ padding: "10px", width: "250px", overflow: "auto" }}
+        style={{ padding: "10px 0px", width: "250px", overflow: "auto" }}
         height={500}
         titleRender={(element) => (
           <Title

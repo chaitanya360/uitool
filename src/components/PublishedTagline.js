@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import { Button, Tooltip } from "antd";
 import { Link, useHistory } from "react-router-dom";
+import { colors } from "../utility";
 function PublishedTagline({
   visible = true,
   setVisible,
@@ -56,11 +57,14 @@ function PublishedTagline({
           <Link to={`/project/${projectId}/tour`} target="_blank">
             <Button
               style={{
-                fontSize: "0.8rem",
+                fontSize: "1rem",
                 marginLeft: "20px",
-                borderRadius: "5px",
+                borderRadius: "3px",
                 transform: "scale(0.9)",
                 fontWeight: "500",
+                padding: "0 12px",
+                color: "white",
+                backgroundColor: colors.primary,
               }}
               onClick={handleOpenSiteBtnPressed}
             >

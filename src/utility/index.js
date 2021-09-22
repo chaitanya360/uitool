@@ -1,8 +1,10 @@
 let colors = {
   light_red: "#FF6060",
   yellow: "#FBBC05",
-  primary: "#ff655b",
-  secondary: "#ff4769",
+  // primary: "#ff655b",
+  // secondary: "#ff4769",
+  primary: "#1DB958",
+  secondary: "#2c2c2c",
   green: "#ff685A",
   white: "#FFFFFF",
   light_green: "#52D8BB",

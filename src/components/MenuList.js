@@ -68,12 +68,12 @@ function MenuList({
   const ProjectTitle = () => (
     <Menu.Item
       style={{
-        backgroundColor: "#F33256",
+        backgroundColor: "white",
         padding: "2px 15px",
         fontSize: "1rem",
         cursor: "default",
         textTransform: "capitalize",
-        color: "rgba(255,255,255,0.8)",
+        color: "black",
         margin: "5px auto",
         marginTop: "0px",
       }}

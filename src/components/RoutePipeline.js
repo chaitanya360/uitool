@@ -1,5 +1,6 @@
 import React from "react";
 import { Breadcrumb } from "antd";
+import { colors } from "../utility";
 
 function RoutePipeline({
   setCurrentFrameId,
@@ -47,7 +48,8 @@ function RoutePipeline({
           <span
             style={{
               cursor: "pointer",
-              color: singleLocation.isLast ? "white" : "inherit",
+              color: singleLocation.isLast ? colors.primary : "inherit",
+              fontWeight: "500",
             }}
           >
             {singleLocation.title}

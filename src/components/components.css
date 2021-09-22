@@ -1,7 +1,9 @@
 :root {
   --menu_bg: #ffeeec;
-  --primary: #ff4769;
-  --secondary: #ff655b;
+  /* --primary: #ff4769;
+  --secondary: #ff655b; */
+  --primary: #2c2c2c;
+  --secondary: #000000;
   --dark: #3f4257;
 }
 
@@ -100,7 +102,7 @@
   color: rgb(240, 236, 236);
   position: absolute;
   z-index: 999;
-  top: -2px;
+  top: -1px;
   left: 0;
   width: 100%;
   background-color: var(--primary);
@@ -115,7 +117,7 @@
 .public_close {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 5px;
   padding: 0px 10px;
 }
 
@@ -138,6 +140,14 @@
   height: 100%;
   position: absolute;
   left: 0px;
+}
+
+.ant-tree {
+  background-color: transparent;
+}
+
+.ant-tree-treenode {
+  color: white;
 }
 
 #published_link {
@@ -191,9 +201,14 @@
   padding: 0;
 }
 
+#slider .ant-tree-node-content-wrapper {
+  background-color: transparent;
+}
+
 #tools_header {
   height: 40px;
-  box-shadow: 2px 2px 4px grey;
+  box-shadow: 2px 2px 4px rgba(83, 83, 83, 0.205);
+  background-color: var(--secondary);
 }
 
 .loader {

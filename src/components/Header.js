@@ -55,7 +55,8 @@ function Header({
         setCurrentTool("change_bg");
         break;
       case "free":
-        setCurrentTool("free");
+        if (currentTool === "free") setCurrentTool(false);
+        else setCurrentTool("free");
         break;
       case "details":
         handleShowDetails();
@@ -95,7 +96,7 @@ function Header({
       style={{
         fontWeight: "500",
         display: "flex",
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.primary,
         height: "30px",
         padding: "5px 15px",
         borderRadius: "3px",
